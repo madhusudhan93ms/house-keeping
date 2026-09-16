@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Star, CheckCircle, ShieldCheck, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { X, Star, CheckCircle, ShieldCheck, Plus, Minus, ShoppingBag, Info } from 'lucide-react';
 
 export default function QuickViewModal({ product, onClose, onAddToCart }) {
   const [qty, setQty] = useState(product?.minBulkUnits || 1);
@@ -121,8 +121,9 @@ export default function QuickViewModal({ product, onClose, onAddToCart }) {
               </div>
 
               {!isBulk && (
-                <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--primary-800)', fontWeight: 600 }}>
-                  💡 Tip: Increase quantity to {product.minBulkUnits}+ units to unlock bulk pricing at ₹{product.bulkPrice.toLocaleString('en-IN')}/{product.unit || 'unit'}!
+                <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--primary-800)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <Info size={13} strokeWidth={2.5} />
+                  <span>Tip: Increase quantity to {product.minBulkUnits}+ units to unlock bulk pricing at ₹{product.bulkPrice.toLocaleString('en-IN')}/{product.unit || 'unit'}!</span>
                 </div>
               )}
             </div>

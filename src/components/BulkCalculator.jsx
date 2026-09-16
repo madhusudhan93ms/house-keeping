@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, Building2, Briefcase, HeartPulse, GraduationCap, School, ShoppingCart, Check, BookOpen, Sparkles } from 'lucide-react';
+import { Calculator, Building2, Briefcase, HeartPulse, GraduationCap, School, ShoppingCart, Check, BookOpen, Sparkles, FileText, PenTool, Folder, ShieldCheck, Droplets, Trash2, Truck } from 'lucide-react';
 
 const FACILITY_TYPES = [
   { id: 'companies', label: 'Company / Factory', icon: Building2, unitName: 'Staff Members', defaultUnits: 100, min: 20, max: 1000 },
@@ -164,10 +164,10 @@ export default function BulkCalculator({ onAddBundleToCart }) {
                     <span>Stationery Pack</span>
                   </div>
                   <ul className="breakdown-list">
-                    <li>📄 <strong>{paperCartons} Cartons</strong> A4 Copier Paper</li>
-                    <li>📒 <strong>{registerBundles} Packs</strong> Hardbound Registers</li>
-                    <li>🖊️ <strong>{penJars} Jars</strong> Ballpoint Pens (50/jar)</li>
-                    <li>📁 <strong>{filePacks} Packs</strong> Box Files (10/pack)</li>
+                    <li><FileText size={14} strokeWidth={2} className="stroke-bullet-icon blue" /> <strong>{paperCartons} Cartons</strong> A4 Copier Paper</li>
+                    <li><BookOpen size={14} strokeWidth={2} className="stroke-bullet-icon blue" /> <strong>{registerBundles} Packs</strong> Hardbound Registers</li>
+                    <li><PenTool size={14} strokeWidth={2} className="stroke-bullet-icon blue" /> <strong>{penJars} Jars</strong> Ballpoint Pens (50/jar)</li>
+                    <li><Folder size={14} strokeWidth={2} className="stroke-bullet-icon blue" /> <strong>{filePacks} Packs</strong> Box Files (10/pack)</li>
                   </ul>
                 </div>
 
@@ -177,10 +177,10 @@ export default function BulkCalculator({ onAddBundleToCart }) {
                     <span>Housekeeping Pack</span>
                   </div>
                   <ul className="breakdown-list">
-                    <li>🧴 <strong>{disinfectantCans} × 5L</strong> Disinfectant Cleaner</li>
-                    <li>🌿 <strong>{floorCleanerCans} × 5L</strong> Floor Cleaner</li>
-                    <li>🧼 <strong>{handwashCans} × 5L</strong> Liquid Hand Soap</li>
-                    <li>🗑️ <strong>{garbageBagPacks} Packs</strong> Heavy Garbage Bags</li>
+                    <li><ShieldCheck size={14} strokeWidth={2} className="stroke-bullet-icon green" /> <strong>{disinfectantCans} × 5L</strong> Disinfectant Cleaner</li>
+                    <li><Droplets size={14} strokeWidth={2} className="stroke-bullet-icon green" /> <strong>{floorCleanerCans} × 5L</strong> Floor Cleaner</li>
+                    <li><Sparkles size={14} strokeWidth={2} className="stroke-bullet-icon green" /> <strong>{handwashCans} × 5L</strong> Liquid Hand Soap</li>
+                    <li><Trash2 size={14} strokeWidth={2} className="stroke-bullet-icon green" /> <strong>{garbageBagPacks} Packs</strong> Heavy Garbage Bags</li>
                   </ul>
                 </div>
               </div>
@@ -231,7 +231,8 @@ export default function BulkCalculator({ onAddBundleToCart }) {
               </button>
 
               <div className="calc-delivery-guarantee">
-                🚚 <strong>Hosur Delivery:</strong> Delivered directly to your office, hospital, school or factory with delivery challan.
+                <Truck size={16} strokeWidth={2} color="var(--primary-700)" className="delivery-stroke-icon" />
+                <span><strong>Hosur Delivery:</strong> Delivered directly to your office, hospital, school or factory with delivery challan.</span>
               </div>
             </div>
           </div>

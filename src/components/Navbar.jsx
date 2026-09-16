@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Search, Lock, Menu, X, Mail, MapPin, MessageSquare } from 'lucide-react';
+import { ShoppingBag, Search, Lock, Menu, X, Mail, MapPin, MessageSquare, Zap } from 'lucide-react';
 
 export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, searchQuery, setSearchQuery }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,7 +27,10 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
       {/* Top Announcement & Contact Bar */}
       <aside aria-label="Announcement" className="announcement-bar">
         <div className="container announcement-inner">
-          <span className="announcement-pill">⚡ ONLY WHOLESALE PRICE</span>
+          <span className="announcement-pill">
+            <Zap size={11} strokeWidth={3} className="pill-stroke-icon" />
+            <span>ONLY WHOLESALE PRICE</span>
+          </span>
           <span className="announcement-text">
             Best Quality • Competitive Price • On Time Delivery
           </span>

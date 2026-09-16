@@ -1,7 +1,7 @@
 /* Modern Clean Design System - PurePro Housekeeping Supplies */
 :root {
-  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Brand Colors */
   --primary-50: #f0fdfa;
@@ -79,6 +79,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--slate-900);
   line-height: 1.2;
+}
+
+input, button, textarea, select {
+  font-family: inherit;
 }
 
 /* Custom Scrollbar */
@@ -2994,4 +2998,212 @@ h1, h2, h3, h4, h5, h6 {
     width: 48px;
     height: 48px;
   }
+}
+
+/* ==========================================================================
+   STROKE ICONS & CARD TEXT MICRO-ANIMATIONS
+   ========================================================================== */
+
+/* Stroke Vector Icon Wrappers */
+.guarantee-stroke-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--slate-50);
+  border: 1.5px solid var(--slate-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.guarantee-item:hover .guarantee-stroke-icon {
+  transform: scale(1.1) rotate(5deg);
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+}
+
+.stroke-bullet-icon {
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.35rem;
+  transition: transform 0.2s ease;
+}
+
+.stroke-bullet-icon.blue {
+  color: var(--primary-700);
+}
+
+.stroke-bullet-icon.green {
+  color: #059669;
+}
+
+.breakdown-list li {
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.breakdown-list li:hover {
+  transform: translateX(3px);
+  color: var(--slate-900);
+}
+
+.breakdown-list li:hover .stroke-bullet-icon {
+  transform: scale(1.2);
+}
+
+.delivery-stroke-icon {
+  flex-shrink: 0;
+  animation: pulseGentle 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseGentle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Card Hover Elevation & Stroke Outline Glow */
+.product-card {
+  position: relative;
+  background: #ffffff;
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary-500);
+  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12),
+              0 0 0 1px rgba(13, 148, 136, 0.2);
+}
+
+/* Card Text Title Animation with Gradient Glow */
+.product-title {
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.product-card:hover .product-title {
+  color: var(--primary-700);
+}
+
+/* Sector Card Animations */
+.sector-card {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.sector-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary-500);
+  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12),
+              0 0 0 1px rgba(13, 148, 136, 0.25);
+}
+
+.sector-card:hover .sector-icon-box {
+  transform: scale(1.12) rotate(-4deg);
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.25);
+  border-color: var(--primary-500);
+}
+
+.sector-icon-box {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+
+.sector-card:hover .sector-title {
+  color: var(--primary-700);
+}
+
+.sector-title {
+  transition: color 0.25s ease;
+}
+
+.sector-action-btn .btn-arrow {
+  transition: transform 0.25s ease;
+}
+
+.sector-card:hover .sector-action-btn .btn-arrow {
+  transform: translateX(5px);
+}
+
+/* Popular tags hover animation */
+.popular-tag {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.popular-tag:hover {
+  transform: translateX(4px);
+  background-color: var(--primary-50);
+}
+
+/* Feature Card Animations */
+.feature-card {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-500);
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.1);
+}
+
+.feature-card:hover .feature-icon-box {
+  transform: scale(1.1) rotate(4deg);
+  background: var(--primary-600);
+  color: #ffffff;
+}
+
+.feature-icon-box {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.25s ease,
+              color 0.25s ease;
+}
+
+/* Stepper & Action Buttons */
+.add-to-cart-btn {
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.97);
+}
+
+.add-to-cart-btn:hover {
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+}
+
+.stepper-btn {
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.stepper-btn:active {
+  transform: scale(0.9);
+}
+
+/* Wholesale Tier Tip Animation */
+.wholesale-tier-tip {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wholesale-tier-tip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
 }

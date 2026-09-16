@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Minus, Check, Eye, AlertCircle, Sparkles, Filter, BookOpen, Layers } from 'lucide-react';
+import { Plus, Minus, Check, Eye, AlertCircle, Sparkles, Filter, BookOpen, Layers, Package, BadgePercent } from 'lucide-react';
 import { CATEGORIES, DEPARTMENTS } from '../data/products';
 
 export default function ProductCatalog({ 
@@ -147,7 +147,10 @@ export default function ProductCatalog({
             Showing <strong>{filteredProducts.length}</strong> wholesale items available for Hosur & regional dispatch
           </div>
           <div className="wholesale-tier-tip">
-            <span>💡 <strong>Wholesale Tier:</strong> Buy carton/bulk quantities to unlock automatic wholesale price savings.</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+              <BadgePercent size={14} strokeWidth={2.5} color="#166534" />
+              <span><strong>Wholesale Tier:</strong> Buy carton/bulk quantities to unlock automatic wholesale price savings.</span>
+            </span>
           </div>
         </div>
 
@@ -219,7 +222,8 @@ export default function ProductCatalog({
                     </h3>
 
                     <p className="package-size-tag">
-                      📦 {product.packageSize}
+                      <Package size={13} strokeWidth={2} className="package-stroke-icon" />
+                      <span>{product.packageSize}</span>
                     </p>
 
                     <p className="product-desc">

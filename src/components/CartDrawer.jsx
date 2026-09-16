@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, CheckCircle, MessageSquare, Mail, Printer } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, CheckCircle, MessageSquare, Mail, Printer, Package, Truck } from 'lucide-react';
 
 export default function CartDrawer({ 
   isOpen, 
@@ -338,10 +338,15 @@ export default function CartDrawer({
             {/* Free Delivery Bar */}
             <div className="shipping-progress-box">
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                <span>
-                  {isFreeShipping 
-                    ? '🎉 Free Regional Delivery Qualified (Hosur & Border)!' 
-                    : `Add ₹${(freeShippingThreshold - subtotal).toLocaleString('en-IN')} more for FREE Delivery`}
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                  {isFreeShipping ? (
+                    <>
+                      <Truck size={14} strokeWidth={2.2} color="#059669" />
+                      <span>Free Regional Delivery Qualified (Hosur & Border)!</span>
+                    </>
+                  ) : (
+                    <span>Add ₹{(freeShippingThreshold - subtotal).toLocaleString('en-IN')} more for FREE Delivery</span>
+                  )}
                 </span>
                 <span>₹{subtotal.toLocaleString('en-IN')} / ₹{freeShippingThreshold.toLocaleString('en-IN')}</span>
               </div>
@@ -390,8 +395,9 @@ export default function CartDrawer({
                           </button>
                         </div>
 
-                        <div className="cart-item-package">
-                          📦 {item.packageSize}
+                        <div className="cart-item-package" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <Package size={12} strokeWidth={2} />
+                          <span>{item.packageSize}</span>
                         </div>
 
                         <div className="cart-item-bottom">
