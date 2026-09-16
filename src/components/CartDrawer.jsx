@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, CheckCircle, Truck, FileText } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, CheckCircle, MessageSquare, Mail, Printer } from 'lucide-react';
 
 export default function CartDrawer({ 
   isOpen, 
@@ -17,15 +17,14 @@ export default function CartDrawer({
     email: '',
     phone: '',
     address: '',
-    poNumber: '',
+    sector: 'Company',
     paymentTerms: 'net-30',
-    cadence: 'one-time',
     notes: ''
   });
 
   if (!isOpen) return null;
 
-  // Calculate pricing & bulk savings
+  // Calculate pricing & bulk savings in INR
   let subtotal = 0;
   let totalSavings = 0;
 
@@ -38,9 +37,9 @@ export default function CartDrawer({
     }
   });
 
-  const freeShippingThreshold = 350;
-  const isFreeShipping = subtotal >= freeShippingThreshold;
-  const shippingCost = isFreeShipping || cart.length === 0 ? 0 : 24.95;
+  const freeShippingThreshold = 4000;
+  const isFreeShipping = subtotal >= freeShippingThreshold || cart.length === 0;
+  const shippingCost = isFreeShipping ? 0 : 250;
   const total = subtotal + shippingCost;
   const progressToFree = Math.min(100, (subtotal / freeShippingThreshold) * 100);
 
@@ -49,14 +48,45 @@ export default function CartDrawer({
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const generateOrderSummaryText = () => {
+    let text = `*JASVI ENTERPRISES - WHOLESALE REQUISITION*\n`;
+    text += `*Institution:* ${formData.facilityName || 'Valued Client'}\n`;
+    text += `*Contact:* ${formData.contactName} (${formData.phone || 'N/A'})\n`;
+    text += `*Delivery Address:* ${formData.address || 'Hosur / TN'}\n\n`;
+    text += `*Order Items:*\n`;
+    cart.forEach((item, index) => {
+      const isBulk = item.qty >= item.minBulkUnits;
+      const price = isBulk ? item.bulkPrice : item.price;
+      text += `${index + 1}. ${item.name} - Qty: ${item.qty} × ₹${price} = ₹${item.qty * price}\n`;
+    });
+    text += `\n*Subtotal:* ₹${subtotal.toLocaleString('en-IN')}`;
+    text += `\n*Wholesale Savings:* ₹${totalSavings.toLocaleString('en-IN')}`;
+    text += `\n*Estimated Total:* ₹${total.toLocaleString('en-IN')}`;
+    if (formData.notes) text += `\n*Notes:* ${formData.notes}`;
+    return text;
+  };
+
+  const handleWhatsAppOrder = () => {
+    const orderText = generateOrderSummaryText();
+    const encoded = encodeURIComponent(orderText);
+    window.open(`https://wa.me/919487000000?text=${encoded}`, '_blank');
+  };
+
+  const handleEmailRFQ = () => {
+    const subject = encodeURIComponent(`Wholesale Supply RFQ: ${formData.facilityName || 'Requisition Order'}`);
+    const body = encodeURIComponent(generateOrderSummaryText());
+    window.open(`mailto:jasvienterprises28@gmail.com?subject=${subject}&body=${body}`, '_blank');
+  };
+
   const handleSubmitOrder = (e) => {
     e.preventDefault();
-    const orderNumber = `PO-HK-${Math.floor(100000 + Math.random() * 900000)}`;
+    const orderNumber = `JE-REQ-${Math.floor(100000 + Math.random() * 900000)}`;
     setOrderSuccess({
       orderNumber,
       itemsCount: cart.reduce((acc, curr) => acc + curr.qty, 0),
       totalAmount: total,
-      facility: formData.facilityName || 'Commercial Partner'
+      facility: formData.facilityName || 'Institutional Partner',
+      items: [...cart]
     });
     setIsCheckingOut(false);
     onClearCart();
@@ -75,285 +105,379 @@ export default function CartDrawer({
         <div className="drawer-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <ShoppingBag size={20} color="var(--primary-700)" />
-            <h3>Housekeeping Requisition</h3>
+            <h3>Wholesale Requisition Order</h3>
           </div>
-          <button className="close-btn" onClick={handleCloseAll} aria-label="Close cart drawer">
+          <button className="close-btn" onClick={handleCloseAll} aria-label="Close requisition drawer">
             <X size={20} />
           </button>
         </div>
 
         {/* Success Confirmation View */}
         {orderSuccess ? (
-          <div style={{ padding: '2.5rem 1.75rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', marginBottom: '1.25rem' }}>
-              <CheckCircle size={36} />
+          <div className="order-success-view">
+            <div className="success-icon-circle">
+              <CheckCircle size={40} />
             </div>
-            <h3 style={{ fontSize: '1.45rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--slate-900)' }}>
-              Order Request Transmitted!
+            <h3 className="success-title">
+              Requisition Transmitted!
             </h3>
-            <p style={{ color: 'var(--slate-600)', fontSize: '0.92rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>
-              Thank you, <strong>{orderSuccess.facility}</strong>. Your housekeeping supply requisition has been assigned reference:
+            <p className="success-subtitle">
+              Thank you, <strong>{orderSuccess.facility}</strong>. Your stationery & housekeeping supply requisition has been registered with Jasvi Enterprises:
             </p>
 
-            <div style={{ background: 'var(--slate-100)', padding: '0.85rem 1.5rem', borderRadius: 'var(--radius-md)', border: '1px dashed var(--slate-300)', fontWeight: 800, fontSize: '1.2rem', color: 'var(--primary-700)', letterSpacing: '0.05em', marginBottom: '1.5rem' }}>
+            <div className="order-ref-badge">
               {orderSuccess.orderNumber}
             </div>
 
-            <div style={{ background: 'var(--primary-50)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--primary-200)', fontSize: '0.84rem', color: 'var(--primary-900)', textAlign: 'left', width: '100%', marginBottom: '2rem' }}>
-              <div>📦 Total Material Units: <strong>{orderSuccess.itemsCount}</strong></div>
-              <div style={{ marginTop: '0.35rem' }}>💰 Authorized Estimate: <strong>${orderSuccess.totalAmount.toFixed(2)}</strong></div>
-              <div style={{ marginTop: '0.35rem' }}>⏱️ Dispatch Window: <strong>Next Business Morning</strong></div>
+            <div className="order-success-card">
+              <div className="success-stat-row">
+                <span>Total Items Ordered:</span>
+                <strong>{orderSuccess.itemsCount} units</strong>
+              </div>
+              <div className="success-stat-row">
+                <span>Estimated Invoice Total:</span>
+                <strong style={{ color: 'var(--primary-700)', fontSize: '1.1rem' }}>
+                  ₹{orderSuccess.totalAmount.toLocaleString('en-IN')}
+                </strong>
+              </div>
+              <div className="success-stat-row">
+                <span>Fulfillment Hub:</span>
+                <span>Zuzuwadi, Hosur (TN)</span>
+              </div>
             </div>
 
-            <button className="btn btn-primary" style={{ width: '100%' }} onClick={handleCloseAll}>
-              Continue Shopping
-            </button>
+            <div className="success-actions-row">
+              <button 
+                className="btn btn-whatsapp btn-block"
+                onClick={handleWhatsAppOrder}
+              >
+                <MessageSquare size={17} />
+                <span>Confirm on WhatsApp (Instant Reply)</span>
+              </button>
+
+              <button 
+                className="btn btn-secondary btn-block"
+                onClick={() => window.print()}
+              >
+                <Printer size={16} />
+                <span>Print Requisition Slip</span>
+              </button>
+
+              <button 
+                className="btn btn-outline btn-block"
+                onClick={handleCloseAll}
+              >
+                Return to Product Catalog
+              </button>
+            </div>
           </div>
         ) : isCheckingOut ? (
-          /* Checkout / PO Submission Form */
-          <form onSubmit={handleSubmitOrder} style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div className="drawer-body">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: 'var(--primary-700)', fontWeight: 700, fontSize: '0.9rem' }}>
-                <FileText size={18} />
-                <span>Commercial Account Requisition Details</span>
-              </div>
+          /* Checkout / RFQ Form View */
+          <div className="checkout-form-container">
+            <div className="checkout-header-bar">
+              <button 
+                className="back-to-cart-btn" 
+                onClick={() => setIsCheckingOut(false)}
+              >
+                ← Edit Order Items
+              </button>
+              <span style={{ fontSize: '0.82rem', color: 'var(--slate-500)', fontWeight: 600 }}>
+                Wholesale Requisition
+              </span>
+            </div>
+
+            <form onSubmit={handleSubmitOrder} className="rfq-form">
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--slate-900)', marginBottom: '0.2rem' }}>
+                Institution & Delivery Information
+              </h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--slate-500)', marginBottom: '1.25rem' }}>
+                We will prepare your dispatch challan and send confirmation to your email/phone.
+              </p>
 
               <div className="form-group">
-                <label className="form-label">Facility / Company Name *</label>
+                <label>Company / Institution / School Name *</label>
                 <input 
                   type="text" 
                   name="facilityName" 
                   required 
-                  placeholder="e.g. Grand Horizon Hotel & Spa" 
-                  className="form-input"
+                  placeholder="e.g. Apex Precision Motors / St. Xavier School"
                   value={formData.facilityName}
                   onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Contact Person Name *</label>
-                <input 
-                  type="text" 
-                  name="contactName" 
-                  required 
-                  placeholder="e.g. Jane Miller (Director of Housekeeping)" 
                   className="form-input"
-                  value={formData.contactName}
-                  onChange={handleInputChange}
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Work Email for SDS & Invoicing *</label>
-                <input 
-                  type="email" 
-                  name="email" 
-                  required 
-                  placeholder="housekeeping@hotelgroup.com" 
-                  className="form-input"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
+              <div className="form-row-2">
+                <div className="form-group">
+                  <label>Contact Person *</label>
+                  <input 
+                    type="text" 
+                    name="contactName" 
+                    required 
+                    placeholder="Procurement / Admin Manager"
+                    value={formData.contactName}
+                    onChange={handleInputChange}
+                    className="form-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Phone / WhatsApp *</label>
+                  <input 
+                    type="tel" 
+                    name="phone" 
+                    required 
+                    placeholder="+91 98765 43210"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              <div className="form-row-2">
+                <div className="form-group">
+                  <label>Official Email</label>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="admin@institution.com"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="form-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Institution Sector</label>
+                  <select 
+                    name="sector" 
+                    value={formData.sector} 
+                    onChange={handleInputChange}
+                    className="form-input"
+                  >
+                    <option value="Company">Company / Manufacturing</option>
+                    <option value="Office">Corporate Office / IT</option>
+                    <option value="Hospital">Hospital / Clinic</option>
+                    <option value="College">College / University</option>
+                    <option value="School">School / Institute</option>
+                  </select>
+                </div>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Delivery Loading Dock / Street Address *</label>
-                <input 
-                  type="text" 
+                <label>Delivery Address in Hosur / Krishnagiri / Bangalore *</label>
+                <textarea 
                   name="address" 
+                  rows={2} 
                   required 
-                  placeholder="Loading Dock B, 1400 Boulevard Way, NY" 
-                  className="form-input"
+                  placeholder="Street address, SIPCOT Phase / Landmark, Pincode"
                   value={formData.address}
                   onChange={handleInputChange}
+                  className="form-input"
                 />
               </div>
 
               <div className="form-group">
-                <label className="form-label">Internal PO / Requisition Reference (Optional)</label>
-                <input 
-                  type="text" 
-                  name="poNumber" 
-                  placeholder="e.g. PO-2026-094" 
-                  className="form-input"
-                  value={formData.poNumber}
+                <label>Special Instructions / GST / Delivery Notes</label>
+                <textarea 
+                  name="notes" 
+                  rows={2} 
+                  placeholder="Any specific delivery hours, packaging preferences, or carton requirements"
+                  value={formData.notes}
                   onChange={handleInputChange}
+                  className="form-input"
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Billing Terms</label>
-                <select 
-                  name="paymentTerms" 
-                  className="form-input"
-                  value={formData.paymentTerms}
-                  onChange={handleInputChange}
-                >
-                  <option value="net-30">Commercial Net-30 Invoicing</option>
-                  <option value="credit-card">Credit Card on File</option>
-                  <option value="ach-wire">ACH / Wire Transfer</option>
-                </select>
+              {/* Order Mini Summary */}
+              <div className="rfq-mini-summary">
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                  <span>Requisition Items:</span>
+                  <strong>{cart.reduce((a, b) => a + b.qty, 0)} units</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                  <span>Wholesale Discount Savings:</span>
+                  <strong style={{ color: '#059669' }}>-₹{totalSavings.toLocaleString('en-IN')}</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.05rem', fontWeight: 800, color: 'var(--slate-900)', borderTop: '1px solid var(--slate-200)', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
+                  <span>Estimated Total:</span>
+                  <span>₹{total.toLocaleString('en-IN')}</span>
+                </div>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Restock Schedule</label>
-                <select 
-                  name="cadence" 
-                  className="form-input"
-                  value={formData.cadence}
-                  onChange={handleInputChange}
-                >
-                  <option value="one-time">One-Time Restock Delivery</option>
-                  <option value="bi-weekly">Recurring: Every 2 Weeks (-5% off)</option>
-                  <option value="monthly">Recurring: Monthly Restock (-5% off)</option>
-                </select>
-              </div>
-            </div>
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1rem' }}>
+                <button type="submit" className="btn btn-primary btn-block">
+                  Submit Official Wholesale Requisition
+                </button>
 
-            <div className="drawer-footer">
-              <div className="summary-total" style={{ marginTop: 0, paddingTop: 0, border: 'none', marginBottom: '1rem' }}>
-                <span>Order Total:</span>
-                <span>${total.toFixed(2)}</span>
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <button 
                   type="button" 
-                  className="btn btn-secondary" 
-                  style={{ flex: 1 }}
-                  onClick={() => setIsCheckingOut(false)}
+                  className="btn btn-whatsapp btn-block"
+                  onClick={handleWhatsAppOrder}
                 >
-                  Back to List
+                  <MessageSquare size={17} />
+                  <span>Send Order via WhatsApp Directly</span>
                 </button>
+
                 <button 
-                  type="submit" 
-                  className="btn btn-primary" 
-                  style={{ flex: 2 }}
+                  type="button" 
+                  className="btn btn-secondary btn-block"
+                  onClick={handleEmailRFQ}
                 >
-                  Confirm & Transmit PO
+                  <Mail size={16} />
+                  <span>Email to jasvienterprises28@gmail.com</span>
                 </button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         ) : (
-          /* Standard Cart Items View */
+          /* Cart List View */
           <>
-            {/* Free Freight Tracker */}
-            <div style={{ padding: '0.85rem 1.5rem', background: 'var(--slate-50)', borderBottom: '1px solid var(--slate-200)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '0.4rem', fontWeight: 600, color: 'var(--slate-700)' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <Truck size={14} color="var(--primary-600)" />
-                  {isFreeShipping ? '🎉 Free Commercial Freight Unlocked!' : `Add $${(freeShippingThreshold - subtotal).toFixed(2)} for Free Freight`}
+            {/* Free Delivery Bar */}
+            <div className="shipping-progress-box">
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.4rem' }}>
+                <span>
+                  {isFreeShipping 
+                    ? '🎉 Free Regional Delivery Qualified (Hosur & Border)!' 
+                    : `Add ₹${(freeShippingThreshold - subtotal).toLocaleString('en-IN')} more for FREE Delivery`}
                 </span>
-                <span>{progressToFree.toFixed(0)}%</span>
+                <span>₹{subtotal.toLocaleString('en-IN')} / ₹{freeShippingThreshold.toLocaleString('en-IN')}</span>
               </div>
-              <div style={{ width: '100%', height: 6, background: 'var(--slate-200)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
-                <div style={{ width: `${progressToFree}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary-600), var(--accent-cyan))', transition: 'width 0.3s ease' }} />
+              <div className="progress-track">
+                <div 
+                  className="progress-bar-fill" 
+                  style={{ width: `${progressToFree}%` }}
+                />
               </div>
             </div>
 
-            {/* Cart Items Scroll Area */}
-            <div className="drawer-body">
-              {cart.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '3.5rem 1rem', color: 'var(--slate-500)' }}>
-                  <ShoppingBag size={48} color="var(--slate-300)" style={{ marginBottom: '1rem' }} />
-                  <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--slate-700)', marginBottom: '0.5rem' }}>Your order list is empty</h4>
-                  <p style={{ fontSize: '0.88rem', lineHeight: 1.5 }}>
-                    Select cleaning chemicals, mops, carts, and paper liners from the catalog to build your facility order.
-                  </p>
-                </div>
-              ) : (
-                cart.map(item => {
+            {/* Cart Items List */}
+            {cart.length === 0 ? (
+              <div className="empty-cart-view">
+                <ShoppingBag size={48} color="var(--slate-300)" />
+                <h4>Your Requisition List is Empty</h4>
+                <p>Browse our stationery and housekeeping supplies catalog to add bulk items.</p>
+                <button className="btn btn-primary btn-sm" onClick={onClose}>
+                  Explore Wholesale Catalog
+                </button>
+              </div>
+            ) : (
+              <div className="cart-items-scroll">
+                {cart.map(item => {
                   const isBulk = item.qty >= item.minBulkUnits;
                   const unitPrice = isBulk ? item.bulkPrice : item.price;
-                  const lineTotal = unitPrice * item.qty;
+                  const itemTotal = unitPrice * item.qty;
 
                   return (
                     <div key={item.id} className="cart-item-row">
-                      <img src={item.image} alt={item.name} className="cart-item-thumb" />
-                      
-                      <div className="cart-item-details">
-                        <div className="cart-item-name">{item.name}</div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)', marginTop: 2 }}>
-                          {item.packageSize}
-                        </div>
-                        
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginTop: 4 }}>
-                          <span style={{ fontWeight: 700, color: 'var(--slate-900)', fontSize: '0.9rem' }}>
-                            ${unitPrice.toFixed(2)} ea
-                          </span>
-                          {isBulk && (
-                            <span className="badge badge-green" style={{ fontSize: '0.68rem', padding: '0.1rem 0.4rem' }}>
-                              Bulk Tier
-                            </span>
-                          )}
+                      <img 
+                        src={item.image} 
+                        alt={item.name} 
+                        className="cart-item-thumbnail" 
+                      />
+
+                      <div className="cart-item-info">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <h4 className="cart-item-title">{item.name}</h4>
+                          <button 
+                            className="item-remove-btn" 
+                            onClick={() => onRemoveItem(item.id)}
+                            aria-label={`Remove ${item.name} from cart`}
+                          >
+                            <Trash2 size={15} />
+                          </button>
                         </div>
 
-                        {/* Stepper Inside Cart */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.65rem' }}>
-                          <div className="qty-control" style={{ transform: 'scale(0.88)', transformOrigin: 'left' }}>
-                            <button className="qty-btn" onClick={() => onUpdateQty(item.id, item.qty - 1)} aria-label="Decrease quantity">
-                              <Minus size={12} />
+                        <div className="cart-item-package">
+                          📦 {item.packageSize}
+                        </div>
+
+                        <div className="cart-item-bottom">
+                          <div className="cart-qty-stepper">
+                            <button 
+                              onClick={() => onUpdateQty(item.id, item.qty - 1)}
+                              aria-label="Decrease quantity"
+                            >
+                              <Minus size={13} />
                             </button>
-                            <input type="text" readOnly value={item.qty} className="qty-input" />
-                            <button className="qty-btn" onClick={() => onUpdateQty(item.id, item.qty + 1)} aria-label="Increase quantity">
-                              <Plus size={12} />
+                            <span>{item.qty}</span>
+                            <button 
+                              onClick={() => onUpdateQty(item.id, item.qty + 1)}
+                              aria-label="Increase quantity"
+                            >
+                              <Plus size={13} />
                             </button>
                           </div>
 
-                          <span style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--primary-700)' }}>
-                            ${lineTotal.toFixed(2)}
-                          </span>
+                          <div className="cart-item-pricing">
+                            <div className="cart-unit-price">
+                              ₹{unitPrice.toLocaleString('en-IN')} / {item.unit || 'unit'}
+                            </div>
+                            <div className="cart-total-price">
+                              ₹{itemTotal.toLocaleString('en-IN')}
+                            </div>
+                          </div>
                         </div>
-                      </div>
 
-                      <button 
-                        className="cart-item-remove"
-                        onClick={() => onRemoveItem(item.id)}
-                        title="Remove item"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                        {isBulk && (
+                          <div className="cart-bulk-badge">
+                            ✓ Wholesale Rate Applied (Saved ₹{((item.price - item.bulkPrice) * item.qty).toLocaleString('en-IN')})
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            )}
 
-            {/* Footer Summary */}
+            {/* Cart Footer */}
             {cart.length > 0 && (
               <div className="drawer-footer">
-                <div className="summary-line">
-                  <span>Materials Subtotal:</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-
-                {totalSavings > 0 && (
-                  <div className="summary-line" style={{ color: '#059669', fontWeight: 600 }}>
-                    <span>Wholesale Bulk Savings:</span>
-                    <span>-${totalSavings.toFixed(2)}</span>
+                <div className="summary-rows">
+                  <div className="summary-row">
+                    <span>Requisition Subtotal:</span>
+                    <span>₹{subtotal.toLocaleString('en-IN')}</span>
                   </div>
-                )}
 
-                <div className="summary-line">
-                  <span>Freight Delivery:</span>
-                  <span>{isFreeShipping ? <strong style={{ color: '#059669' }}>FREE</strong> : `$${shippingCost.toFixed(2)}`}</span>
+                  {totalSavings > 0 && (
+                    <div className="summary-row savings">
+                      <span>Wholesale Tier Savings:</span>
+                      <span>-₹{totalSavings.toLocaleString('en-IN')}</span>
+                    </div>
+                  )}
+
+                  <div className="summary-row">
+                    <span>Hosur Regional Freight:</span>
+                    <span>{isFreeShipping ? <strong style={{ color: '#059669' }}>FREE</strong> : `₹${shippingCost}`}</span>
+                  </div>
+
+                  <div className="summary-row grand-total">
+                    <span>Estimated Total:</span>
+                    <span>₹{total.toLocaleString('en-IN')}</span>
+                  </div>
                 </div>
 
-                <div className="summary-total">
-                  <span>Estimated Total:</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
+                <div className="drawer-action-buttons">
+                  <button 
+                    className="btn btn-primary btn-block btn-lg"
+                    onClick={() => setIsCheckingOut(true)}
+                  >
+                    <span>Proceed to Requisition RFQ</span>
+                    <ArrowRight size={17} />
+                  </button>
 
-                <button 
-                  className="btn btn-primary"
-                  style={{ width: '100%', marginTop: '1.25rem', padding: '0.9rem' }}
-                  onClick={() => setIsCheckingOut(true)}
-                >
-                  <span>Proceed to Commercial Checkout</span>
-                  <ArrowRight size={18} />
-                </button>
+                  <button 
+                    className="btn btn-whatsapp btn-block"
+                    onClick={handleWhatsAppOrder}
+                    title="Send entire cart to WhatsApp"
+                  >
+                    <MessageSquare size={17} />
+                    <span>Quick Order on WhatsApp</span>
+                  </button>
+                </div>
               </div>
             )}
           </>

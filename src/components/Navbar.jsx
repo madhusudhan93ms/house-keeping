@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Sparkles, ShoppingBag, Search, Lock, Menu, X } from 'lucide-react';
+import { ShoppingBag, Search, Lock, Menu, X, Mail, MapPin, MessageSquare } from 'lucide-react';
 
 export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, searchQuery, setSearchQuery }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Materials Catalog', href: '#catalog' },
-    { label: 'Supply Calculator', href: '#calculator' },
-    { label: 'Why PurePro', href: '#features' },
-    { label: 'Verified Reviews', href: '#reviews' },
+    { label: 'All Supplies', href: '#catalog' },
+    { label: 'Target Sectors', href: '#sectors' },
+    { label: 'Restock Calculator', href: '#calculator' },
+    { label: 'Why Jasvi', href: '#features' },
+    { label: 'Client Reviews', href: '#reviews' },
     { label: 'FAQs', href: '#faqs' }
   ];
 
@@ -16,32 +17,52 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
     setIsMobileMenuOpen(false);
   };
 
+  const handleWhatsAppContact = () => {
+    const text = encodeURIComponent("Hello Jasvi Enterprises, I would like to inquire about wholesale Stationery & Housekeeping supplies for my organization in Hosur.");
+    window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
+  };
+
   return (
     <header className="navbar-wrapper">
-      {/* Top Announcement Bar */}
+      {/* Top Announcement & Contact Bar */}
       <aside aria-label="Announcement" className="announcement-bar">
         <div className="container announcement-inner">
-          <span>⚡ <strong>Wholesale Restock:</strong> Free Freight on orders over $350</span>
+          <span className="announcement-pill">⚡ ONLY WHOLESALE PRICE</span>
+          <span className="announcement-text">
+            Best Quality • Competitive Price • On Time Delivery
+          </span>
           <span className="announcement-divider">•</span>
-          <span>📞 24/7 Facility Support: <strong>1-800-555-PURE</strong></span>
+          <a href="mailto:jasvienterprises28@gmail.com" className="announcement-link">
+            <Mail size={13} />
+            <span>jasvienterprises28@gmail.com</span>
+          </a>
           <span className="announcement-divider">•</span>
-          <span>🛡️ EPA & OSHA Certified Housekeeping Materials</span>
+          <span className="announcement-location">
+            <MapPin size={13} />
+            <span>At Hosur, Krishnagiri (Tamil Nadu)</span>
+          </span>
         </div>
       </aside>
 
       {/* Main Navbar */}
       <nav className="navbar" aria-label="Main Navigation">
         <div className="container nav-container">
-          {/* Left: Brand Logo */}
+          {/* Left: Brand Logo with Stylized JE Monogram */}
           <div className="nav-left">
             <a href="#" className="logo-brand">
-              <div className="logo-icon-box">
-                <Sparkles size={20} />
+              <div className="je-logo-badge">
+                <div className="je-logo-swoosh"></div>
+                <div className="je-logo-inner">
+                  <span className="je-letter-j">J</span>
+                  <span className="je-letter-e">E</span>
+                </div>
               </div>
               <div className="logo-text-group">
-                <div className="logo-text">Pure<span>Pro</span></div>
+                <div className="logo-text">
+                  JASVI <span>ENTERPRISES</span>
+                </div>
                 <div className="logo-subtitle">
-                  Housekeeping Supplies
+                  <span className="tagline-highlight">Your Needs Our Priority</span> • Wholesale Supplier
                 </div>
               </div>
             </a>
@@ -68,12 +89,23 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
               <input
                 type="text"
                 className="nav-search-input"
-                placeholder="Search supplies..."
+                placeholder="Search paper, chemicals, mops..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search housekeeping supplies"
+                aria-label="Search stationery and housekeeping supplies"
               />
             </div>
+
+            {/* Quick WhatsApp Link */}
+            <button 
+              className="nav-btn nav-btn-whatsapp"
+              onClick={handleWhatsAppContact}
+              title="Quick Inquiry on WhatsApp"
+              aria-label="Quick WhatsApp Inquiry"
+            >
+              <MessageSquare size={16} />
+              <span className="btn-label">WhatsApp</span>
+            </button>
 
             {/* Cart Drawer Trigger */}
             <button 
@@ -82,7 +114,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
               aria-label={`View Cart with ${cartCount} items`}
             >
               <ShoppingBag size={17} />
-              <span className="btn-label">Order List</span>
+              <span className="btn-label">Wholesale Requisition</span>
               {cartCount > 0 && (
                 <span className="cart-badge-pill">{cartCount}</span>
               )}
@@ -95,8 +127,8 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
               title="Admin & Warehouse Portal"
               aria-label="Admin Portal"
             >
-              <Lock size={15} color="var(--primary-700)" />
-              <span className="btn-label">Admin</span>
+              <Lock size={15} />
+              <span className="btn-label">Warehouse</span>
             </button>
 
             {/* Mobile Menu Toggle Button */}
@@ -121,10 +153,10 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
                 <input
                   type="text"
                   className="nav-search-input mobile-input"
-                  placeholder="Search housekeeping supplies..."
+                  placeholder="Search stationery & housekeeping..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search housekeeping supplies"
+                  aria-label="Search supplies"
                 />
               </div>
 
@@ -148,16 +180,28 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
                   onClick={() => { setIsMobileMenuOpen(false); onOpenCart(); }}
                 >
                   <ShoppingBag size={17} />
-                  <span>View Order List ({cartCount})</span>
+                  <span>Requisition Cart ({cartCount})</span>
                 </button>
 
                 <button 
-                  className="nav-btn nav-btn-admin mobile-action-btn"
-                  onClick={() => { setIsMobileMenuOpen(false); onOpenAdminPreview(); }}
+                  className="nav-btn nav-btn-whatsapp mobile-action-btn"
+                  onClick={handleWhatsAppContact}
                 >
-                  <Lock size={15} color="var(--primary-700)" />
-                  <span>Admin Operations</span>
+                  <MessageSquare size={17} />
+                  <span>WhatsApp Inquiry</span>
                 </button>
+              </div>
+
+              <div className="mobile-contact-card">
+                <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--slate-800)', marginBottom: '0.3rem' }}>
+                  Jasvi Enterprises • Hosur Hub
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--slate-600)' }}>
+                  Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, Krishnagiri, TN.
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--primary-700)', marginTop: '0.3rem', fontWeight: 600 }}>
+                  jasvienterprises28@gmail.com
+                </div>
               </div>
             </div>
           </div>

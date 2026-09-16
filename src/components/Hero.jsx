@@ -1,7 +1,12 @@
 import React from 'react';
-import { ArrowRight, Calculator, ShieldCheck, CheckCircle2, Sparkles, Box } from 'lucide-react';
+import { ArrowRight, Calculator, ShieldCheck, CheckCircle2, Sparkles, Box, MessageSquare } from 'lucide-react';
 
 export default function Hero({ onExploreCatalog, onOpenCalculator }) {
+  const handleWhatsAppContact = () => {
+    const text = encodeURIComponent("Hello Jasvi Enterprises, I would like to inquire about wholesale Stationery & Housekeeping supplies.");
+    window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
+  };
+
   return (
     <header className="hero-section">
       <div className="container">
@@ -10,24 +15,42 @@ export default function Hero({ onExploreCatalog, onOpenCalculator }) {
           <div className="hero-content">
             <div className="section-tag">
               <Sparkles size={14} />
-              <span>Commercial & Hospitality Housekeeping Supplies</span>
+              <span>Wholesale Supplier • Hosur, Tamil Nadu</span>
             </div>
 
-            <h1>
-              Industrial Housekeeping Materials, <br />
-              <span className="hero-gradient-text">Delivered Fast & Reliable.</span>
+            <h1 className="hero-main-title">
+              Stationery & <br />
+              <span className="hero-gradient-text">Housekeeping Materials</span> <br />
+              At Wholesale Prices.
             </h1>
 
             <p className="hero-lead">
-              Empower your housekeeping crews with hospital-grade disinfectants, high-durability janitorial carts, split-fiber mops, and luxury guest amenities. Save up to 28% with tiered wholesale pricing and guaranteed next-day dispatch.
+              Direct wholesale supplier for <strong>Companies, Offices, Hospitals, Colleges & Schools</strong>. Best quality supplies, competitive prices, and fast on-time delivery across Hosur & Krishnagiri.
             </p>
 
+            {/* Quick 3 Value Points */}
+            <div className="hero-pillars-row">
+              <div className="pillar-badge">
+                <span className="pillar-dot green"></span>
+                <strong>Best Quality</strong>
+              </div>
+              <div className="pillar-badge">
+                <span className="pillar-dot amber"></span>
+                <strong>Competitive Price</strong>
+              </div>
+              <div className="pillar-badge">
+                <span className="pillar-dot blue"></span>
+                <strong>On Time Delivery</strong>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
             <div className="hero-buttons">
               <button 
                 className="btn btn-primary btn-lg"
                 onClick={onExploreCatalog}
               >
-                <span>Order Housekeeping Materials</span>
+                <span>View Products</span>
                 <ArrowRight size={18} />
               </button>
 
@@ -36,40 +59,49 @@ export default function Hero({ onExploreCatalog, onOpenCalculator }) {
                 onClick={onOpenCalculator}
               >
                 <Calculator size={18} color="var(--primary-700)" />
-                <span>Estimate Facility Needs</span>
+                <span>Estimate Restock</span>
+              </button>
+
+              <button
+                className="btn btn-whatsapp btn-lg"
+                onClick={handleWhatsAppContact}
+                title="Direct WhatsApp Order"
+              >
+                <MessageSquare size={18} />
+                <span>WhatsApp Quote</span>
               </button>
             </div>
 
-            {/* Live Trust Badges */}
-            <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--slate-600)', fontWeight: 500 }}>
-                <CheckCircle2 size={16} color="var(--primary-600)" /> EPA & OSHA Registered
+            {/* Simple Trust Points */}
+            <div className="hero-trust-indicators">
+              <span>
+                <CheckCircle2 size={16} color="var(--primary-600)" /> Daily Hosur Delivery
               </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--slate-600)', fontWeight: 500 }}>
-                <CheckCircle2 size={16} color="var(--primary-600)" /> Net-30 Invoicing for Facilities
+              <span>
+                <CheckCircle2 size={16} color="var(--primary-600)" /> Only Wholesale Rates
               </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--slate-600)', fontWeight: 500 }}>
-                <CheckCircle2 size={16} color="var(--primary-600)" /> 100% Eco-Safe Formulations
+              <span>
+                <CheckCircle2 size={16} color="var(--primary-600)" /> Single-Source Supplier
               </span>
             </div>
 
-            {/* Metrics */}
+            {/* Key Numbers */}
             <div className="hero-stats-row">
               <div className="stat-item">
-                <h3>99.8%</h3>
-                <p>On-Time Dispatch</p>
+                <h3>100%</h3>
+                <p>Wholesale Rates</p>
+              </div>
+              <div className="stat-item">
+                <h3>5</h3>
+                <p>Sectors Served</p>
               </div>
               <div className="stat-item">
                 <h3>500+</h3>
-                <p>Hotels & Facilities</p>
+                <p>Products in Stock</p>
               </div>
               <div className="stat-item">
-                <h3>2,400+</h3>
-                <p>Active Cleaning SKUs</p>
-              </div>
-              <div className="stat-item">
-                <h3>24-48h</h3>
-                <p>Average Delivery</p>
+                <h3>Hosur</h3>
+                <p>Local Hub</p>
               </div>
             </div>
           </div>
@@ -78,39 +110,40 @@ export default function Hero({ onExploreCatalog, onOpenCalculator }) {
           <div className="hero-visual-card">
             <img 
               src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&auto=format&fit=crop&q=80" 
-              alt="Professional Janitorial Housekeeping Cart and Materials" 
+              alt="Professional Housekeeping and Stationery Materials" 
               className="hero-featured-image"
             />
 
-            {/* Floating Live Badge Top Right */}
+            {/* Floating Badges */}
             <div className="floating-pill top-right animate-float">
               <div className="icon-bubble">
                 <ShieldCheck size={18} />
               </div>
               <div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--slate-900)' }}>Hospital-Grade Clean</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--slate-500)' }}>99.99% Virucidal Efficacy</div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--slate-900)' }}>Guaranteed Quality</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--slate-500)' }}>Branded Paper & Chemicals</div>
               </div>
             </div>
 
-            {/* Floating Live Badge Bottom Left */}
             <div className="floating-pill bottom-left animate-float-delay">
               <div className="icon-bubble" style={{ background: '#ecfdf5', color: '#059669' }}>
                 <Box size={18} />
               </div>
               <div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--slate-900)' }}>Bulk Tier Discounts</div>
-                <div style={{ fontSize: '0.72rem', color: '#059669', fontWeight: 700 }}>Save 15% - 28% Instantly</div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--slate-900)' }}>Bulk Discounts</div>
+                <div style={{ fontSize: '0.72rem', color: '#059669', fontWeight: 700 }}>Save on Carton Orders</div>
               </div>
             </div>
 
             {/* Status Footer Tag */}
-            <div style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem', color: 'var(--slate-600)', background: '#ffffff', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--slate-200)' }}>
+            <div className="hero-card-footer">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block' }}></span>
-                <span>Central Distribution Hub: <strong>Active</strong></span>
+                <span className="status-indicator-dot"></span>
+                <span>Hosur Hub: <strong>Ready for Dispatch</strong></span>
               </div>
-              <span style={{ color: 'var(--primary-700)', fontWeight: 600 }}>Ships in 24h</span>
+              <span style={{ color: 'var(--primary-700)', fontWeight: 700 }}>
+                Zuzuwadi, Hosur
+              </span>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import TargetSectors from './components/TargetSectors';
 import ProductCatalog from './components/ProductCatalog';
 import BulkCalculator from './components/BulkCalculator';
 import Features from './components/Features';
@@ -11,14 +12,14 @@ import CartDrawer from './components/CartDrawer';
 import QuickViewModal from './components/QuickViewModal';
 import AdminPreviewModal from './components/AdminPreviewModal';
 import { PRODUCTS } from './data/products';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, MessageSquare } from 'lucide-react';
 
 function App() {
   const [cart, setCart] = useState(() => {
-    // Initial sample order so the user immediately sees how it works
+    // Initial sample wholesale items from Stationery and Housekeeping
     return [
-      { ...PRODUCTS[0], qty: 6 },
-      { ...PRODUCTS[1], qty: 10 }
+      { ...PRODUCTS[0], qty: 3 }, // JK Copier A4 Paper (3 Cartons - wholesale tier)
+      { ...PRODUCTS[13], qty: 4 }  // Hospital Disinfectant Liquid 5L (4 Cans - wholesale tier)
     ];
   });
 
@@ -46,7 +47,7 @@ function App() {
       }
       return [...prev, { ...product, qty }];
     });
-    showToast(`Added ${qty} × ${product.name} to order`);
+    showToast(`Added ${qty} × ${product.name} to wholesale requisition`);
   };
 
   // Add bundle items from Bulk Calculator
@@ -68,7 +69,7 @@ function App() {
       });
       return updated;
     });
-    showToast(`Added recommended restock bundle to your order!`);
+    showToast(`Added complete monthly restock bundle to your order!`);
   };
 
   // Update item quantity in cart
@@ -103,33 +104,49 @@ function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleFloatingWhatsApp = () => {
+    const text = encodeURIComponent("Hello Jasvi Enterprises! I would like to inquire about wholesale Stationery & Housekeeping supplies.");
+    window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
+  };
+
   return (
     <div className="min-h-screen">
       {/* Toast Notification */}
       {toastMessage && (
         <div style={{
           position: 'fixed',
-          bottom: '1.5rem',
+          bottom: '1.75rem',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 200,
-          background: 'var(--slate-900)',
+          background: '#0b1528',
           color: '#ffffff',
-          padding: '0.75rem 1.4rem',
+          padding: '0.8rem 1.5rem',
           borderRadius: 'var(--radius-full)',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.35)',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.6rem',
+          gap: '0.65rem',
           fontSize: '0.9rem',
           fontWeight: 600,
-          border: '1px solid rgba(20, 184, 166, 0.4)',
+          border: '1px solid rgba(56, 189, 248, 0.4)',
           animation: 'fadeInScale 0.25s ease'
         }}>
-          <CheckCircle2 size={18} color="#14b8a6" />
+          <CheckCircle2 size={19} color="#10b981" />
           <span>{toastMessage}</span>
         </div>
       )}
+
+      {/* Floating WhatsApp Quick Action Button */}
+      <button 
+        className="floating-whatsapp-btn"
+        onClick={handleFloatingWhatsApp}
+        title="Direct WhatsApp Inquiry"
+        aria-label="Direct WhatsApp Inquiry"
+      >
+        <MessageSquare size={24} />
+        <span className="floating-tooltip">Chat with Jasvi Enterprises</span>
+      </button>
 
       {/* Top Navbar */}
       <Navbar
@@ -147,6 +164,11 @@ function App() {
           onOpenCalculator={scrollToCalculator}
         />
 
+        {/* Our Supply For: Target Sectors (Companies, Offices, Hospitals, College, Schools) */}
+        <TargetSectors 
+          onExploreCatalog={scrollToCatalog}
+        />
+
         {/* Product Catalog */}
         <ProductCatalog
           products={PRODUCTS}
@@ -161,13 +183,13 @@ function App() {
           onAddBundleToCart={handleAddBundleToCart}
         />
 
-        {/* Why Choose Us */}
+        {/* Value Proposition & Operations */}
         <Features />
 
-        {/* Testimonials & Industry Certifications */}
+        {/* Client Reviews */}
         <Testimonials />
 
-        {/* Common Questions */}
+        {/* FAQs */}
         <FAQ />
       </main>
 
@@ -177,7 +199,16 @@ function App() {
         onExploreCatalog={scrollToCatalog}
       />
 
-      {/* Slide-out Order Cart Drawer */}
+      {/* Quick View Modal */}
+      {quickViewProduct && (
+        <QuickViewModal
+          product={quickViewProduct}
+          onClose={() => setQuickViewProduct(null)}
+          onAddToCart={handleAddToCart}
+        />
+      )}
+
+      {/* Cart Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -187,14 +218,7 @@ function App() {
         onClearCart={handleClearCart}
       />
 
-      {/* Quick View / Technical Specs Modal */}
-      <QuickViewModal
-        product={quickViewProduct}
-        onClose={() => setQuickViewProduct(null)}
-        onAddToCart={handleAddToCart}
-      />
-
-      {/* Admin Operations Preview Modal */}
+      {/* Admin Preview Modal */}
       <AdminPreviewModal
         isOpen={isAdminPreviewOpen}
         onClose={() => setIsAdminPreviewOpen(false)}

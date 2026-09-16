@@ -1,36 +1,36 @@
 import React from 'react';
-import { Truck, ShieldCheck, DollarSign, Leaf, Repeat, Headphones, Sparkles } from 'lucide-react';
+import { Truck, Tag, PackageCheck, Layers, Award, Headphones } from 'lucide-react';
 
 const FEATURES = [
   {
+    icon: Award,
+    title: 'Best Quality Products',
+    desc: 'Branded stationery (JK Copier, Kangaro) and tested high-grade cleaning chemicals.'
+  },
+  {
+    icon: Tag,
+    title: 'Only Wholesale Prices',
+    desc: 'Direct wholesale rates without retail markups. Clear carton and case discounts.'
+  },
+  {
     icon: Truck,
-    title: 'Guaranteed 24-48h Dispatch',
-    desc: 'With 6 regional fulfillment centers, 98% of hospitality and facility orders arrive within two business days. Emergency same-day couriers available.'
+    title: 'On-Time Delivery',
+    desc: 'Prompt daily dispatch to companies, hospitals, and schools in Hosur & Krishnagiri.'
   },
   {
-    icon: ShieldCheck,
-    title: 'EPA & OSHA Compliant',
-    desc: 'Full regulatory compliance with automatic digital SDS sheet delivery, bilingual hazard labeling, and certified disinfectant kill claim documentation.'
+    icon: Layers,
+    title: 'One-Stop Supply',
+    desc: 'Consolidate all stationery and housekeeping materials on a single invoice.'
   },
   {
-    icon: DollarSign,
-    title: 'Tiered Wholesale Pricing',
-    desc: 'Bypass distributor markups with direct manufacturer pricing. Enjoy automatic discounts scaling from 10% to 28% off on case and pallet volumes.'
-  },
-  {
-    icon: Leaf,
-    title: 'Eco-Certified Formulations',
-    desc: 'Environmentally responsible cleaning materials bearing Green Seal and EPA Safer Choice certifications that are non-toxic to housekeeping staff.'
-  },
-  {
-    icon: Repeat,
-    title: 'Smart Recurring Restock',
-    desc: 'Set custom delivery cadences based on occupancy rates. Pause, edit, or adjust volumes anytime with automated inventory reservation.'
+    icon: PackageCheck,
+    title: '5 Target Sectors',
+    desc: 'Supplying Companies, Offices, Hospitals, Colleges, and Schools.'
   },
   {
     icon: Headphones,
-    title: 'Dedicated Account Manager',
-    desc: 'Get assigned a commercial housekeeping procurement specialist ready to assist with POs, customized packaging, and chemical audit consulting.'
+    title: 'Instant Support',
+    desc: 'Quick quotations and order processing via WhatsApp and email.'
   }
 ];
 
@@ -40,12 +40,11 @@ export default function Features() {
       <div className="container">
         <div className="section-header">
           <div className="section-tag">
-            <Sparkles size={14} />
-            <span>Operational Advantage</span>
+            <span>Why Jasvi Enterprises</span>
           </div>
-          <h2 className="section-title">Built Exclusively for Housekeeping & Facility Operations</h2>
+          <h2 className="section-title">Your Trusted Wholesale Partner</h2>
           <p className="section-subtitle">
-            Say goodbye to fragmented cleaning vendors. We provide high-potency, reliable materials engineered for intense daily sanitization demands.
+            Reliable quality, competitive pricing, and on-time delivery across Hosur.
           </p>
         </div>
 
@@ -55,7 +54,7 @@ export default function Features() {
             return (
               <div key={idx} className="feature-card">
                 <div className="feature-icon-box">
-                  <Icon size={24} />
+                  <Icon size={22} />
                 </div>
                 <h3>{feature.title}</h3>
                 <p>{feature.desc}</p>

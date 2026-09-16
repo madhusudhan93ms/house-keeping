@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { X, Star, CheckCircle, ShieldCheck, Plus, Minus, ShoppingBag } from 'lucide-react';
 
 export default function QuickViewModal({ product, onClose, onAddToCart }) {
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(product?.minBulkUnits || 1);
 
   if (!product) return null;
 
   const isBulk = qty >= product.minBulkUnits;
   const unitPrice = isBulk ? product.bulkPrice : product.price;
+  const total = unitPrice * qty;
 
   const handleAdd = () => {
     onAddToCart(product, qty);
@@ -30,18 +31,18 @@ export default function QuickViewModal({ product, onClose, onAddToCart }) {
         <div className="quickview-grid">
           {/* Image */}
           <div>
-            <div style={{ width: '100%', height: 260, background: 'var(--slate-50)', borderRadius: 'var(--radius-lg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', border: '1px solid var(--slate-200)', marginBottom: '1rem' }}>
+            <div className="quickview-img-wrap">
               <img 
                 src={product.image} 
                 alt={product.name} 
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                className="quickview-img"
               />
             </div>
             
-            <div style={{ background: 'var(--primary-50)', padding: '0.85rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--primary-200)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div className="quickview-trust-callout">
               <ShieldCheck size={20} color="var(--primary-700)" />
               <div style={{ fontSize: '0.82rem', color: 'var(--primary-900)' }}>
-                <strong>Quality Guaranteed:</strong> Verified for industrial cleaning safety & compliance.
+                <strong>Quality Guaranteed:</strong> Sourced directly for corporate, hospital, and educational standards.
               </div>
             </div>
           </div>
@@ -58,72 +59,101 @@ export default function QuickViewModal({ product, onClose, onAddToCart }) {
             </h3>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.85rem' }}>
-              <div style={{ display: 'flex' }}>
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} fill="#f59e0b" color="#f59e0b" />
-                ))}
-              </div>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--slate-700)' }}>
-                {product.rating} ({product.reviewsCount} facility reviews)
-              </span>
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i} 
+                  size={15} 
+                  fill={i < Math.floor(product.rating) ? '#f59e0b' : 'none'} 
+                  color="#f59e0b" 
+                />
+              ))}
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, marginLeft: 4 }}>{product.rating}</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--slate-400)' }}>({product.reviewsCount} verified reviews)</span>
             </div>
 
-            <p style={{ fontSize: '0.88rem', color: 'var(--slate-600)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
+            <div style={{ background: 'var(--slate-50)', padding: '0.65rem 0.9rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', border: '1px solid var(--slate-200)', fontSize: '0.85rem', color: 'var(--slate-700)' }}>
+              <strong>Packaging Unit:</strong> {product.packageSize}
+            </div>
+
+            <p style={{ fontSize: '0.9rem', color: 'var(--slate-600)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
               {product.description}
             </p>
 
-            {/* Specifications Box */}
+            {/* Specifications */}
             <div style={{ marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--slate-700)', marginBottom: '0.5rem' }}>
-                Technical Specifications & Standards:
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--slate-500)', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+                Key Specifications
               </div>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                {product.specs?.map((spec, idx) => (
-                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.82rem', color: 'var(--slate-600)' }}>
-                    <CheckCircle size={14} color="var(--primary-600)" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                {product.specs.map((spec, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: 'var(--slate-700)' }}>
+                    <CheckCircle size={14} color="var(--primary-600)" style={{ flexShrink: 0 }} />
                     <span>{spec}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
-            {/* Pricing Details */}
-            <div style={{ background: 'var(--slate-50)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--slate-200)', marginBottom: '1.25rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            {/* Price Box */}
+            <div style={{ background: isBulk ? 'var(--primary-50)' : 'var(--slate-50)', padding: '1rem', borderRadius: 'var(--radius-md)', border: isBulk ? '1.5px solid var(--primary-500)' : '1px solid var(--slate-200)', marginBottom: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--slate-900)' }}>
-                    ${unitPrice.toFixed(2)}
-                  </span>
-                  <span style={{ fontSize: '0.82rem', color: 'var(--slate-500)', marginLeft: 4 }}>
-                    / {product.packageSize}
-                  </span>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 600 }}>Wholesale Price Rate:</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', marginTop: 2 }}>
+                    <span style={{ fontSize: '1.55rem', fontWeight: 800, color: 'var(--slate-900)' }}>
+                      ₹{unitPrice.toLocaleString('en-IN')}
+                    </span>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--slate-500)' }}>/{product.unit || 'unit'}</span>
+                    {isBulk && (
+                      <span style={{ textDecoration: 'line-through', fontSize: '0.9rem', color: 'var(--slate-400)' }}>
+                        ₹{product.price.toLocaleString('en-IN')}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                {isBulk && (
-                  <span className="badge badge-green">
-                    Wholesale Applied (-${(product.price - product.bulkPrice).toFixed(2)})
-                  </span>
-                )}
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 600 }}>Total (Qty {qty}):</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--primary-700)' }}>
+                    ₹{total.toLocaleString('en-IN')}
+                  </div>
+                </div>
               </div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)', marginTop: 4 }}>
-                Bulk pricing: <strong>${product.bulkPrice.toFixed(2)}</strong> for orders of {product.minBulkUnits}+ units.
-              </div>
+
+              {!isBulk && (
+                <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--primary-800)', fontWeight: 600 }}>
+                  💡 Tip: Increase quantity to {product.minBulkUnits}+ units to unlock bulk pricing at ₹{product.bulkPrice.toLocaleString('en-IN')}/{product.unit || 'unit'}!
+                </div>
+              )}
             </div>
 
-            {/* Quantity and Add */}
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <div className="qty-control">
-                <button className="qty-btn" onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease quantity">
+            {/* Stepper and Add Button */}
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <div className="quantity-stepper" style={{ height: 44 }}>
+                <button 
+                  className="stepper-btn" 
+                  onClick={() => setQty(Math.max(1, qty - 1))}
+                  aria-label="Decrease quantity"
+                >
                   <Minus size={14} />
                 </button>
-                <input type="text" readOnly value={qty} className="qty-input" />
-                <button className="qty-btn" onClick={() => setQty(qty + 1)} aria-label="Increase quantity">
+                <span className="stepper-value" style={{ minWidth: 32, fontSize: '0.95rem' }}>{qty}</span>
+                <button 
+                  className="stepper-btn" 
+                  onClick={() => setQty(qty + 1)}
+                  aria-label="Increase quantity"
+                >
                   <Plus size={14} />
                 </button>
               </div>
 
-              <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleAdd}>
-                <ShoppingBag size={18} />
-                <span>Add {qty} to Order</span>
+              <button 
+                className="btn btn-primary btn-block btn-lg"
+                onClick={handleAdd}
+                style={{ height: 44 }}
+              >
+                <ShoppingBag size={17} />
+                <span>Add {qty} to Requisition Order</span>
               </button>
             </div>
           </div>

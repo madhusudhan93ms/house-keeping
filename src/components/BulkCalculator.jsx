@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Calculator, Building2, Hospital, Briefcase, Home, ShoppingCart, Check, Sparkles } from 'lucide-react';
+import { Calculator, Building2, Briefcase, HeartPulse, GraduationCap, School, ShoppingCart, Check, BookOpen, Sparkles } from 'lucide-react';
 
 const FACILITY_TYPES = [
-  { id: 'hotel', label: 'Hotel & Resort', icon: Building2, unitName: 'Guest Rooms', defaultUnits: 60, min: 10, max: 400 },
-  { id: 'medical', label: 'Hospital & Clinic', icon: Hospital, unitName: 'Beds / Exam Rooms', defaultUnits: 40, min: 10, max: 250 },
-  { id: 'office', label: 'Corporate Office', icon: Briefcase, unitName: 'Floors / Zones', defaultUnits: 8, min: 1, max: 50 },
-  { id: 'property', label: 'Vacation Rentals', icon: Home, unitName: 'Properties', defaultUnits: 25, min: 5, max: 150 },
+  { id: 'companies', label: 'Company / Factory', icon: Building2, unitName: 'Staff Members', defaultUnits: 100, min: 20, max: 1000 },
+  { id: 'offices', label: 'Office', icon: Briefcase, unitName: 'Desks', defaultUnits: 50, min: 10, max: 500 },
+  { id: 'hospitals', label: 'Hospital', icon: HeartPulse, unitName: 'Beds', defaultUnits: 40, min: 10, max: 300 },
+  { id: 'colleges', label: 'College', icon: GraduationCap, unitName: 'Students', defaultUnits: 500, min: 100, max: 5000 },
+  { id: 'schools', label: 'School', icon: School, unitName: 'Students', defaultUnits: 300, min: 50, max: 2500 },
 ];
 
 export default function BulkCalculator({ onAddBundleToCart }) {
@@ -18,25 +19,80 @@ export default function BulkCalculator({ onAddBundleToCart }) {
     setUnitCount(facility.defaultUnits);
   };
 
-  // Compute recommended materials based on unit count and facility multiplier
-  const multiplier = selectedFacility.id === 'medical' ? 1.6 : selectedFacility.id === 'office' ? 4.2 : 1.0;
-  
-  const disinfectantCases = Math.max(2, Math.round((unitCount * 0.12 * multiplier)));
-  const microfiberPacks = Math.max(3, Math.round((unitCount * 0.15 * multiplier)));
-  const linerBoxes = Math.max(2, Math.round((unitCount * 0.1 * multiplier)));
-  const paperCases = Math.max(2, Math.round((unitCount * 0.14 * multiplier)));
+  // Calculate Stationery & Housekeeping quantities based on size
+  let paperCartons = 2;
+  let registerBundles = 1;
+  let penJars = 2;
+  let filePacks = 1;
 
-  // Estimated cost
-  const estimatedRetail = (disinfectantCases * 38.5) + (microfiberPacks * 26.0) + (linerBoxes * 42.0) + (paperCases * 38.0);
-  const estimatedBulk = (disinfectantCases * 31.9) + (microfiberPacks * 20.5) + (linerBoxes * 34.5) + (paperCases * 31.0);
-  const totalSavings = estimatedRetail - estimatedBulk;
+  let floorCleanerCans = 2;
+  let disinfectantCans = 1;
+  let handwashCans = 2;
+  let garbageBagPacks = 2;
+
+  if (selectedFacility.id === 'companies') {
+    paperCartons = Math.max(2, Math.round(unitCount * 0.02));
+    registerBundles = Math.max(1, Math.round(unitCount * 0.015));
+    penJars = Math.max(2, Math.round(unitCount * 0.025));
+    filePacks = Math.max(1, Math.round(unitCount * 0.015));
+
+    floorCleanerCans = Math.max(3, Math.round(unitCount * 0.035));
+    disinfectantCans = Math.max(2, Math.round(unitCount * 0.02));
+    handwashCans = Math.max(3, Math.round(unitCount * 0.03));
+    garbageBagPacks = Math.max(3, Math.round(unitCount * 0.035));
+  } else if (selectedFacility.id === 'offices') {
+    paperCartons = Math.max(3, Math.round(unitCount * 0.05));
+    registerBundles = Math.max(1, Math.round(unitCount * 0.01));
+    penJars = Math.max(2, Math.round(unitCount * 0.04));
+    filePacks = Math.max(2, Math.round(unitCount * 0.03));
+
+    floorCleanerCans = Math.max(2, Math.round(unitCount * 0.025));
+    disinfectantCans = Math.max(1, Math.round(unitCount * 0.015));
+    handwashCans = Math.max(2, Math.round(unitCount * 0.03));
+    garbageBagPacks = Math.max(2, Math.round(unitCount * 0.025));
+  } else if (selectedFacility.id === 'hospitals') {
+    paperCartons = Math.max(3, Math.round(unitCount * 0.05));
+    registerBundles = Math.max(2, Math.round(unitCount * 0.03));
+    penJars = Math.max(2, Math.round(unitCount * 0.04));
+    filePacks = Math.max(2, Math.round(unitCount * 0.03));
+
+    floorCleanerCans = Math.max(4, Math.round(unitCount * 0.07));
+    disinfectantCans = Math.max(5, Math.round(unitCount * 0.08));
+    handwashCans = Math.max(5, Math.round(unitCount * 0.08));
+    garbageBagPacks = Math.max(5, Math.round(unitCount * 0.08));
+  } else {
+    // colleges & schools
+    paperCartons = Math.max(3, Math.round(unitCount * 0.015));
+    registerBundles = Math.max(2, Math.round(unitCount * 0.01));
+    penJars = Math.max(3, Math.round(unitCount * 0.012));
+    filePacks = Math.max(2, Math.round(unitCount * 0.008));
+
+    floorCleanerCans = Math.max(3, Math.round(unitCount * 0.012));
+    disinfectantCans = Math.max(2, Math.round(unitCount * 0.008));
+    handwashCans = Math.max(4, Math.round(unitCount * 0.012));
+    garbageBagPacks = Math.max(3, Math.round(unitCount * 0.01));
+  }
+
+  const retailCost = 
+    (paperCartons * 3200) + (registerBundles * 1440) + (penJars * 350) + (filePacks * 1650) +
+    (floorCleanerCans * 650) + (disinfectantCans * 950) + (handwashCans * 650) + (garbageBagPacks * 850);
+
+  const bulkCost = 
+    (paperCartons * 2850) + (registerBundles * 1200) + (penJars * 280) + (filePacks * 1380) +
+    (floorCleanerCans * 520) + (disinfectantCans * 780) + (handwashCans * 510) + (garbageBagPacks * 690);
+
+  const totalSavings = retailCost - bulkCost;
 
   const handleAddBundle = () => {
     const bundleItems = [
-      { id: 'prod-1', qty: disinfectantCases },
-      { id: 'prod-2', qty: microfiberPacks },
-      { id: 'prod-4', qty: linerBoxes },
-      { id: 'prod-11', qty: paperCases }
+      { id: 'stat-1', qty: paperCartons },
+      { id: 'stat-3', qty: registerBundles },
+      { id: 'stat-5', qty: penJars },
+      { id: 'stat-7', qty: filePacks },
+      { id: 'hk-1', qty: disinfectantCans },
+      { id: 'hk-2', qty: floorCleanerCans },
+      { id: 'hk-6', qty: handwashCans },
+      { id: 'hk-8', qty: garbageBagPacks }
     ];
 
     onAddBundleToCart(bundleItems);
@@ -50,11 +106,11 @@ export default function BulkCalculator({ onAddBundleToCart }) {
         <div className="section-header">
           <div className="section-tag">
             <Calculator size={14} />
-            <span>Interactive Estimator</span>
+            <span>Restock Calculator</span>
           </div>
-          <h2 className="section-title">Calculate Your Monthly Housekeeping Supply Restock</h2>
+          <h2 className="section-title">Estimate Monthly Supply Needs</h2>
           <p className="section-subtitle">
-            Never run out of critical cleaning materials. Select your facility profile to generate an accurate monthly supply requisition plan with verified wholesale tier pricing.
+            Select your institution type and size to view recommended monthly stationery and housekeeping packs.
           </p>
         </div>
 
@@ -62,10 +118,9 @@ export default function BulkCalculator({ onAddBundleToCart }) {
           <div className="calculator-grid">
             {/* Left Controls */}
             <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>1. Select Your Facility Type</h3>
-              <p style={{ color: 'var(--slate-600)', fontSize: '0.88rem' }}>
-                Different operations have unique chemical consumption and sanitary turnover rates.
-              </p>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.4rem', color: 'var(--slate-900)' }}>
+                1. Select Institution
+              </h3>
 
               <div className="facility-type-buttons">
                 {FACILITY_TYPES.map(fac => {
@@ -77,17 +132,17 @@ export default function BulkCalculator({ onAddBundleToCart }) {
                       className={`facility-type-btn ${isActive ? 'active' : ''}`}
                       onClick={() => handleFacilityChange(fac)}
                     >
-                      <Icon size={18} color={isActive ? 'var(--primary-700)' : 'var(--slate-600)'} />
+                      <Icon size={17} color={isActive ? 'var(--primary-700)' : 'var(--slate-600)'} />
                       <span>{fac.label}</span>
                     </button>
                   );
                 })}
               </div>
 
-              {/* Slider for Capacity */}
+              {/* Slider */}
               <div className="slider-group">
                 <div className="slider-label-row">
-                  <span>Number of {selectedFacility.unitName}:</span>
+                  <span>Capacity:</span>
                   <span className="slider-val-badge">{unitCount} {selectedFacility.unitName}</span>
                 </div>
                 <input
@@ -97,87 +152,86 @@ export default function BulkCalculator({ onAddBundleToCart }) {
                   value={unitCount}
                   onChange={(e) => setUnitCount(Number(e.target.value))}
                   className="range-slider"
-                  aria-label={`Select number of ${selectedFacility.unitName}`}
+                  aria-label={`Select capacity in ${selectedFacility.unitName}`}
                 />
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.35rem', fontSize: '0.75rem', color: 'var(--slate-400)' }}>
-                  <span>{selectedFacility.min} Min</span>
-                  <span>{selectedFacility.max} Max Facility Capacity</span>
-                </div>
               </div>
 
-              {/* Highlights */}
-              <div style={{ background: 'var(--slate-50)', padding: '1rem 1.25rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--slate-200)', display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                <Sparkles size={22} color="var(--primary-600)" style={{ flexShrink: 0 }} />
-                <p style={{ fontSize: '0.84rem', color: 'var(--slate-700)', lineHeight: 1.5, margin: 0 }}>
-                  Estimates follow standardized <strong>AHLA (American Hotel & Lodging Association)</strong> and <strong>ISSA Clean Standards</strong> for sanitization cycles.
-                </p>
+              {/* Recommended Packs */}
+              <div className="restock-dual-breakdown">
+                <div className="breakdown-col">
+                  <div className="breakdown-header">
+                    <BookOpen size={16} color="var(--primary-700)" />
+                    <span>Stationery Pack</span>
+                  </div>
+                  <ul className="breakdown-list">
+                    <li>📄 <strong>{paperCartons} Cartons</strong> A4 Copier Paper</li>
+                    <li>📒 <strong>{registerBundles} Packs</strong> Hardbound Registers</li>
+                    <li>🖊️ <strong>{penJars} Jars</strong> Ballpoint Pens (50/jar)</li>
+                    <li>📁 <strong>{filePacks} Packs</strong> Box Files (10/pack)</li>
+                  </ul>
+                </div>
+
+                <div className="breakdown-col">
+                  <div className="breakdown-header">
+                    <Sparkles size={16} color="#059669" />
+                    <span>Housekeeping Pack</span>
+                  </div>
+                  <ul className="breakdown-list">
+                    <li>🧴 <strong>{disinfectantCans} × 5L</strong> Disinfectant Cleaner</li>
+                    <li>🌿 <strong>{floorCleanerCans} × 5L</strong> Floor Cleaner</li>
+                    <li>🧼 <strong>{handwashCans} × 5L</strong> Liquid Hand Soap</li>
+                    <li>🗑️ <strong>{garbageBagPacks} Packs</strong> Heavy Garbage Bags</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            {/* Right Results Box */}
-            <div className="calc-summary-box">
-              <div>
-                <div className="calc-summary-title">2. Recommended Monthly Restock Bundle</div>
-                
-                <div className="recommendations-list">
-                  <div className="rec-item">
-                    <span className="rec-item-name">Hospital-Grade Disinfectant (Case of 4x1 Gal)</span>
-                    <span className="rec-item-qty">{disinfectantCases} Cases</span>
-                  </div>
+            {/* Right Summary */}
+            <div className="calc-summary-panel">
+              <div className="calc-summary-header">
+                <span className="calc-live-pill">Wholesale Summary</span>
+                <h4>Monthly Estimate</h4>
+                <p>{selectedFacility.label} • {unitCount} {selectedFacility.unitName}</p>
+              </div>
 
-                  <div className="rec-item">
-                    <span className="rec-item-name">Commercial Microfiber Cloths (50 Pk)</span>
-                    <span className="rec-item-qty">{microfiberPacks} Packs</span>
-                  </div>
+              <div className="calc-cost-breakdown">
+                <div className="calc-cost-row">
+                  <span>Standard Retail:</span>
+                  <span className="strikethrough">₹{retailCost.toLocaleString('en-IN')}</span>
+                </div>
 
-                  <div className="rec-item">
-                    <span className="rec-item-name">55-Gallon Heavy Duty Trash Can Liners</span>
-                    <span className="rec-item-qty">{linerBoxes} Boxes</span>
-                  </div>
+                <div className="calc-cost-row highlight">
+                  <span>Wholesale Rate:</span>
+                  <span className="bulk-cost-figure">₹{bulkCost.toLocaleString('en-IN')}</span>
+                </div>
 
-                  <div className="rec-item">
-                    <span className="rec-item-name">Commercial Multifold Hand Towels (Case of 4k)</span>
-                    <span className="rec-item-qty">{paperCases} Cases</span>
+                <div className="calc-savings-box">
+                  <div className="savings-label">Wholesale Savings:</div>
+                  <div className="savings-amount">
+                    ₹{totalSavings.toLocaleString('en-IN')} (~{Math.round((totalSavings / retailCost) * 100)}% off)
                   </div>
                 </div>
               </div>
 
-              <div>
-                <div className="calc-price-row">
-                  <div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      Tiered Bulk Price
-                    </div>
-                    <div className="calc-price-val">${estimatedBulk.toFixed(2)}</div>
-                  </div>
+              <button 
+                className={`btn btn-primary btn-block calc-add-btn ${bundleAdded ? 'added' : ''}`}
+                onClick={handleAddBundle}
+              >
+                {bundleAdded ? (
+                  <>
+                    <Check size={18} />
+                    <span>Bundle Added to Cart!</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart size={18} />
+                    <span>Add Monthly Bundle to Cart</span>
+                  </>
+                )}
+              </button>
 
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#5eead4', fontWeight: 700 }}>
-                      You Save ~${totalSavings.toFixed(2)}
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'line-through' }}>
-                      Retail: ${estimatedRetail.toFixed(2)}
-                    </div>
-                  </div>
-                </div>
-
-                <button 
-                  className="btn btn-primary"
-                  style={{ width: '100%', padding: '0.95rem', fontSize: '1rem' }}
-                  onClick={handleAddBundle}
-                >
-                  {bundleAdded ? (
-                    <>
-                      <Check size={18} />
-                      <span>Bundle Added to Order List!</span>
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart size={18} />
-                      <span>Add Recommended Bundle to Order</span>
-                    </>
-                  )}
-                </button>
+              <div className="calc-delivery-guarantee">
+                🚚 <strong>Hosur Delivery:</strong> Delivered directly to your office, hospital, school or factory with delivery challan.
               </div>
             </div>
           </div>

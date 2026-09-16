@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Star, Plus, Minus, Check, Eye, AlertCircle, Sparkles, Filter } from 'lucide-react';
-import { CATEGORIES } from '../data/products';
+import { Plus, Minus, Check, Eye, AlertCircle, Sparkles, Filter, BookOpen, Layers } from 'lucide-react';
+import { CATEGORIES, DEPARTMENTS } from '../data/products';
 
 export default function ProductCatalog({ 
   products, 
@@ -9,10 +9,23 @@ export default function ProductCatalog({
   searchQuery, 
   setSearchQuery 
 }) {
+  const [selectedDept, setSelectedDept] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
   const [quantities, setQuantities] = useState({});
   const [addedAnimationId, setAddedAnimationId] = useState(null);
+
+  // Filter categories based on selected department
+  const availableCategories = useMemo(() => {
+    if (selectedDept === 'all') return CATEGORIES;
+    return CATEGORIES.filter(cat => cat.id === 'all' || cat.dept === selectedDept);
+  }, [selectedDept]);
+
+  // Handle department change
+  const handleDeptChange = (deptId) => {
+    setSelectedDept(deptId);
+    setSelectedCategory('all');
+  };
 
   // Handle quantity stepper
   const handleQuantityChange = (productId, delta) => {
@@ -36,13 +49,14 @@ export default function ProductCatalog({
   const filteredProducts = useMemo(() => {
     return products
       .filter(item => {
+        const matchesDept = selectedDept === 'all' || item.dept === selectedDept;
         const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
         const matchesSearch = !searchQuery || 
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.sku.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
+        return matchesDept && matchesCategory && matchesSearch;
       })
       .sort((a, b) => {
         if (sortBy === 'price-low') return a.price - b.price;
@@ -50,28 +64,51 @@ export default function ProductCatalog({
         if (sortBy === 'rating') return b.rating - a.rating;
         return 0; // featured
       });
-  }, [products, selectedCategory, searchQuery, sortBy]);
+  }, [products, selectedDept, selectedCategory, searchQuery, sortBy]);
 
   return (
     <section id="catalog" className="catalog-section">
       <div className="container">
-        {/* Section Header */}
         <div className="section-header">
           <div className="section-tag">
             <Sparkles size={14} />
-            <span>Commercial Catalog</span>
+            <span>Wholesale Catalog</span>
           </div>
-          <h2 className="section-title">Essential Housekeeping Supplies</h2>
+          <h2 className="section-title">Stationery & Housekeeping Supplies</h2>
           <p className="section-subtitle">
-            Source certified cleaning materials, microfiber equipment, and restock supplies in bulk. Tiered discounts automatically applied to commercial carton orders.
+            Source office papers, registers, files, and cleaning chemicals directly at wholesale rates.
           </p>
         </div>
 
-        {/* Filter & Search Bar */}
+        {/* High-Level Department Tabs */}
+        <div className="department-tabs-bar">
+          {DEPARTMENTS.map(dept => {
+            const isActive = selectedDept === dept.id;
+            return (
+              <button
+                key={dept.id}
+                className={`dept-tab-btn ${isActive ? 'active' : ''}`}
+                onClick={() => handleDeptChange(dept.id)}
+              >
+                {dept.id === 'stationery' && <BookOpen size={18} />}
+                {dept.id === 'housekeeping' && <Sparkles size={18} />}
+                {dept.id === 'all' && <Layers size={18} />}
+                <span>{dept.label}</span>
+                <span className="dept-count-badge">
+                  {dept.id === 'all' 
+                    ? products.length 
+                    : products.filter(p => p.dept === dept.id).length}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Filter & Subcategory Bar */}
         <div className="filter-bar">
-          {/* Category Tabs */}
+          {/* Subcategory Pills */}
           <div className="category-tabs" role="tablist">
-            {CATEGORIES.map(cat => (
+            {availableCategories.map(cat => (
               <button
                 key={cat.id}
                 role="tab"
@@ -104,120 +141,141 @@ export default function ProductCatalog({
           </div>
         </div>
 
-        {/* Active Filter Notice if searched */}
-        {searchQuery && (
-          <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--primary-50)', padding: '0.65rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--primary-200)' }}>
-            <span style={{ fontSize: '0.9rem', color: 'var(--primary-900)' }}>
-              Filtering for: <strong>"{searchQuery}"</strong> ({filteredProducts.length} items found)
-            </span>
+        {/* Result Count and Wholesale Notice */}
+        <div className="catalog-meta-row">
+          <div style={{ fontSize: '0.88rem', color: 'var(--slate-600)' }}>
+            Showing <strong>{filteredProducts.length}</strong> wholesale items available for Hosur & regional dispatch
+          </div>
+          <div className="wholesale-tier-tip">
+            <span>💡 <strong>Wholesale Tier:</strong> Buy carton/bulk quantities to unlock automatic wholesale price savings.</span>
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        {filteredProducts.length === 0 ? (
+          <div className="empty-catalog-state">
+            <AlertCircle size={44} color="var(--slate-400)" />
+            <h3>No products found</h3>
+            <p>No stationery or housekeeping supplies matched your filter. Try clearing the search or category.</p>
             <button 
-              onClick={() => setSearchQuery('')}
-              style={{ background: 'transparent', border: 'none', color: 'var(--primary-700)', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer' }}
+              className="btn btn-secondary btn-sm"
+              onClick={() => { setSelectedDept('all'); setSelectedCategory('all'); setSearchQuery(''); }}
             >
-              Clear Search
+              Reset Filters
             </button>
           </div>
-        )}
-
-        {/* Products Grid */}
-        {filteredProducts.length > 0 ? (
+        ) : (
           <div className="products-grid">
             {filteredProducts.map(product => {
               const currentQty = quantities[product.id] || 1;
-              const isBulkQualified = currentQty >= product.minBulkUnits;
-              const effectivePrice = isBulkQualified ? product.bulkPrice : product.price;
-              const isJustAdded = addedAnimationId === product.id;
+              const isBulkTier = currentQty >= product.minBulkUnits;
+              const effectivePrice = isBulkTier ? product.bulkPrice : product.price;
+              const savingsPerUnit = product.price - product.bulkPrice;
 
               return (
-                <article key={product.id} className="product-card">
-                  {/* Image Container */}
-                  <div className="product-image-container">
+                <div key={product.id} className="product-card">
+                  {/* Card Header Media */}
+                  <div className="card-image-wrap">
                     <img 
                       src={product.image} 
                       alt={product.name} 
-                      className="product-image"
                       loading="lazy"
+                      className="product-img"
                     />
-                    
-                    {/* Badge Overlay */}
-                    <div className="product-badge-overlay">
-                      <span className={`badge badge-${product.badgeColor || 'teal'}`}>
+
+                    {/* Department / Category Pill */}
+                    <span className="card-dept-tag">
+                      {product.dept === 'stationery' ? 'Stationery' : 'Housekeeping'}
+                    </span>
+
+                    {/* Badges */}
+                    {product.badge && (
+                      <span className={`badge badge-${product.badgeColor || 'teal'} card-badge`}>
                         {product.badge}
                       </span>
-                      {isBulkQualified && (
-                        <span className="badge badge-green">
-                          Bulk Tier Active (-{Math.round(((product.price - product.bulkPrice)/product.price)*100)}%)
-                        </span>
-                      )}
-                    </div>
+                    )}
 
                     {/* Quick View Button */}
                     <button 
                       className="quick-view-btn"
                       onClick={() => onOpenQuickView(product)}
-                      title="Quick Specs & SDS details"
+                      title="Quick Specs & Details"
+                      aria-label={`Quick view ${product.name}`}
                     >
-                      <Eye size={13} style={{ display: 'inline', marginRight: '4px' }} />
-                      Specs
+                      <Eye size={16} />
+                      <span>Details</span>
                     </button>
                   </div>
 
-                  {/* Details */}
-                  <div className="product-info">
-                    <div className="product-category-row">
-                      <span className="product-category-name">{product.categoryLabel}</span>
-                      <div className="product-rating">
-                        <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                        <span>{product.rating}</span>
-                        <span style={{ color: 'var(--slate-400)', fontWeight: 400 }}>({product.reviewsCount})</span>
-                      </div>
+                  {/* Card Body */}
+                  <div className="card-body">
+                    <div className="card-meta">
+                      <span className="category-label">{product.categoryLabel}</span>
+                      <span className="sku-tag">SKU: {product.sku}</span>
                     </div>
 
-                    <h3 className="product-title">{product.name}</h3>
-                    <div className="product-spec">
-                      <span>Package: <strong>{product.packageSize}</strong></span> • 
-                      <span style={{ marginLeft: 4 }}>SKU: {product.sku}</span>
+                    <h3 className="product-title" title={product.name}>
+                      {product.name}
+                    </h3>
+
+                    <p className="package-size-tag">
+                      📦 {product.packageSize}
+                    </p>
+
+                    <p className="product-desc">
+                      {product.description}
+                    </p>
+
+                    {/* Specs Pills */}
+                    <div className="specs-row">
+                      {product.specs.slice(0, 2).map((spec, i) => (
+                        <span key={i} className="spec-pill">{spec}</span>
+                      ))}
                     </div>
 
-                    {/* Price Tier */}
-                    <div className="product-price-tier">
-                      <div>
-                        <div className="unit-price">
-                          ${effectivePrice.toFixed(2)}
-                          <span style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 500, marginLeft: 2 }}>/unit</span>
+                    {/* Pricing Display */}
+                    <div className="pricing-box">
+                      <div className="price-row">
+                        <div className="price-current">
+                          <span className="currency-symbol">₹</span>
+                          <span className="price-number">{effectivePrice.toLocaleString('en-IN')}</span>
+                          <span className="price-unit">/{product.unit || 'unit'}</span>
                         </div>
-                        {isBulkQualified ? (
-                          <span style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 600 }}>Wholesale Tier Active!</span>
+
+                        {/* Bulk Tier Badge */}
+                        {isBulkTier ? (
+                          <span className="bulk-active-tag">
+                            Wholesale Tier Active!
+                          </span>
                         ) : (
-                          <span style={{ fontSize: '0.75rem', color: 'var(--slate-500)' }}>Regular Single Unit</span>
+                          <span className="bulk-hint-tag">
+                            Buy {product.minBulkUnits}+ for ₹{product.bulkPrice.toLocaleString('en-IN')}
+                          </span>
                         )}
                       </div>
 
-                      <div className="bulk-price-tag">
-                        <div>Bulk: <strong>${product.bulkPrice.toFixed(2)}</strong></div>
-                        <div style={{ color: 'var(--slate-500)' }}>for {product.minBulkUnits}+ units</div>
-                      </div>
+                      {/* Savings notice */}
+                      {isBulkTier && (
+                        <div className="savings-callout">
+                          Saved ₹{(savingsPerUnit * currentQty).toLocaleString('en-IN')} with wholesale rate!
+                        </div>
+                      )}
                     </div>
 
-                    {/* Actions: Stepper + Add Button */}
-                    <div className="card-action-row">
-                      <div className="qty-control">
+                    {/* Action Controls */}
+                    <div className="card-actions">
+                      <div className="quantity-stepper" aria-label="Adjust quantity">
                         <button 
-                          className="qty-btn"
+                          className="stepper-btn"
                           onClick={() => handleQuantityChange(product.id, -1)}
+                          disabled={currentQty <= 1}
                           aria-label="Decrease quantity"
                         >
                           <Minus size={14} />
                         </button>
-                        <input 
-                          type="text" 
-                          readOnly 
-                          value={currentQty} 
-                          className="qty-input"
-                          aria-label="Quantity"
-                        />
+                        <span className="stepper-value">{currentQty}</span>
                         <button 
-                          className="qty-btn"
+                          className="stepper-btn"
                           onClick={() => handleQuantityChange(product.id, 1)}
                           aria-label="Increase quantity"
                         >
@@ -225,42 +283,27 @@ export default function ProductCatalog({
                         </button>
                       </div>
 
-                      <button 
-                        className={`btn add-cart-btn ${isJustAdded ? 'btn-secondary' : 'btn-primary'}`}
+                      <button
+                        className={`add-to-cart-btn ${addedAnimationId === product.id ? 'added' : ''}`}
                         onClick={() => handleAddToCartWithAnim(product)}
-                        style={isJustAdded ? { borderColor: '#10b981', color: '#059669' } : {}}
+                        aria-label={`Add ${currentQty} of ${product.name} to order`}
                       >
-                        {isJustAdded ? (
+                        {addedAnimationId === product.id ? (
                           <>
-                            <Check size={16} color="#059669" />
-                            <span>Added!</span>
+                            <Check size={16} />
+                            <span>Added to Requisition!</span>
                           </>
                         ) : (
                           <>
-                            <Plus size={16} />
-                            <span>Add to Order</span>
+                            <span>Add {currentQty} to Order</span>
                           </>
                         )}
                       </button>
                     </div>
                   </div>
-                </article>
+                </div>
               );
             })}
-          </div>
-        ) : (
-          <div style={{ textAlign: 'center', padding: '4rem 1rem', background: 'var(--slate-50)', borderRadius: 'var(--radius-lg)', border: '1px dashed var(--slate-300)' }}>
-            <AlertCircle size={44} color="var(--slate-400)" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No housekeeping supplies match your filter</h3>
-            <p style={{ color: 'var(--slate-600)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
-              Try searching with different terms or reset your active filters.
-            </p>
-            <button 
-              className="btn btn-secondary"
-              onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-            >
-              Reset All Filters
-            </button>
           </div>
         )}
       </div>

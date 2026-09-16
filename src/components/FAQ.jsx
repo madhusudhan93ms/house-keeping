@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, PhoneCall } from 'lucide-react';
+import { ChevronDown, HelpCircle, Mail, MessageSquare } from 'lucide-react';
 import { FAQS } from '../data/products';
 
 export default function FAQ() {
@@ -9,17 +9,22 @@ export default function FAQ() {
     setOpenIndex(openIndex === index ? -1 : index);
   };
 
+  const handleWhatsAppContact = () => {
+    const text = encodeURIComponent("Hello Jasvi Enterprises, I have a question regarding bulk wholesale supplies.");
+    window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
+  };
+
   return (
     <section id="faqs" className="faq-section">
       <div className="container">
         <div className="section-header">
           <div className="section-tag">
             <HelpCircle size={14} />
-            <span>Got Questions?</span>
+            <span>FAQs</span>
           </div>
-          <h2 className="section-title">Frequently Asked Commercial Questions</h2>
+          <h2 className="section-title">Common Questions</h2>
           <p className="section-subtitle">
-            Everything you need to know about wholesale minimum order quantities, delivery freight, custom restock contracts, and SDS safety documentation.
+            Quick answers about wholesale orders, delivery, and payment.
           </p>
         </div>
 
@@ -56,17 +61,39 @@ export default function FAQ() {
         </div>
 
         {/* Live Support Banner */}
-        <div style={{ maxWidth: 800, margin: '2.5rem auto 0 auto', background: 'var(--primary-50)', border: '1px solid var(--primary-200)', borderRadius: 'var(--radius-md)', padding: '1.25rem 1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+        <div className="faq-support-banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-            <PhoneCall size={24} color="var(--primary-700)" />
+            <div className="support-icon-box">
+              <Mail size={20} color="var(--primary-700)" />
+            </div>
             <div>
-              <div style={{ fontWeight: 700, color: 'var(--primary-900)', fontSize: '0.95rem' }}>Need a custom volume quote for multi-property chains?</div>
-              <div style={{ fontSize: '0.84rem', color: 'var(--primary-700)' }}>Our commercial housekeeping specialists reply within 15 minutes.</div>
+              <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--slate-900)' }}>
+                Have questions or need a custom quote?
+              </h4>
+              <p style={{ fontSize: '0.82rem', color: 'var(--slate-600)', margin: 0 }}>
+                Reach us directly at <strong>jasvienterprises28@gmail.com</strong> or WhatsApp.
+              </p>
             </div>
           </div>
-          <a href="tel:18005557873" className="btn btn-primary btn-sm">
-            Call 1-800-555-PURE
-          </a>
+
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <button 
+              className="btn btn-whatsapp btn-sm"
+              onClick={handleWhatsAppContact}
+            >
+              <MessageSquare size={15} />
+              <span>WhatsApp Inquiry</span>
+            </button>
+
+            <a 
+              href="mailto:jasvienterprises28@gmail.com"
+              className="btn btn-primary btn-sm"
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <Mail size={15} />
+              <span>Email Us</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
-import { Sparkles, Mail, Phone, MapPin, Check, Lock, ArrowUpRight } from 'lucide-react';
+import React from 'react';
+import { Mail, MapPin, Lock, ArrowUpRight, MessageSquare, ShieldCheck } from 'lucide-react';
 
 export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
 
-  const handleNewsletter = (e) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setTimeout(() => setSubscribed(false), 3000);
-      setEmail('');
-    }
+  const handleWhatsAppContact = () => {
+    const text = encodeURIComponent("Hello Jasvi Enterprises, I would like to request wholesale product pricing.");
+    window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
   };
 
   return (
@@ -21,110 +15,118 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
           {/* Brand Col */}
           <div className="footer-brand">
             <div className="logo-brand" style={{ color: '#ffffff' }}>
-              <div className="logo-icon-box">
-                <Sparkles size={22} />
+              <div className="je-logo-badge small">
+                <div className="je-logo-inner">
+                  <span className="je-letter-j">J</span>
+                  <span className="je-letter-e">E</span>
+                </div>
               </div>
               <div>
-                <div className="logo-text" style={{ color: '#ffffff' }}>Pure<span style={{ color: '#5eead4' }}>Pro</span></div>
-                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                  Commercial Housekeeping Supplies
+                <div className="logo-text" style={{ color: '#ffffff' }}>
+                  JASVI <span style={{ color: '#38bdf8' }}>ENTERPRISES</span>
+                </div>
+                <div style={{ fontSize: '0.68rem', color: '#10b981', fontWeight: 700 }}>
+                  YOUR NEEDS OUR PRIORITY
                 </div>
               </div>
             </div>
 
             <p>
-              Direct wholesale distributor of hospital-grade cleaning chemicals, ergonomic housekeeping carts, microfibers, and luxury room amenities. Serving commercial hospitality nationwide.
+              Wholesale supplier of Stationery & Housekeeping Materials for Companies, Offices, Hospitals, Colleges & Schools in Hosur.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: '#94a3b8' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Phone size={14} color="#5eead4" />
-                <span>1-800-555-PURE (24/7 Support)</span>
+            <div className="footer-contact-items">
+              <div className="footer-contact-item">
+                <Mail size={15} color="#38bdf8" />
+                <a href="mailto:jasvienterprises28@gmail.com" style={{ color: '#cbd5e1', textDecoration: 'none' }}>
+                  jasvienterprises28@gmail.com
+                </a>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Mail size={14} color="#5eead4" />
-                <span>orders@pureprohousekeeping.com</span>
+              <div className="footer-contact-item">
+                <MapPin size={15} color="#38bdf8" />
+                <span>Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, Krishnagiri, Tamil Nadu</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <MapPin size={14} color="#5eead4" />
-                <span>Logistics Hubs: Atlanta • Chicago • Dallas • Reno</span>
+              <div className="footer-contact-item">
+                <ShieldCheck size={15} color="#10b981" />
+                <span>GST NUMBER: NIL</span>
               </div>
+            </div>
+
+            <div style={{ marginTop: '1rem' }}>
+              <button 
+                className="btn btn-whatsapp btn-sm"
+                onClick={handleWhatsAppContact}
+              >
+                <MessageSquare size={15} />
+                <span>WhatsApp Inquiry</span>
+              </button>
             </div>
           </div>
 
-          {/* Quick Category Links */}
+          {/* Stationery Products Column */}
           <div className="footer-col">
-            <h4>Housekeeping Materials</h4>
+            <h4>Stationery Items</h4>
             <ul>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Cleaning Chemicals & Disinfectants</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Commercial Microfiber & Mops</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Trash Can Liners & Paper Towels</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Janitorial Carts & Caddies</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Hotel Room Amenities</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Safety Signs & Nitrile Gloves</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Paper (A4, A5, Legal)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Notebooks & Registers</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Pens, Pencils & Markers</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Files & Folders</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Staplers & Punches</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Sticky Notes & Tags</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Envelopes & Labels</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Art & Craft Materials</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Office Accessories</a></li>
             </ul>
           </div>
 
-          {/* Facility Support */}
+          {/* Housekeeping Products Column */}
           <div className="footer-col">
-            <h4>Commercial Resources</h4>
+            <h4>Housekeeping Materials</h4>
             <ul>
-              <li><a href="#calculator">Supply Usage Calculator</a></li>
-              <li><a href="#faqs">Safety Data Sheets (SDS)</a></li>
-              <li><a href="#faqs">Net-30 Commercial Credit Terms</a></li>
-              <li><a href="#faqs">Scheduled Restock Delivery</a></li>
-              <li><a href="#reviews">Verified Facility Case Studies</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Cleaning Chemicals</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Floor Cleaner (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Glass Cleaner (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Toilet Cleaner (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Dish Wash Liquid (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Hand Wash (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Paper Napkins & Tissue</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Garbage Bags (XL)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Mops, Brooms & Tools</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Dustbins & Storage</a></li>
+            </ul>
+          </div>
+
+          {/* Target Sectors & Admin */}
+          <div className="footer-col">
+            <h4>Our Supply For</h4>
+            <ul>
+              <li><a href="#sectors">Companies & Factories</a></li>
+              <li><a href="#sectors">Corporate Offices</a></li>
+              <li><a href="#sectors">Hospitals & Clinics</a></li>
+              <li><a href="#sectors">Colleges & Universities</a></li>
+              <li><a href="#sectors">Schools & Academies</a></li>
+              <li><a href="#calculator">Restock Calculator</a></li>
               <li>
                 <button 
                   onClick={onOpenAdminPreview}
-                  style={{ background: 'transparent', border: 'none', color: '#5eead4', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', fontSize: '0.9rem', padding: 0 }}
+                  style={{ background: 'transparent', border: 'none', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', fontSize: '0.85rem', padding: 0, marginTop: '0.5rem' }}
                 >
                   <Lock size={12} />
-                  <span>Admin & Operations Portal</span>
+                  <span>Hosur Hub Portal</span>
                   <ArrowUpRight size={12} />
                 </button>
               </li>
             </ul>
-          </div>
-
-          {/* Newsletter / Volume Deals */}
-          <div className="footer-col footer-newsletter">
-            <h4>Wholesale Inventory Alerts</h4>
-            <p>
-              Subscribe for flash bulk pallet discounts, quarterly chemical price indices, and seasonal hospitality restock alerts.
-            </p>
-
-            <form onSubmit={handleNewsletter} className="newsletter-form">
-              <input 
-                type="email" 
-                required 
-                placeholder="procurement@hotel.com" 
-                className="newsletter-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-label="Your work email"
-              />
-              <button type="submit" className="btn btn-primary btn-sm">
-                {subscribed ? <Check size={16} /> : 'Join'}
-              </button>
-            </form>
-            {subscribed && (
-              <div style={{ color: '#5eead4', fontSize: '0.78rem', marginTop: '0.5rem', fontWeight: 600 }}>
-                ✓ Subscribed! You will receive wholesale discount alerts.
-              </div>
-            )}
           </div>
         </div>
 
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div>
-            © {new Date().getFullYear()} PurePro Supply Co. All Rights Reserved. OSHA & EPA Compliant Supply Partner.
+            © {new Date().getFullYear()} <strong>Jasvi Enterprises</strong>. Hosur, Tamil Nadu. GST NUMBER: NIL.
           </div>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <a href="#" style={{ color: 'var(--slate-500)', textDecoration: 'none' }}>Privacy Policy</a>
-            <a href="#" style={{ color: 'var(--slate-500)', textDecoration: 'none' }}>Commercial Terms of Sale</a>
-            <a href="#" style={{ color: 'var(--slate-500)', textDecoration: 'none' }}>SDS Repository</a>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+            <a href="mailto:jasvienterprises28@gmail.com" style={{ color: '#94a3b8', textDecoration: 'none' }}>jasvienterprises28@gmail.com</a>
           </div>
         </div>
       </div>
