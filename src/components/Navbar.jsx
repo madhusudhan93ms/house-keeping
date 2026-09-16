@@ -5,11 +5,9 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'All Supplies', href: '#catalog' },
-    { label: 'Target Sectors', href: '#sectors' },
-    { label: 'Restock Calculator', href: '#calculator' },
-    { label: 'Why Jasvi', href: '#features' },
-    { label: 'Client Reviews', href: '#reviews' },
+    { label: 'Products', href: '#catalog' },
+    { label: 'Sectors', href: '#sectors' },
+    { label: 'Estimator', href: '#calculator' },
     { label: 'FAQs', href: '#faqs' }
   ];
 

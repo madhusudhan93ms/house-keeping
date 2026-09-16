@@ -29,7 +29,7 @@ export default function FAQ() {
         </div>
 
         <div className="faq-container">
-          {FAQS.map((faq, index) => {
+          {FAQS.slice(0, 3).map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div key={index} className={`faq-item ${isOpen ? 'open' : ''}`}>

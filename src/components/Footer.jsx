@@ -67,15 +67,11 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
           <div className="footer-col">
             <h4>Stationery Items</h4>
             <ul>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Paper (A4, A5, Legal)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Copier Paper (A4 / Legal)</a></li>
               <li><a href="#catalog" onClick={onExploreCatalog}>Notebooks & Registers</a></li>
               <li><a href="#catalog" onClick={onExploreCatalog}>Pens, Pencils & Markers</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Files & Folders</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Staplers & Punches</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Sticky Notes & Tags</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Envelopes & Labels</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Art & Craft Materials</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Office Accessories</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Files & Box Folders</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Desk Stationery & Staplers</a></li>
             </ul>
           </div>
 
@@ -83,16 +79,11 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
           <div className="footer-col">
             <h4>Housekeeping Materials</h4>
             <ul>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Cleaning Chemicals</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Floor Cleaner (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Glass Cleaner (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Toilet Cleaner (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Dish Wash Liquid (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Hand Wash (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Paper Napkins & Tissue</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Garbage Bags (XL)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Mops, Brooms & Tools</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Dustbins & Storage</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Disinfectants & Chemicals (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Floor & Glass Cleaner (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Liquid Hand Wash (5L)</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Tissue Napkins & Towels</a></li>
+              <li><a href="#catalog" onClick={onExploreCatalog}>Garbage Bags & Cleaning Mops</a></li>
             </ul>
           </div>
 
@@ -103,9 +94,8 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
               <li><a href="#sectors">Companies & Factories</a></li>
               <li><a href="#sectors">Corporate Offices</a></li>
               <li><a href="#sectors">Hospitals & Clinics</a></li>
-              <li><a href="#sectors">Colleges & Universities</a></li>
-              <li><a href="#sectors">Schools & Academies</a></li>
-              <li><a href="#calculator">Restock Calculator</a></li>
+              <li><a href="#sectors">Colleges & Schools</a></li>
+              <li><a href="#calculator">Restock Estimator</a></li>
               <li>
                 <button 
                   onClick={onOpenAdminPreview}

@@ -4,8 +4,6 @@ import Hero from './components/Hero';
 import TargetSectors from './components/TargetSectors';
 import ProductCatalog from './components/ProductCatalog';
 import BulkCalculator from './components/BulkCalculator';
-import Features from './components/Features';
-import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
@@ -99,11 +97,6 @@ function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const scrollToCalculator = () => {
-    const el = document.getElementById('calculator');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const handleFloatingWhatsApp = () => {
     const text = encodeURIComponent("Hello Jasvi Enterprises! I would like to inquire about wholesale Stationery & Housekeeping supplies.");
     window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
@@ -161,7 +154,6 @@ function App() {
       <main>
         <Hero
           onExploreCatalog={scrollToCatalog}
-          onOpenCalculator={scrollToCalculator}
         />
 
         {/* Our Supply For: Target Sectors (Companies, Offices, Hospitals, College, Schools) */}
@@ -182,12 +174,6 @@ function App() {
         <BulkCalculator
           onAddBundleToCart={handleAddBundleToCart}
         />
-
-        {/* Value Proposition & Operations */}
-        <Features />
-
-        {/* Client Reviews */}
-        <Testimonials />
 
         {/* FAQs */}
         <FAQ />

@@ -14,6 +14,7 @@ export default function ProductCatalog({
   const [sortBy, setSortBy] = useState('featured');
   const [quantities, setQuantities] = useState({});
   const [addedAnimationId, setAddedAnimationId] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   // Filter categories based on selected department
   const availableCategories = useMemo(() => {
@@ -65,6 +66,14 @@ export default function ProductCatalog({
         return 0; // featured
       });
   }, [products, selectedDept, selectedCategory, searchQuery, sortBy]);
+
+  // Show 8 items initially if viewing All without search
+  const displayedProducts = useMemo(() => {
+    if (!showAll && !searchQuery && selectedDept === 'all' && selectedCategory === 'all') {
+      return filteredProducts.slice(0, 8);
+    }
+    return filteredProducts;
+  }, [filteredProducts, showAll, searchQuery, selectedDept, selectedCategory]);
 
   return (
     <section id="catalog" className="catalog-section">
@@ -168,147 +177,150 @@ export default function ProductCatalog({
             </button>
           </div>
         ) : (
-          <div className="products-grid">
-            {filteredProducts.map(product => {
-              const currentQty = quantities[product.id] || 1;
-              const isBulkTier = currentQty >= product.minBulkUnits;
-              const effectivePrice = isBulkTier ? product.bulkPrice : product.price;
-              const savingsPerUnit = product.price - product.bulkPrice;
+          <>
+            <div className="products-grid">
+              {displayedProducts.map(product => {
+                const currentQty = quantities[product.id] || 1;
+                const isBulkTier = currentQty >= product.minBulkUnits;
+                const effectivePrice = isBulkTier ? product.bulkPrice : product.price;
+                const savingsPerUnit = product.price - product.bulkPrice;
 
-              return (
-                <div key={product.id} className="product-card">
-                  {/* Card Header Media */}
-                  <div className="card-image-wrap">
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      loading="lazy"
-                      className="product-img"
-                    />
+                return (
+                  <div key={product.id} className="product-card">
+                    {/* Card Header Media */}
+                    <div className="card-image-wrap">
+                      <img 
+                        src={product.image} 
+                        alt={product.name} 
+                        loading="lazy"
+                        className="product-img"
+                      />
 
-                    {/* Department / Category Pill */}
-                    <span className="card-dept-tag">
-                      {product.dept === 'stationery' ? 'Stationery' : 'Housekeeping'}
-                    </span>
-
-                    {/* Badges */}
-                    {product.badge && (
-                      <span className={`badge badge-${product.badgeColor || 'teal'} card-badge`}>
-                        {product.badge}
+                      {/* Department / Category Pill */}
+                      <span className="card-dept-tag">
+                        {product.dept === 'stationery' ? 'Stationery' : 'Housekeeping'}
                       </span>
-                    )}
 
-                    {/* Quick View Button */}
-                    <button 
-                      className="quick-view-btn"
-                      onClick={() => onOpenQuickView(product)}
-                      title="Quick Specs & Details"
-                      aria-label={`Quick view ${product.name}`}
-                    >
-                      <Eye size={16} />
-                      <span>Details</span>
-                    </button>
-                  </div>
-
-                  {/* Card Body */}
-                  <div className="card-body">
-                    <div className="card-meta">
-                      <span className="category-label">{product.categoryLabel}</span>
-                      <span className="sku-tag">SKU: {product.sku}</span>
-                    </div>
-
-                    <h3 className="product-title" title={product.name}>
-                      {product.name}
-                    </h3>
-
-                    <p className="package-size-tag">
-                      <Package size={13} strokeWidth={2} className="package-stroke-icon" />
-                      <span>{product.packageSize}</span>
-                    </p>
-
-                    <p className="product-desc">
-                      {product.description}
-                    </p>
-
-                    {/* Specs Pills */}
-                    <div className="specs-row">
-                      {product.specs.slice(0, 2).map((spec, i) => (
-                        <span key={i} className="spec-pill">{spec}</span>
-                      ))}
-                    </div>
-
-                    {/* Pricing Display */}
-                    <div className="pricing-box">
-                      <div className="price-row">
-                        <div className="price-current">
-                          <span className="currency-symbol">₹</span>
-                          <span className="price-number">{effectivePrice.toLocaleString('en-IN')}</span>
-                          <span className="price-unit">/{product.unit || 'unit'}</span>
-                        </div>
-
-                        {/* Bulk Tier Badge */}
-                        {isBulkTier ? (
-                          <span className="bulk-active-tag">
-                            Wholesale Tier Active!
-                          </span>
-                        ) : (
-                          <span className="bulk-hint-tag">
-                            Buy {product.minBulkUnits}+ for ₹{product.bulkPrice.toLocaleString('en-IN')}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Savings notice */}
-                      {isBulkTier && (
-                        <div className="savings-callout">
-                          Saved ₹{(savingsPerUnit * currentQty).toLocaleString('en-IN')} with wholesale rate!
-                        </div>
+                      {/* Badges */}
+                      {product.badge && (
+                        <span className={`badge badge-${product.badgeColor || 'teal'} card-badge`}>
+                          {product.badge}
+                        </span>
                       )}
-                    </div>
 
-                    {/* Action Controls */}
-                    <div className="card-actions">
-                      <div className="quantity-stepper" aria-label="Adjust quantity">
-                        <button 
-                          className="stepper-btn"
-                          onClick={() => handleQuantityChange(product.id, -1)}
-                          disabled={currentQty <= 1}
-                          aria-label="Decrease quantity"
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="stepper-value">{currentQty}</span>
-                        <button 
-                          className="stepper-btn"
-                          onClick={() => handleQuantityChange(product.id, 1)}
-                          aria-label="Increase quantity"
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
-
-                      <button
-                        className={`add-to-cart-btn ${addedAnimationId === product.id ? 'added' : ''}`}
-                        onClick={() => handleAddToCartWithAnim(product)}
-                        aria-label={`Add ${currentQty} of ${product.name} to order`}
+                      {/* Quick View Button */}
+                      <button 
+                        className="quick-view-btn"
+                        onClick={() => onOpenQuickView(product)}
+                        title="Quick Specs & Details"
+                        aria-label={`Quick view ${product.name}`}
                       >
-                        {addedAnimationId === product.id ? (
-                          <>
-                            <Check size={16} />
-                            <span>Added to Requisition!</span>
-                          </>
-                        ) : (
-                          <>
-                            <span>Add {currentQty} to Order</span>
-                          </>
-                        )}
+                        <Eye size={16} />
+                        <span>Details</span>
                       </button>
                     </div>
+
+                    {/* Card Body */}
+                    <div className="card-body">
+                      <div className="card-meta">
+                        <span className="category-label">{product.categoryLabel}</span>
+                      </div>
+
+                      <h3 className="product-title" title={product.name}>
+                        {product.name}
+                      </h3>
+
+                      <p className="package-size-tag">
+                        <Package size={13} strokeWidth={2} className="package-stroke-icon" />
+                        <span>{product.packageSize}</span>
+                      </p>
+
+                      {/* Pricing Display */}
+                      <div className="pricing-box">
+                        <div className="price-row">
+                          <div className="price-current">
+                            <span className="currency-symbol">₹</span>
+                            <span className="price-number">{effectivePrice.toLocaleString('en-IN')}</span>
+                            <span className="price-unit">/{product.unit || 'unit'}</span>
+                          </div>
+
+                          {/* Bulk Tier Badge */}
+                          {isBulkTier ? (
+                            <span className="bulk-active-tag">
+                              Wholesale Tier Active!
+                            </span>
+                          ) : (
+                            <span className="bulk-hint-tag">
+                              Buy {product.minBulkUnits}+ for ₹{product.bulkPrice.toLocaleString('en-IN')}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Savings notice */}
+                        {isBulkTier && (
+                          <div className="savings-callout">
+                            Saved ₹{(savingsPerUnit * currentQty).toLocaleString('en-IN')} with wholesale rate!
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Controls */}
+                      <div className="card-actions">
+                        <div className="quantity-stepper" aria-label="Adjust quantity">
+                          <button 
+                            className="stepper-btn"
+                            onClick={() => handleQuantityChange(product.id, -1)}
+                            disabled={currentQty <= 1}
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="stepper-value">{currentQty}</span>
+                          <button 
+                            className="stepper-btn"
+                            onClick={() => handleQuantityChange(product.id, 1)}
+                            aria-label="Increase quantity"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+
+                        <button
+                          className={`add-to-cart-btn ${addedAnimationId === product.id ? 'added' : ''}`}
+                          onClick={() => handleAddToCartWithAnim(product)}
+                          aria-label={`Add ${currentQty} of ${product.name} to order`}
+                        >
+                          {addedAnimationId === product.id ? (
+                            <>
+                              <Check size={16} />
+                              <span>Added to Order!</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>Add to Order</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+
+            {/* Toggle Show All / Show Less Button */}
+            {filteredProducts.length > 8 && !searchQuery && selectedDept === 'all' && selectedCategory === 'all' && (
+              <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+                <button 
+                  className="btn btn-secondary btn-lg"
+                  onClick={() => setShowAll(!showAll)}
+                  style={{ minWidth: '240px' }}
+                >
+                  {showAll ? 'Show Fewer Products' : `View All Supplies (${filteredProducts.length} Items)`}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
