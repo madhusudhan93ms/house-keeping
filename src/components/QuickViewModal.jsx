@@ -10,84 +10,87 @@ export default function QuickViewModal({ product, onClose, onAddToCart }) {
   const unitPrice = isBulk ? product.bulkPrice : product.price;
   const total = unitPrice * qty;
 
-  const handleAdd = () => {
-    onAddToCart(product, qty);
-    onClose();
+  const handleAdd = () => { onAddToCart(product, qty); onClose(); };
+
+  const badgeColorMap = {
+    blue:   'bg-blue-50 text-blue-800 border-blue-200',
+    teal:   'bg-teal-50 text-teal-800 border-teal-200',
+    amber:  'bg-amber-50 text-amber-800 border-amber-200',
+    green:  'bg-green-50 text-green-800 border-green-200',
+    purple: 'bg-purple-50 text-purple-800 border-purple-200',
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 bg-slate-900/60 backdrop-blur-[4px] z-[110] flex items-center justify-center p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="bg-white rounded-[20px] w-full max-w-[860px] max-h-[90vh] overflow-y-auto relative animate-fade-scale shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close Button */}
-        <button 
-          className="close-btn" 
+        <button
+          className="absolute top-5 right-5 z-10 bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100 cursor-pointer p-2 rounded-[8px] flex items-center transition-colors"
           onClick={onClose}
-          style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}
           aria-label="Close modal"
         >
           <X size={22} />
         </button>
 
-        <div className="quickview-grid">
-          {/* Image */}
-          <div>
-            <div className="quickview-img-wrap">
-              <img 
-                src={product.image} 
-                alt={product.name} 
-                className="quickview-img"
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+          {/* Image Column */}
+          <div className="p-6">
+            <div className="rounded-[12px] overflow-hidden bg-slate-50 border border-slate-100 mb-4">
+              <img src={product.image} alt={product.name} className="w-full h-[260px] md:h-[300px] object-cover" />
             </div>
-            
-            <div className="quickview-trust-callout">
-              <ShieldCheck size={20} color="var(--primary-700)" />
-              <div style={{ fontSize: '0.82rem', color: 'var(--primary-900)' }}>
+            <div className="flex items-start gap-3 bg-primary-50 border border-primary-200 rounded-[10px] p-3">
+              <ShieldCheck size={20} className="text-primary-700 flex-shrink-0 mt-0.5" />
+              <div className="text-[0.82rem] text-primary-900">
                 <strong>Quality Guaranteed:</strong> Sourced directly for corporate, hospital, and educational standards.
               </div>
             </div>
           </div>
 
-          {/* Details */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-              <span className={`badge badge-${product.badgeColor || 'teal'}`}>{product.badge}</span>
-              <span style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 600 }}>SKU: {product.sku}</span>
+          {/* Details Column */}
+          <div className="p-6 border-t md:border-t-0 md:border-l border-slate-100">
+            {/* Badge + SKU */}
+            <div className="flex items-center gap-2.5 mb-3">
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.75rem] font-semibold border ${badgeColorMap[product.badgeColor || 'teal'] || badgeColorMap.teal}`}>
+                {product.badge}
+              </span>
+              <span className="text-[0.78rem] text-slate-500 font-semibold">SKU: {product.sku}</span>
             </div>
 
-            <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '0.5rem', lineHeight: 1.25 }}>
-              {product.name}
-            </h3>
+            {/* Title */}
+            <h3 className="text-[1.3rem] font-extrabold text-slate-900 leading-snug mb-2">{product.name}</h3>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.85rem' }}>
+            {/* Stars */}
+            <div className="flex items-center gap-1.5 mb-4">
               {[...Array(5)].map((_, i) => (
-                <Star 
-                  key={i} 
-                  size={15} 
-                  fill={i < Math.floor(product.rating) ? '#f59e0b' : 'none'} 
-                  color="#f59e0b" 
-                />
+                <Star key={i} size={15} fill={i < Math.floor(product.rating) ? '#f59e0b' : 'none'} color="#f59e0b" />
               ))}
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, marginLeft: 4 }}>{product.rating}</span>
-              <span style={{ fontSize: '0.8rem', color: 'var(--slate-400)' }}>({product.reviewsCount} verified reviews)</span>
+              <span className="text-[0.85rem] font-bold ml-1">{product.rating}</span>
+              <span className="text-[0.8rem] text-slate-400">({product.reviewsCount} verified reviews)</span>
             </div>
 
-            <div style={{ background: 'var(--slate-50)', padding: '0.65rem 0.9rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', border: '1px solid var(--slate-200)', fontSize: '0.85rem', color: 'var(--slate-700)' }}>
+            {/* Package */}
+            <div className="bg-slate-50 px-3 py-2 rounded-[8px] border border-slate-200 text-[0.85rem] text-slate-700 mb-3">
               <strong>Packaging Unit:</strong> {product.packageSize}
             </div>
 
-            <p style={{ fontSize: '0.9rem', color: 'var(--slate-600)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-              {product.description}
-            </p>
+            {/* Description */}
+            <p className="text-[0.9rem] text-slate-600 leading-relaxed mb-4">{product.description}</p>
 
-            {/* Specifications */}
-            <div style={{ marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--slate-500)', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
-                Key Specifications
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+            {/* Specs */}
+            <div className="mb-4">
+              <div className="text-[0.78rem] font-bold uppercase tracking-widest text-slate-500 mb-2">Key Specifications</div>
+              <div className="grid grid-cols-2 gap-2">
                 {product.specs.map((spec, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: 'var(--slate-700)' }}>
-                    <CheckCircle size={14} color="var(--primary-600)" style={{ flexShrink: 0 }} />
+                  <div key={i} className="flex items-center gap-1.5 text-[0.82rem] text-slate-700">
+                    <CheckCircle size={14} className="text-primary-600 flex-shrink-0" />
                     <span>{spec}</span>
                   </div>
                 ))}
@@ -95,63 +98,41 @@ export default function QuickViewModal({ product, onClose, onAddToCart }) {
             </div>
 
             {/* Price Box */}
-            <div style={{ background: isBulk ? 'var(--primary-50)' : 'var(--slate-50)', padding: '1rem', borderRadius: 'var(--radius-md)', border: isBulk ? '1.5px solid var(--primary-500)' : '1px solid var(--slate-200)', marginBottom: '1.25rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className={`p-4 rounded-[10px] border mb-4 ${isBulk ? 'bg-primary-50 border-primary-400' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="flex justify-between items-center">
                 <div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 600 }}>Wholesale Price Rate:</div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', marginTop: 2 }}>
-                    <span style={{ fontSize: '1.55rem', fontWeight: 800, color: 'var(--slate-900)' }}>
-                      ₹{unitPrice.toLocaleString('en-IN')}
-                    </span>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--slate-500)' }}>/{product.unit || 'unit'}</span>
+                  <div className="text-[0.78rem] text-slate-500 font-semibold mb-1">Wholesale Price Rate:</div>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[1.55rem] font-extrabold text-slate-900">₹{unitPrice.toLocaleString('en-IN')}</span>
+                    <span className="text-[0.85rem] text-slate-500">/{product.unit || 'unit'}</span>
                     {isBulk && (
-                      <span style={{ textDecoration: 'line-through', fontSize: '0.9rem', color: 'var(--slate-400)' }}>
-                        ₹{product.price.toLocaleString('en-IN')}
-                      </span>
+                      <span className="line-through text-[0.9rem] text-slate-400">₹{product.price.toLocaleString('en-IN')}</span>
                     )}
                   </div>
                 </div>
-
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 600 }}>Total (Qty {qty}):</div>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--primary-700)' }}>
-                    ₹{total.toLocaleString('en-IN')}
-                  </div>
+                <div className="text-right">
+                  <div className="text-[0.78rem] text-slate-500 font-semibold mb-1">Total (Qty {qty}):</div>
+                  <div className="text-[1.3rem] font-extrabold text-primary-700">₹{total.toLocaleString('en-IN')}</div>
                 </div>
               </div>
-
               {!isBulk && (
-                <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--primary-800)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div className="mt-2 text-[0.78rem] text-primary-800 font-semibold flex items-center gap-1.5">
                   <Info size={13} strokeWidth={2.5} />
-                  <span>Tip: Increase quantity to {product.minBulkUnits}+ units to unlock bulk pricing at ₹{product.bulkPrice.toLocaleString('en-IN')}/{product.unit || 'unit'}!</span>
+                  <span>Increase quantity to {product.minBulkUnits}+ units to unlock bulk pricing at ₹{product.bulkPrice.toLocaleString('en-IN')}/{product.unit || 'unit'}!</span>
                 </div>
               )}
             </div>
 
-            {/* Stepper and Add Button */}
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <div className="quantity-stepper" style={{ height: 44 }}>
-                <button 
-                  className="stepper-btn" 
-                  onClick={() => setQty(Math.max(1, qty - 1))}
-                  aria-label="Decrease quantity"
-                >
-                  <Minus size={14} />
-                </button>
-                <span className="stepper-value" style={{ minWidth: 32, fontSize: '0.95rem' }}>{qty}</span>
-                <button 
-                  className="stepper-btn" 
-                  onClick={() => setQty(qty + 1)}
-                  aria-label="Increase quantity"
-                >
-                  <Plus size={14} />
-                </button>
+            {/* Stepper + Add Button */}
+            <div className="flex gap-3 items-center">
+              <div className="inline-flex items-center h-11 bg-white border-[1.5px] border-slate-300 rounded-[10px] flex-shrink-0 focus-within:border-primary-500 transition-colors">
+                <button className="w-9 h-full flex items-center justify-center bg-slate-50 rounded-l-[8px] border-none text-slate-700 cursor-pointer hover:bg-primary-100 hover:text-primary-800 transition-colors" onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease quantity"><Minus size={14} /></button>
+                <span className="min-w-[32px] text-center font-bold text-[0.95rem] text-slate-900 px-1 select-none">{qty}</span>
+                <button className="w-9 h-full flex items-center justify-center bg-slate-50 rounded-r-[8px] border-none text-slate-700 cursor-pointer hover:bg-primary-100 hover:text-primary-800 transition-colors" onClick={() => setQty(qty + 1)} aria-label="Increase quantity"><Plus size={14} /></button>
               </div>
-
-              <button 
-                className="btn btn-primary btn-block btn-lg"
+              <button
+                className="flex-1 h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold text-[0.92rem] rounded-[10px] border-none cursor-pointer shadow-[0_4px_14px_rgba(13,148,136,0.35)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(13,148,136,0.45)] transition-all"
                 onClick={handleAdd}
-                style={{ height: 44 }}
               >
                 <ShoppingBag size={17} />
                 <span>Add {qty} to Requisition Order</span>

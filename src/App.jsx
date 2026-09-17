@@ -106,25 +106,7 @@ function App() {
     <div className="min-h-screen">
       {/* Toast Notification */}
       {toastMessage && (
-        <div style={{
-          position: 'fixed',
-          bottom: '1.75rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 200,
-          background: '#0b1528',
-          color: '#ffffff',
-          padding: '0.8rem 1.5rem',
-          borderRadius: 'var(--radius-full)',
-          boxShadow: '0 12px 30px rgba(0,0,0,0.35)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.65rem',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          border: '1px solid rgba(56, 189, 248, 0.4)',
-          animation: 'fadeInScale 0.25s ease'
-        }}>
+        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 z-[200] bg-[#0b1528] text-white px-6 py-3 rounded-full shadow-[0_12px_30px_rgba(0,0,0,0.35)] flex items-center gap-2.5 text-[0.9rem] font-semibold border border-sky-400/40 animate-fade-scale">
           <CheckCircle2 size={19} color="#10b981" />
           <span>{toastMessage}</span>
         </div>

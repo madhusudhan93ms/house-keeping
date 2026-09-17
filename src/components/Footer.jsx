@@ -2,19 +2,19 @@ import React from 'react';
 import { Mail, MapPin, Lock, ArrowUpRight, MessageSquare, ShieldCheck } from 'lucide-react';
 
 export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
-
   const handleWhatsAppContact = () => {
     const text = encodeURIComponent("Hello Jasvi Enterprises, I would like to request wholesale product pricing.");
     window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
   };
 
   return (
-    <footer className="site-footer">
-      <div className="container">
-        <div className="footer-grid">
+    <footer className="bg-gradient-to-br from-slate-900 to-[#0b1528] text-slate-300">
+      <div className="w-full max-w-[1320px] mx-auto px-5 pt-12 pb-6">
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
           {/* Brand Col */}
-          <div className="footer-brand">
-            <div className="logo-brand" style={{ color: '#ffffff' }}>
+          <div className="sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center gap-2.5 mb-4">
               <div className="je-logo-badge small">
                 <div className="je-logo-inner">
                   <span className="je-letter-j">J</span>
@@ -22,84 +22,94 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
                 </div>
               </div>
               <div>
-                <div className="logo-text" style={{ color: '#ffffff' }}>
-                  JASVI <span style={{ color: '#38bdf8' }}>ENTERPRISES</span>
+                <div className="font-[var(--font-heading)] text-[1.15rem] font-extrabold text-white tracking-tight leading-tight">
+                  JASVI <span className="text-sky-400">ENTERPRISES</span>
                 </div>
-                <div style={{ fontSize: '0.68rem', color: '#10b981', fontWeight: 700 }}>
+                <div className="text-[0.62rem] text-emerald-400 font-bold tracking-widest uppercase">
                   YOUR NEEDS OUR PRIORITY
                 </div>
               </div>
             </div>
 
-            <p>
+            <p className="text-[0.88rem] text-slate-400 leading-relaxed mb-4">
               Wholesale supplier of Stationery & Housekeeping Materials for Companies, Offices, Hospitals, Colleges & Schools in Hosur.
             </p>
 
-            <div className="footer-contact-items">
-              <div className="footer-contact-item">
-                <Mail size={15} color="#38bdf8" />
-                <a href="mailto:jasvienterprises28@gmail.com" style={{ color: '#cbd5e1', textDecoration: 'none' }}>
+            <div className="flex flex-col gap-2 mb-4">
+              <div className="flex items-center gap-2 text-[0.82rem]">
+                <Mail size={15} className="text-sky-400 flex-shrink-0" />
+                <a href="mailto:jasvienterprises28@gmail.com" className="text-slate-300 hover:text-sky-300 no-underline transition-colors">
                   jasvienterprises28@gmail.com
                 </a>
               </div>
-              <div className="footer-contact-item">
-                <MapPin size={15} color="#38bdf8" />
+              <div className="flex items-start gap-2 text-[0.82rem]">
+                <MapPin size={15} className="text-sky-400 flex-shrink-0 mt-0.5" />
                 <span>Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, Krishnagiri, Tamil Nadu</span>
               </div>
-              <div className="footer-contact-item">
-                <ShieldCheck size={15} color="#10b981" />
+              <div className="flex items-center gap-2 text-[0.82rem]">
+                <ShieldCheck size={15} className="text-emerald-400 flex-shrink-0" />
                 <span>GST NUMBER: NIL</span>
               </div>
             </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <button 
-                className="btn btn-whatsapp btn-sm"
-                onClick={handleWhatsAppContact}
-              >
-                <MessageSquare size={15} />
-                <span>WhatsApp Inquiry</span>
-              </button>
-            </div>
+            <button
+              className="btn-whatsapp inline-flex items-center gap-1.5 font-semibold text-[0.85rem] px-4 py-2 rounded-[8px] transition-all duration-250"
+              onClick={handleWhatsAppContact}
+            >
+              <MessageSquare size={15} />
+              <span>WhatsApp Inquiry</span>
+            </button>
           </div>
 
-          {/* Stationery Products Column */}
-          <div className="footer-col">
-            <h4>Stationery Items</h4>
-            <ul>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Copier Paper (A4 / Legal)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Notebooks & Registers</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Pens, Pencils & Markers</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Files & Box Folders</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Desk Stationery & Staplers</a></li>
+          {/* Stationery Items */}
+          <div>
+            <h4 className="text-white font-bold text-[0.95rem] mb-4">Stationery Items</h4>
+            <ul className="flex flex-col gap-2 list-none m-0 p-0">
+              {['Copier Paper (A4 / Legal)', 'Notebooks & Registers', 'Pens, Pencils & Markers', 'Files & Box Folders', 'Desk Stationery & Staplers'].map((item) => (
+                <li key={item}>
+                  <a href="#catalog" onClick={onExploreCatalog} className="text-slate-400 hover:text-white text-[0.85rem] no-underline transition-colors">
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Housekeeping Products Column */}
-          <div className="footer-col">
-            <h4>Housekeeping Materials</h4>
-            <ul>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Disinfectants & Chemicals (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Floor & Glass Cleaner (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Liquid Hand Wash (5L)</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Tissue Napkins & Towels</a></li>
-              <li><a href="#catalog" onClick={onExploreCatalog}>Garbage Bags & Cleaning Mops</a></li>
+          {/* Housekeeping */}
+          <div>
+            <h4 className="text-white font-bold text-[0.95rem] mb-4">Housekeeping Materials</h4>
+            <ul className="flex flex-col gap-2 list-none m-0 p-0">
+              {['Disinfectants & Chemicals (5L)', 'Floor & Glass Cleaner (5L)', 'Liquid Hand Wash (5L)', 'Tissue Napkins & Towels', 'Garbage Bags & Cleaning Mops'].map((item) => (
+                <li key={item}>
+                  <a href="#catalog" onClick={onExploreCatalog} className="text-slate-400 hover:text-white text-[0.85rem] no-underline transition-colors">
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Target Sectors & Admin */}
-          <div className="footer-col">
-            <h4>Our Supply For</h4>
-            <ul>
-              <li><a href="#sectors">Companies & Factories</a></li>
-              <li><a href="#sectors">Corporate Offices</a></li>
-              <li><a href="#sectors">Hospitals & Clinics</a></li>
-              <li><a href="#sectors">Colleges & Schools</a></li>
-              <li><a href="#calculator">Restock Estimator</a></li>
+          {/* Our Supply For */}
+          <div>
+            <h4 className="text-white font-bold text-[0.95rem] mb-4">Our Supply For</h4>
+            <ul className="flex flex-col gap-2 list-none m-0 p-0">
+              {[
+                { label: 'Companies & Factories', href: '#sectors' },
+                { label: 'Corporate Offices',     href: '#sectors' },
+                { label: 'Hospitals & Clinics',   href: '#sectors' },
+                { label: 'Colleges & Schools',    href: '#sectors' },
+                { label: 'Restock Estimator',     href: '#calculator' },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <a href={href} className="text-slate-400 hover:text-white text-[0.85rem] no-underline transition-colors">
+                    {label}
+                  </a>
+                </li>
+              ))}
               <li>
-                <button 
+                <button
                   onClick={onOpenAdminPreview}
-                  style={{ background: 'transparent', border: 'none', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', fontSize: '0.85rem', padding: 0, marginTop: '0.5rem' }}
+                  className="flex items-center gap-1.5 bg-transparent border-none text-sky-400 hover:text-sky-300 cursor-pointer text-[0.85rem] p-0 mt-1 transition-colors"
                 >
                   <Lock size={12} />
                   <span>Hosur Hub Portal</span>
@@ -111,12 +121,14 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
         </div>
 
         {/* Footer Bottom */}
-        <div className="footer-bottom">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-white/10 text-[0.82rem] text-slate-500">
           <div>
-            © {new Date().getFullYear()} <strong>Jasvi Enterprises</strong>. Hosur, Tamil Nadu. GST NUMBER: NIL.
+            © {new Date().getFullYear()} <strong className="text-slate-400">Jasvi Enterprises</strong>. Hosur, Tamil Nadu. GST NUMBER: NIL.
           </div>
-          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-            <a href="mailto:jasvienterprises28@gmail.com" style={{ color: '#94a3b8', textDecoration: 'none' }}>jasvienterprises28@gmail.com</a>
+          <div className="flex gap-5 flex-wrap">
+            <a href="mailto:jasvienterprises28@gmail.com" className="text-slate-500 hover:text-slate-300 no-underline transition-colors">
+              jasvienterprises28@gmail.com
+            </a>
           </div>
         </div>
       </div>
