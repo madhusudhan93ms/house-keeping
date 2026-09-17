@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Search, Lock, Menu, X, Mail, MapPin, MessageSquare, Zap } from 'lucide-react';
 
 export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, searchQuery, setSearchQuery }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { label: 'Products', href: '#catalog' },
@@ -21,7 +32,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
   };
 
   return (
-    <header className="navbar-wrapper">
+    <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''}`}>
       {/* Top Announcement & Contact Bar */}
       <aside aria-label="Announcement" className="announcement-bar">
         <div className="container announcement-inner">
