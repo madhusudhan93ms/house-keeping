@@ -1,69 +1,73 @@
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, Mail, MessageSquare } from 'lucide-react';
+import { ChevronDown, HelpCircle, MessageSquare, MapPin } from 'lucide-react';
 import { FAQS } from '../data/products';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
+  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.1 });
 
   const toggleFAQ = (index) => setOpenIndex(openIndex === index ? -1 : index);
 
   const handleWhatsAppContact = () => {
-    const text = encodeURIComponent("Hello Jasvi Enterprises, I have a question regarding bulk wholesale supplies.");
+    const text = encodeURIComponent("Hello Jasvi Enterprises, I have a question regarding wholesale supplies and delivery in Hosur.");
     window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
   };
 
   return (
-    <section id="faqs" className="py-12 md:py-16 bg-white">
-      <div className="w-full max-w-[1320px] mx-auto px-5">
+    <section 
+      id="faq" 
+      ref={sectionRef}
+      className="py-16 sm:py-24 bg-slate-900 border-t border-slate-800/80 relative"
+    >
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 text-[0.8rem] font-bold tracking-widest uppercase text-primary-700 bg-primary-100 border border-primary-200 rounded-full mb-3">
-            <HelpCircle size={14} />
-            <span>FAQs</span>
+        <div className={`text-center mb-12 transition-all duration-700 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-teal-500/10 border border-teal-400/30 text-teal-300 text-xs font-bold uppercase tracking-wider mb-3">
+            <HelpCircle size={13} className="text-teal-400" />
+            <span>Frequently Asked Questions</span>
           </div>
-          <h2 className="text-3xl md:text-[2.25rem] font-extrabold text-slate-900 tracking-tight mb-3">
-            Common Questions
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Wholesale Procurement FAQs
           </h2>
-          <p className="text-slate-600 text-base leading-relaxed">
-            Quick answers about wholesale orders, delivery, and payment.
+          <p className="mt-3 text-sm sm:text-base text-slate-400 leading-relaxed">
+            Essential information regarding delivery areas, billing vouchers, and lead times in Hosur.
           </p>
         </div>
 
-        {/* FAQ Items */}
-        <div className="max-w-[800px] mx-auto flex flex-col gap-3 mb-8">
-          {FAQS.slice(0, 3).map((faq, index) => {
+        {/* FAQ Accordion */}
+        <div className="space-y-3.5 mb-10">
+          {FAQS.slice(0, 4).map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className={`border rounded-[10px] overflow-hidden transition-colors duration-150 ${
-                  isOpen ? 'border-primary-400' : 'border-slate-200'
+                className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                  isOpen 
+                    ? 'border-teal-500/40 bg-slate-950/90 shadow-lg shadow-teal-950/20' 
+                    : 'border-slate-800 bg-slate-950/50 hover:border-slate-700'
                 }`}
               >
-                <div
-                  className={`flex justify-between items-center px-5 py-4 cursor-pointer font-semibold text-[1rem] transition-colors duration-150 ${
-                    isOpen
-                      ? 'bg-primary-50 text-primary-800'
-                      : 'bg-white text-slate-900 hover:bg-slate-50'
-                  }`}
+                <button
+                  type="button"
+                  className="w-full flex justify-between items-center px-5 py-4 text-left font-bold text-sm sm:text-base text-white gap-3 cursor-pointer bg-transparent border-none"
                   onClick={() => toggleFAQ(index)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleFAQ(index)}
+                  aria-expanded={isOpen}
                 >
-                  <span>{faq.q}</span>
+                  <span className="leading-snug">{faq.q}</span>
                   <ChevronDown
                     size={18}
-                    className="flex-shrink-0 transition-transform duration-250"
-                    style={{
-                      transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      color: isOpen ? '#0f766e' : '#94a3b8',
-                    }}
+                    className={`text-teal-400 flex-shrink-0 transition-transform duration-300 ${
+                      isOpen ? 'rotate-180' : 'rotate-0'
+                    }`}
                   />
-                </div>
+                </button>
                 {isOpen && (
-                  <div className="px-5 py-4 bg-white text-slate-600 leading-relaxed text-[0.95rem] border-t border-slate-100">
-                    <p>{faq.a}</p>
+                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 animate-fade-in">
+                    <p className="m-0">{faq.a}</p>
                   </div>
                 )}
               </div>
@@ -71,36 +75,30 @@ export default function FAQ() {
           })}
         </div>
 
-        {/* Support Banner */}
-        <div className="max-w-[800px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50 border border-slate-200 rounded-[16px] p-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-[10px] bg-primary-100 flex items-center justify-center flex-shrink-0">
-              <Mail size={20} className="text-primary-700" />
+        {/* Quick Contact Box */}
+        <div className="rounded-2xl bg-gradient-to-r from-teal-950/60 via-slate-950 to-slate-950 border border-teal-500/30 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 text-center sm:text-left">
+            <div className="w-11 h-11 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 flex-shrink-0">
+              <MapPin size={20} />
             </div>
             <div>
-              <h4 className="text-[0.98rem] font-bold text-slate-900">Have questions or need a custom quote?</h4>
-              <p className="text-[0.82rem] text-slate-600 mt-0.5">
-                Reach us directly at <strong>jasvienterprises28@gmail.com</strong> or WhatsApp.
-              </p>
+              <div className="font-bold text-sm sm:text-base text-white">Visit Our Hosur Hub</div>
+              <div className="text-xs text-slate-400 mt-0.5">
+                Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, OSS Roja Nagar, Krishnagiri, TN.
+              </div>
             </div>
           </div>
-          <div className="flex gap-2.5 flex-wrap">
-            <button
-              className="btn-whatsapp inline-flex items-center gap-1.5 font-semibold text-[0.85rem] px-3 py-2 rounded-[8px] transition-all duration-250"
-              onClick={handleWhatsAppContact}
-            >
-              <MessageSquare size={15} />
-              <span>WhatsApp Inquiry</span>
-            </button>
-            <a
-              href="mailto:jasvienterprises28@gmail.com"
-              className="inline-flex items-center gap-1.5 bg-gradient-to-br from-primary-600 to-primary-700 text-white font-semibold text-[0.85rem] px-3 py-2 rounded-[8px] no-underline shadow-[0_4px_14px_rgba(13,148,136,0.35)] hover:-translate-y-0.5 transition-all duration-250"
-            >
-              <Mail size={15} />
-              <span>Email Us</span>
-            </a>
-          </div>
+
+          <button
+            type="button"
+            onClick={handleWhatsAppContact}
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/30 shadow-lg shadow-emerald-950/50 transition-all cursor-pointer whitespace-nowrap"
+          >
+            <MessageSquare size={15} />
+            <span>Chat on WhatsApp</span>
+          </button>
         </div>
+
       </div>
     </section>
   );

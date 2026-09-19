@@ -1,73 +1,89 @@
 import React from 'react';
-import { Mail, MapPin, Lock, ArrowUpRight, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Mail, MapPin, MessageSquare, ShieldCheck, Phone, FileSpreadsheet } from 'lucide-react';
 
-export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
+export default function Footer({ onOpenAdminPreview }) {
   const handleWhatsAppContact = () => {
     const text = encodeURIComponent("Hello Jasvi Enterprises, I would like to request wholesale product pricing.");
     window.open(`https://wa.me/919487000000?text=${text}`, '_blank');
   };
 
   return (
-    <footer className="bg-gradient-to-br from-slate-900 to-[#0b1528] text-slate-300">
-      <div className="w-full max-w-[1320px] mx-auto px-5 pt-12 pb-6">
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
-          {/* Brand Col */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="je-logo-badge small">
-                <div className="je-logo-inner">
-                  <span className="je-letter-j">J</span>
-                  <span className="je-letter-e">E</span>
-                </div>
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
+          
+          {/* Brand Column */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 border border-teal-500/30 flex items-center justify-center text-sky-400 font-extrabold text-lg">
+                JE
               </div>
               <div>
-                <div className="font-[var(--font-heading)] text-[1.15rem] font-extrabold text-white tracking-tight leading-tight">
-                  JASVI <span className="text-sky-400">ENTERPRISES</span>
+                <div className="font-extrabold text-lg text-white tracking-tight">
+                  JASVI <span className="text-teal-400">ENTERPRISES</span>
                 </div>
-                <div className="text-[0.62rem] text-emerald-400 font-bold tracking-widest uppercase">
-                  YOUR NEEDS OUR PRIORITY
+                <div className="text-[10px] text-teal-400 font-bold uppercase tracking-widest">
+                  Your Needs Our Priority
                 </div>
               </div>
             </div>
 
-            <p className="text-[0.88rem] text-slate-400 leading-relaxed mb-4">
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-5">
               Wholesale supplier of Stationery & Housekeeping Materials for Companies, Offices, Hospitals, Colleges & Schools in Hosur.
             </p>
 
-            <div className="flex flex-col gap-2 mb-4">
-              <div className="flex items-center gap-2 text-[0.82rem]">
-                <Mail size={15} className="text-sky-400 flex-shrink-0" />
-                <a href="mailto:jasvienterprises28@gmail.com" className="text-slate-300 hover:text-sky-300 no-underline transition-colors">
-                  jasvienterprises28@gmail.com
-                </a>
-              </div>
-              <div className="flex items-start gap-2 text-[0.82rem]">
-                <MapPin size={15} className="text-sky-400 flex-shrink-0 mt-0.5" />
-                <span>Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, Krishnagiri, Tamil Nadu</span>
-              </div>
-              <div className="flex items-center gap-2 text-[0.82rem]">
-                <ShieldCheck size={15} className="text-emerald-400 flex-shrink-0" />
-                <span>GST NUMBER: NIL</span>
-              </div>
-            </div>
-
             <button
-              className="btn-whatsapp inline-flex items-center gap-1.5 font-semibold text-[0.85rem] px-4 py-2 rounded-[8px] transition-all duration-250"
+              type="button"
               onClick={handleWhatsAppContact}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/30 shadow-md shadow-emerald-950/50 transition-all cursor-pointer"
             >
-              <MessageSquare size={15} />
-              <span>WhatsApp Inquiry</span>
+              <MessageSquare size={14} />
+              <span>WhatsApp Inquiries</span>
             </button>
           </div>
 
-          {/* Stationery Items */}
+          {/* Quick Contact & Hub */}
           <div>
-            <h4 className="text-white font-bold text-[0.95rem] mb-4">Stationery Items</h4>
-            <ul className="flex flex-col gap-2 list-none m-0 p-0">
-              {['Copier Paper (A4 / Legal)', 'Notebooks & Registers', 'Pens, Pencils & Markers', 'Files & Box Folders', 'Desk Stationery & Staplers'].map((item) => (
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+              Hosur Distribution Hub
+            </h4>
+            <div className="space-y-3 text-xs sm:text-sm">
+              <div className="flex items-start gap-2 text-slate-300">
+                <MapPin size={16} className="text-teal-400 flex-shrink-0 mt-0.5" />
+                <span className="leading-snug">
+                  Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, OSS Roja Nagar, Krishnagiri, Tamil Nadu
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <Phone size={15} className="text-teal-400 flex-shrink-0" />
+                <a href="tel:+919487000000" className="hover:text-teal-300 transition-colors">
+                  +91 94870 00000
+                </a>
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <Mail size={15} className="text-teal-400 flex-shrink-0" />
+                <a href="mailto:jasvienterprises28@gmail.com" className="hover:text-teal-300 transition-colors break-all">
+                  jasvienterprises28@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center gap-2 text-slate-400 pt-1">
+                <ShieldCheck size={15} className="text-teal-400 flex-shrink-0" />
+                <span>GST NUMBER: NIL</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Materials Category Links */}
+          <div>
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+              Key Wholesale Supplies
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm list-none p-0 m-0">
+              {['A4 Copier Paper (JK / Reams)', 'Hardbound Registers & Files', 'Floor & Surface Cleaners (5L)', 'Disinfectant Concentrates (5L)', 'Liquid Hand Soap Refills', 'Heavy Industrial Waste Bags'].map(item => (
                 <li key={item}>
-                  <a href="#catalog" onClick={onExploreCatalog} className="text-slate-400 hover:text-white text-[0.85rem] no-underline transition-colors">
+                  <a href="#materials" className="text-slate-400 hover:text-teal-300 transition-colors">
                     {item}
                   </a>
                 </li>
@@ -75,62 +91,51 @@ export default function Footer({ onOpenAdminPreview, onExploreCatalog }) {
             </ul>
           </div>
 
-          {/* Housekeeping */}
+          {/* Navigation & Admin Portal */}
           <div>
-            <h4 className="text-white font-bold text-[0.95rem] mb-4">Housekeeping Materials</h4>
-            <ul className="flex flex-col gap-2 list-none m-0 p-0">
-              {['Disinfectants & Chemicals (5L)', 'Floor & Glass Cleaner (5L)', 'Liquid Hand Wash (5L)', 'Tissue Napkins & Towels', 'Garbage Bags & Cleaning Mops'].map((item) => (
-                <li key={item}>
-                  <a href="#catalog" onClick={onExploreCatalog} className="text-slate-400 hover:text-white text-[0.85rem] no-underline transition-colors">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Our Supply For */}
-          <div>
-            <h4 className="text-white font-bold text-[0.95rem] mb-4">Our Supply For</h4>
-            <ul className="flex flex-col gap-2 list-none m-0 p-0">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+              Quick Navigation
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm list-none p-0 m-0 mb-5">
               {[
-                { label: 'Companies & Factories', href: '#sectors' },
-                { label: 'Corporate Offices',     href: '#sectors' },
-                { label: 'Hospitals & Clinics',   href: '#sectors' },
-                { label: 'Colleges & Schools',    href: '#sectors' },
-                { label: 'Restock Estimator',     href: '#calculator' },
+                { label: 'Sectors We Supply', href: '#sectors' },
+                { label: 'Key Materials Showcase', href: '#materials' },
+                { label: 'Why Choose Jasvi', href: '#why-us' },
+                { label: 'Request Wholesale Quote', href: '#lead-form' },
+                { label: 'Hosur Hub & FAQ', href: '#faq' }
               ].map(({ label, href }) => (
                 <li key={label}>
-                  <a href={href} className="text-slate-400 hover:text-white text-[0.85rem] no-underline transition-colors">
+                  <a href={href} className="text-slate-400 hover:text-white transition-colors">
                     {label}
                   </a>
                 </li>
               ))}
-              <li>
-                <button
-                  onClick={onOpenAdminPreview}
-                  className="flex items-center gap-1.5 bg-transparent border-none text-sky-400 hover:text-sky-300 cursor-pointer text-[0.85rem] p-0 mt-1 transition-colors"
-                >
-                  <Lock size={12} />
-                  <span>Hosur Hub Portal</span>
-                  <ArrowUpRight size={12} />
-                </button>
-              </li>
             </ul>
+
+            {/* Admin Leads Modal Trigger */}
+            <button
+              type="button"
+              onClick={onOpenAdminPreview}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-teal-300 bg-slate-900 hover:bg-slate-800 border border-teal-500/30 transition-all cursor-pointer"
+              title="Admin Portal - Export Captured Leads to Excel"
+            >
+              <FileSpreadsheet size={14} className="text-teal-400" />
+              <span>Lead Data Hub (Excel Export)</span>
+            </button>
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 text-center sm:text-left">
+          <div>
+            © {new Date().getFullYear()} <strong className="text-slate-300">Jasvi Enterprises</strong>. Hosur, Tamil Nadu. Official Wholesale Supplier.
+          </div>
+          <div>
+            All deliveries accompanied by official delivery challan & GST vouchers.
           </div>
         </div>
 
-        {/* Footer Bottom */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-white/10 text-[0.82rem] text-slate-500">
-          <div>
-            © {new Date().getFullYear()} <strong className="text-slate-400">Jasvi Enterprises</strong>. Hosur, Tamil Nadu. GST NUMBER: NIL.
-          </div>
-          <div className="flex gap-5 flex-wrap">
-            <a href="mailto:jasvienterprises28@gmail.com" className="text-slate-500 hover:text-slate-300 no-underline transition-colors">
-              jasvienterprises28@gmail.com
-            </a>
-          </div>
-        </div>
       </div>
     </footer>
   );

@@ -605,7 +605,7 @@ export const TESTIMONIALS = [
 export const FAQS = [
   {
     q: "Where is Jasvi Enterprises located?",
-    a: "We are at Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, OSS Rola Nagar, Zuzuwadi, Krishnagiri, Tamil Nadu. We supply across Hosur, Krishnagiri district, and nearby industrial zones."
+    a: "We are at Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, OSS Roja Nagar, Zuzuwadi, Krishnagiri, Tamil Nadu. We supply across Hosur, Krishnagiri district, and nearby industrial zones."
   },
   {
     q: "Can we order both stationery and housekeeping supplies together?",

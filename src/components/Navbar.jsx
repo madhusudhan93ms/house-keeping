@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Search, Lock, Menu, X, Mail, MapPin, MessageSquare, Zap } from 'lucide-react';
+import { Menu, X, MapPin, MessageSquare, ArrowRight, Phone } from 'lucide-react';
 
-export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, searchQuery, setSearchQuery }) {
+export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -13,13 +13,20 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
   }, []);
 
   const navLinks = [
-    { label: 'Products', href: '#catalog' },
-    { label: 'Sectors', href: '#sectors' },
-    { label: 'Estimator', href: '#calculator' },
-    { label: 'FAQs', href: '#faqs' }
+    { label: 'Sectors We Supply', href: '#sectors' },
+    { label: 'Key Materials', href: '#materials' },
+    { label: 'Why Jasvi', href: '#why-us' },
+    { label: 'Hosur Hub & FAQ', href: '#faq' }
   ];
 
-  const handleLinkClick = () => setIsMobileMenuOpen(false);
+  const handleScrollToQuote = (e) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    const el = document.getElementById('lead-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleWhatsAppContact = () => {
     const text = encodeURIComponent("Hello Jasvi Enterprises, I would like to inquire about wholesale Stationery & Housekeeping supplies for my organization in Hosur.");
@@ -27,199 +34,134 @@ export default function Navbar({ cartCount, onOpenCart, onOpenAdminPreview, sear
   };
 
   return (
-    <header className="sticky top-0 z-[100] w-full transition-all duration-300">
-      {/* Announcement Bar */}
-      <aside
-        aria-label="Announcement"
-        className={`bg-gradient-to-r from-[#090e1a] to-[#0b2528] border-b border-white/8 overflow-hidden transition-all duration-300 ${
-          isScrolled ? 'max-h-0 opacity-0 py-0 pointer-events-none invisible' : 'max-h-[50px] opacity-100 py-1.5'
-        }`}
-      >
-        <div className="w-full max-w-[1320px] mx-auto px-5">
-          <div className="flex justify-center items-center gap-4 flex-wrap font-medium text-white">
-            <span className="announcement-pill">
-              <Zap size={11} strokeWidth={3} />
-              <span>ONLY WHOLESALE PRICE</span>
+    <header className="sticky top-0 z-50 w-full transition-all duration-300">
+      {/* Top Announcement Bar */}
+      <div className={`bg-gradient-to-r from-slate-950 via-teal-950 to-slate-950 border-b border-teal-500/20 text-slate-300 transition-all duration-300 ${
+        isScrolled ? 'max-h-0 opacity-0 py-0 overflow-hidden pointer-events-none' : 'max-h-20 opacity-100 py-1.5'
+      }`}>
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs font-medium">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 border border-teal-400/40 text-teal-300 text-[11px] font-bold tracking-wider uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+              Wholesale B2B Distribution
             </span>
-            <span className="announcement-text">Best Quality • Competitive Price • On Time Delivery</span>
-            <span className="text-white/30">•</span>
-            <a href="mailto:jasvienterprises28@gmail.com" className="announcement-link">
-              <Mail size={13} />
-              <span>jasvienterprises28@gmail.com</span>
-            </a>
-            <span className="text-white/30 hidden sm:inline">•</span>
-            <span className="announcement-location hidden sm:inline-flex">
-              <MapPin size={13} />
-              <span>At Hosur, Krishnagiri (Tamil Nadu)</span>
+            <span className="hidden sm:inline text-slate-400">
+              Direct Supply for Companies, Offices, Hospitals & Schools
             </span>
           </div>
+          <div className="flex items-center gap-4 text-slate-400">
+            <span className="hidden md:inline-flex items-center gap-1 text-slate-300">
+              <MapPin size={12} className="text-teal-400" />
+              OSS Roja Nagar, Zuzuwadi, Hosur (TN)
+            </span>
+            <a href="tel:+919487000000" className="inline-flex items-center gap-1 text-teal-300 hover:text-teal-200 transition-colors">
+              <Phone size={12} />
+              <span>+91 94870 00000</span>
+            </a>
+          </div>
         </div>
-      </aside>
+      </div>
 
       {/* Main Navbar */}
-      <nav
-        className={`bg-white/96 backdrop-blur-md border-b border-slate-200 transition-shadow duration-250 ${
-          isScrolled ? 'shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)]' : 'shadow-[0_2px_10px_rgba(15,23,42,0.04)]'
-        }`}
-        aria-label="Main Navigation"
-      >
-        <div className="w-full max-w-[1320px] mx-auto px-5 flex items-center justify-between h-[72px] gap-3">
-          {/* Logo */}
-          <div className="flex-none">
-            <a href="#" className="flex items-center gap-2.5 no-underline">
-              <div className="je-logo-badge">
-                <div className="je-logo-swoosh" />
-                <div className="je-logo-inner">
-                  <span className="je-letter-j">J</span>
-                  <span className="je-letter-e">E</span>
-                </div>
+      <nav className={`w-full transition-all duration-300 ${
+        isScrolled
+          ? 'bg-slate-900/90 backdrop-blur-xl border-b border-slate-800/90 shadow-2xl shadow-black/40'
+          : 'bg-slate-900/70 backdrop-blur-md border-b border-slate-800/50'
+      }`}>
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 sm:h-20">
+          
+          {/* Brand Logo */}
+          <a href="#" className="flex items-center gap-3 group no-underline">
+            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-slate-800 via-teal-950 to-slate-900 p-[1px] shadow-lg shadow-teal-900/20 group-hover:shadow-teal-500/30 transition-all duration-300">
+              <div className="w-full h-full rounded-[11px] bg-slate-900/90 flex items-center justify-center border border-teal-500/30">
+                <span className="font-extrabold text-lg sm:text-xl tracking-tighter bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
+                  JE
+                </span>
               </div>
-              <div className="flex flex-col">
-                <div className="font-[var(--font-heading)] text-[1.28rem] font-extrabold text-slate-900 tracking-tight leading-tight">
-                  JASVI <span className="text-primary-600">ENTERPRISES</span>
-                </div>
-                <div className="text-[0.62rem] text-slate-500 font-bold tracking-widest uppercase">
-                  <span className="tagline-highlight">Your Needs Our Priority</span> • Wholesale Supplier
-                </div>
-              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-base sm:text-xl text-white tracking-tight leading-none group-hover:text-teal-300 transition-colors">
+                JASVI <span className="text-teal-400">ENTERPRISES</span>
+              </span>
+              <span className="text-[10px] sm:text-xs font-semibold text-teal-300/80 tracking-wider uppercase mt-0.5">
+                Wholesale Supplier • Hosur
+              </span>
+            </div>
+          </a>
+
+          {/* Desktop Nav Links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Action CTAs */}
+          <div className="hidden sm:flex items-center gap-3">
+            <button
+              onClick={handleWhatsAppContact}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600/90 hover:bg-emerald-500 border border-emerald-400/40 shadow-lg shadow-emerald-950/40 transition-all hover:scale-[1.02] cursor-pointer"
+              title="Chat on WhatsApp"
+            >
+              <MessageSquare size={14} className="text-emerald-200" />
+              <span>WhatsApp RFQ</span>
+            </button>
+            <a
+              href="#lead-form"
+              onClick={handleScrollToQuote}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 shadow-lg shadow-teal-900/50 hover:shadow-teal-500/30 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <span>Get Wholesale Quote</span>
+              <ArrowRight size={14} />
             </a>
           </div>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden md:flex flex-1 justify-center">
-            <ul className="flex items-center gap-1 list-none m-0 p-0">
-              {navLinks.map((link, idx) => (
-                <li key={idx}>
-                  <a
-                    href={link.href}
-                    className="inline-flex items-center text-slate-600 font-semibold text-[0.85rem] no-underline px-2.5 py-1.5 rounded-[10px] whitespace-nowrap transition-all duration-150 hover:text-primary-800 hover:bg-primary-50"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-1.5 flex-none">
-            {/* Search — hidden on mobile */}
-            <div className="relative hidden lg:flex items-center">
-              <Search className="absolute left-3 text-slate-400 pointer-events-none" size={16} />
-              <input
-                type="text"
-                className="h-[38px] w-[145px] pl-8 pr-3 rounded-[10px] border border-slate-300 bg-white text-[0.84rem] text-slate-800 outline-none transition-all duration-150 focus:w-[180px] focus:border-primary-600 focus:ring-2 focus:ring-primary-500/15"
-                placeholder="Search paper, chemicals..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search stationery and housekeeping supplies"
-              />
-            </div>
-
-            {/* WhatsApp — hidden on small mobile */}
-            <button
-              className="nav-btn-whatsapp hidden sm:inline-flex h-[38px] items-center justify-center gap-1.5 px-3 rounded-[10px] font-semibold text-[0.84rem] cursor-pointer whitespace-nowrap transition-all duration-150"
-              onClick={handleWhatsAppContact}
-              title="Quick Inquiry on WhatsApp"
-              aria-label="Quick WhatsApp Inquiry"
-            >
-              <MessageSquare size={16} />
-              <span className="hidden xl:inline">WhatsApp</span>
-            </button>
-
-            {/* Cart */}
-            <button
-              className="h-[38px] inline-flex items-center justify-center gap-1.5 px-3 rounded-[10px] font-semibold text-[0.84rem] cursor-pointer whitespace-nowrap transition-all duration-150 bg-slate-50 border border-slate-300 text-slate-800 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-800"
-              onClick={onOpenCart}
-              aria-label={`View Cart with ${cartCount} items`}
-            >
-              <ShoppingBag size={17} />
-              <span className="hidden xl:inline">Wholesale Requisition</span>
-              {cartCount > 0 && (
-                <span className="bg-primary-600 text-white text-[0.72rem] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center leading-tight">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
-            {/* Admin */}
-            <button
-              className="h-[38px] hidden md:inline-flex items-center justify-center gap-1.5 px-3 rounded-[10px] font-semibold text-[0.84rem] cursor-pointer whitespace-nowrap transition-all duration-150 bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400 hover:text-slate-900"
-              onClick={onOpenAdminPreview}
-              title="Admin & Warehouse Portal"
-              aria-label="Admin Portal"
-            >
-              <Lock size={15} />
-              <span className="hidden xl:inline">Warehouse</span>
-            </button>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              className="md:hidden w-[38px] h-[38px] inline-flex items-center justify-center rounded-[10px] border border-slate-300 bg-white text-slate-800 cursor-pointer transition-all duration-150 hover:bg-slate-100"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={isMobileMenuOpen}
-            >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700/60 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-slate-200 shadow-lg animate-fade-scale">
-            <div className="w-full max-w-[1320px] mx-auto px-5 pt-4 pb-6">
-              {/* Mobile Search */}
-              <div className="relative flex items-center mb-4">
-                <Search className="absolute left-3 text-slate-400 pointer-events-none" size={16} />
-                <input
-                  type="text"
-                  className="w-full h-[40px] pl-9 pr-3 rounded-[10px] border border-slate-300 bg-white text-[0.88rem] text-slate-800 outline-none focus:border-primary-600 focus:ring-2 focus:ring-primary-500/15"
-                  placeholder="Search stationery & housekeeping..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search supplies"
-                />
-              </div>
-
-              {/* Mobile Links */}
-              <ul className="list-none m-0 p-0 flex flex-col gap-1 mb-4">
-                {navLinks.map((link, idx) => (
-                  <li key={idx}>
-                    <a
-                      href={link.href}
-                      className="block px-3 py-2.5 rounded-[10px] text-slate-800 font-semibold text-[0.95rem] no-underline transition-all duration-150 hover:bg-primary-50 hover:text-primary-700"
-                      onClick={handleLinkClick}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Mobile Actions */}
-              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
-                <button
-                  className="w-full h-[42px] flex items-center justify-center gap-2 rounded-[10px] bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-[0.88rem] cursor-pointer hover:bg-primary-50 hover:border-primary-300"
-                  onClick={() => { setIsMobileMenuOpen(false); onOpenCart(); }}
+          <div className="lg:hidden bg-slate-900/98 border-b border-slate-800 px-4 py-5 backdrop-blur-2xl animate-fade-in shadow-2xl">
+            <div className="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-teal-300 transition-colors"
                 >
-                  <ShoppingBag size={17} />
-                  <span>Cart ({cartCount})</span>
-                </button>
+                  {link.label}
+                </a>
+              ))}
+              <div className="pt-3 border-t border-slate-800 flex flex-col gap-2.5 mt-2">
+                <a
+                  href="#lead-form"
+                  onClick={handleScrollToQuote}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-teal-500 to-teal-600 shadow-lg shadow-teal-900/40"
+                >
+                  <span>Request Wholesale Quote</span>
+                  <ArrowRight size={15} />
+                </a>
                 <button
-                  className="nav-btn-whatsapp w-full h-[42px] flex items-center justify-center gap-2 rounded-[10px] font-semibold text-[0.88rem] cursor-pointer"
                   onClick={handleWhatsAppContact}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/40"
                 >
-                  <MessageSquare size={17} />
-                  <span>WhatsApp</span>
+                  <MessageSquare size={16} />
+                  <span>Chat on WhatsApp</span>
                 </button>
-              </div>
-
-              {/* Mobile Contact Card */}
-              <div className="mt-4 p-3 bg-slate-50 rounded-[10px] border border-slate-100">
-                <div className="font-bold text-[0.88rem] text-slate-800 mb-1">Jasvi Enterprises • Hosur Hub</div>
-                <div className="text-[0.8rem] text-slate-600">Survey No. 193-1A1, Zuzuwadi, Hosur 1st Cross, Krishnagiri, TN.</div>
-                <div className="text-[0.8rem] text-primary-700 mt-1 font-semibold">jasvienterprises28@gmail.com</div>
               </div>
             </div>
           </div>
