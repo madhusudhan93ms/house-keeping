@@ -22,12 +22,24 @@ export const LEAD_CONFIG = {
     notes: "entry.1000008",        // Delivery Instructions / Notes
   },
 
-  // 3. Optional: Excel / Google Sheets Webhook (e.g. SheetDB, Make.com, or Google Apps Script Web App)
-  // Format: "https://sheetdb.io/api/v1/YOUR_SHEET_ID" or "https://script.google.com/macros/s/.../exec"
+  // 3. Google Sheets Iframe Embed URL (File -> Share -> Publish to web -> Embed)
+  // Format: "https://docs.google.com/spreadsheets/d/e/2PACX-.../pubhtml?widget=true&amp;headers=false"
+  googleSheetIframeUrl: "",
+
+  // 4. Optional: Excel / Google Sheets Webhook (e.g. SheetDB, Make.com, or Google Apps Script Web App)
   sheetWebhookUrl: "",
 
-  // 4. Contact & Fulfillment details
-  whatsappNumber: "919487000000",
+  // 5. Official Contact & Fulfillment details (from Jasvi Enterprises business card)
+  phoneNumber: "7639093837",
+  displayPhone: "+91 76390 93837",
+  phoneTel: "+917639093837",
+  whatsappNumber: "917639093837",
   contactEmail: "jasvienterprises28@gmail.com",
-  fulfillmentHub: "OSS Roja Nagar, Zuzuwadi, Hosur (TN)"
+  fulfillmentHub: "Zuzuvadi, Roja Nagar, Hosur",
+  fullAddress: "Zuzuvadi, Roja Nagar, Hosur, Tamil Nadu"
 };
+
+export const getWhatsAppUrl = (text = "Hello Jasvi Enterprises, I would like to request wholesale product pricing.") => {
+  return `https://wa.me/${LEAD_CONFIG.whatsappNumber}?text=${encodeURIComponent(text)}`;
+};
+

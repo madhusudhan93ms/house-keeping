@@ -26,16 +26,36 @@
 
   /* Custom Animations */
   --animate-float: float 6s ease-in-out infinite;
+  --animate-float-subtle: floatSubtle 4.5s ease-in-out infinite;
+  --animate-float-reverse: floatReverse 5.5s ease-in-out infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-shimmer: shimmer 2.5s infinite;
+  --animate-beacon: beacon 2s ease-in-out infinite;
+  --animate-glow: glowPulse 3s ease-in-out infinite;
 
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
   }
+  @keyframes floatSubtle {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes floatReverse {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(8px); }
+  }
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
+  }
+  @keyframes beacon {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(13, 148, 136, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(13, 148, 136, 0.45); }
   }
 }
 
@@ -62,14 +82,15 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
-  background-color: #0b1120;
-  color: #f8fafc;
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
 #root {
   overflow-x: clip;
   max-width: 100%;
   width: 100%;
+  background-color: #f8fafc;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -86,12 +107,63 @@ input, button, textarea, select {
   width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #0d9488;
 }
+
+/* Smooth GPU acceleration */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Glassmorphism card for light theme */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ─────────────────────────────────────────────
+   3D Flip Card & Interactive Transforms
+   ───────────────────────────────────────────── */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* ─────────────────────────────────────────────
+   Infinite Smooth Auto-Scroll Ticker (Marquee)
+   ───────────────────────────────────────────── */
+@keyframes marqueeScroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-scroll {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 32s linear infinite;
+}
+
+.animate-marquee-scroll:hover {
+  animation-play-state: paused;
+}
+
