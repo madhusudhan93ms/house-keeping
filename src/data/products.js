@@ -90,7 +90,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'High-brightness multipurpose copier paper for smooth, jam-free printing in offices and schools.',
     specs: ['75 GSM High White', '10 Reams / Carton', 'Jam-free laser & inkjet', 'ColorLok technology'],
-    image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-2',
@@ -111,7 +111,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Standard legal/foolscap size copier paper for contracts, legal filings, and documentation.',
     specs: ['Legal/FS Dimension', '75 GSM Opacity', 'Double-sided copy safe', 'Moisture proof pack'],
-    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-3',
@@ -132,7 +132,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Sturdy hardbound ruled registers for office logs, visitor records, factory gates, and accounts.',
     specs: ['380 Ruled Pages', 'Cloth spine binding', 'Thread-sewn durable spine', 'Numbered index page'],
-    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-4',
@@ -153,7 +153,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Wire-o spiral notebooks with protective poly covers for staff meetings, daily notes, and classes.',
     specs: ['A5 Size', '160 Ruled pages', 'Twin-wire spiral binding', 'Durable plastic cover'],
-    image: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-5',
@@ -174,7 +174,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Smooth smudge-free ball pens with comfortable ribbed grip for everyday office and school writing.',
     specs: ['0.7mm Fine tip', 'Smooth flow blue/black ink', 'Comfortable ribbed grip', '1,500m writing life'],
-    image: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-6',
@@ -195,7 +195,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Low-odor dry-erase markers that wipe off cleanly without leaving marks on whiteboards.',
     specs: ['Bullet tip', 'Easy dry wipe', 'Black, Blue, Red, Green', 'Non-toxic quick dry ink'],
-    image: 'https://images.unsplash.com/photo-1569683795645-b62e50fbf103?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1569683795645-b62e50fbf103?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-7',
@@ -216,7 +216,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Strong board box files with steel clip lever mechanism for organizing invoices, receipts, and HR files.',
     specs: ['75mm Spine (Holds 500 sheets)', 'Finger pull metal ring', 'Metal bottom shoe edge', 'Spine label pocket'],
-    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-8',
@@ -237,7 +237,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'All-metal desk stapler that staples up to 30 sheets of paper cleanly. Includes 10,000 staple pins.',
     specs: ['Staples up to 30 sheets', 'Uses 24/6 & 26/6 pins', 'Includes 10,000 pins', 'Non-skid base'],
-    image: 'https://images.unsplash.com/photo-1589365278144-c9e705f843ba?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1589365278144-c9e705f843ba?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-9',
@@ -258,7 +258,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Precision 2-hole paper punch with alignment guide bar and removable scrap tray.',
     specs: ['Punches up to 32 sheets', '80mm Standard hole spacing', 'Paper centering guide', 'Waste confetti tray'],
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-10',
@@ -279,7 +279,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Self-adhesive sticky notes for reminders and bookmarks. Sticks firmly and removes without residue.',
     specs: ['76 × 76mm (3" × 3")', '100 Sheets / Pad', 'Yellow, Pink, Green, Orange', 'Clean peel off'],
-    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-11',
@@ -300,7 +300,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Reinforced cloth-mesh envelopes for mailing confidential files, certificates, and legal papers safely.',
     specs: ['Size: 10" × 12"', 'Cloth mesh reinforcement', 'Self-seal peel strip', 'Tear resistant'],
-    image: 'https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-12',
@@ -321,7 +321,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Vibrant colored cardstock sheets for school charts, notices, divider tabs, and craft work.',
     specs: ['160 GSM Thickness', '10 Bright shades', 'Printer friendly', 'Non-toxic safe colors'],
-    image: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'stat-13',
@@ -342,7 +342,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Large angled display calculator with tax check, grand total, and solar battery backup.',
     specs: ['12-Digit large display', 'Dual power (Solar + Battery)', 'Tax & Grand Total keys', 'Auto shut-off'],
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=60'
   },
 
   // ==========================================
@@ -367,7 +367,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Powerful disinfectant concentrate that eliminates 99.9% bacteria and viruses on all floors and surfaces.',
     specs: ['Dilution 1:50 with water', 'Safe for tiles & stone', 'Clinical fresh aroma', 'Non-corrosive'],
-    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-2',
@@ -388,7 +388,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Natural pine oil cleaner that removes grease, repels insects, and leaves floors smelling fresh.',
     specs: ['Natural pine formulation', 'Streak-free shine', 'Leaves no sticky film', 'Makes 250+ mop buckets'],
-    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-3',
@@ -409,7 +409,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Fast-drying formula that cleans glass partitions, windows, and conference tables with zero streaks.',
     specs: ['Ammonia-free safe formula', 'Fast evaporating', 'Anti-static dust repel', 'Bulk refill size'],
-    image: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-4',
@@ -430,7 +430,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Thick blue formula that removes hard water scale, yellow stains, and disinfects toilet bowls and urinals.',
     specs: ['Thick viscous cling action', 'Removes tough stains', 'For commodes & urinals', 'Deodorizing fragrance'],
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-5',
@@ -451,7 +451,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Heavy-action dishwashing liquid for company canteens, school mess halls, and office pantries.',
     specs: ['Lemon grease cutters', 'High foam formula', 'Gentle on hands', 'Rinses completely clean'],
-    image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-6',
@@ -472,7 +472,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Gentle antibacterial liquid soap for restroom wall dispensers in offices, clinics, and schools.',
     specs: ['pH Balanced 5.5 skin formula', 'Kills 99.9% germs', 'Mild floral fragrance', 'Rich smooth lather'],
-    image: 'https://images.unsplash.com/photo-1608248597359-2169b1e95966?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1608248597359-2169b1e95966?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-7',
@@ -493,7 +493,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Soft 2-ply M-fold paper towels with fast water absorption to reduce restroom waste.',
     specs: ['100% Virgin soft pulp', 'Sheet size: 21 × 21 cm', 'Fits all M-fold dispensers', 'Lint-free soft texture'],
-    image: 'https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1584556812952-905ffd0c611a?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-8',
@@ -514,7 +514,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Strong, leak-proof large garbage bags for factory waste, office bins, and campus dustbins.',
     specs: ['30" × 50" (Fits 60L - 100L)', 'Star-sealed leak-proof bottom', 'Puncture resistant', 'Biodegradable material'],
-    image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-9',
@@ -535,7 +535,7 @@ export const PRODUCTS = [
     inStock: true,
     description: '360-degree flat microfiber mop for quick, streak-free floor cleaning in offices and corridors.',
     specs: ['60-Inch extendable pole', '18-Inch wide cleaning path', 'Machine washable pads', 'Velcro quick swap'],
-    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-10',
@@ -556,7 +556,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Natural hill grass brooms for indoor floor sweeping paired with hard coconut brooms for outdoor paths.',
     specs: ['Dense grass sweeping head', 'Bamboo handle grip', 'Zero dust-shedding', 'Strong twine binding'],
-    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&auto=format&fit=crop&q=60'
   },
   {
     id: 'hk-11',
@@ -577,7 +577,7 @@ export const PRODUCTS = [
     inStock: true,
     description: 'Hands-free pedal dustbin made of durable plastic with removable inner bucket for clean disposal.',
     specs: ['30 Litre Capacity', 'Foot pedal operation', 'Tight odor seal lid', 'Removable inner bucket'],
-    image: 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?w=500&auto=format&fit=crop&q=70'
+    image: 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?w=400&auto=format&fit=crop&q=60'
   }
 ];
 

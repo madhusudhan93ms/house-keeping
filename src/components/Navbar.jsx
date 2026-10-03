@@ -121,8 +121,12 @@ export default function Navbar() {
           {/* Brand Logo */}
           <a href="#" className="flex items-center gap-3 group no-underline">
             <img
-              src="/je-logo.png"
+              src="/je-logo-sm.webp"
               alt="Jasvi Enterprises Logo"
+              width="48"
+              height="48"
+              loading="eager"
+              decoding="async"
               className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-xl drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
             />
             <div className="flex flex-col">

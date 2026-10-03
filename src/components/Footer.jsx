@@ -18,8 +18,12 @@ export default function Footer({ onOpenAdminPreview }) {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/je-logo.png"
+                src="/je-logo-sm.webp"
                 alt="Jasvi Enterprises Logo"
+                width="44"
+                height="44"
+                loading="lazy"
+                decoding="async"
                 className="w-11 h-11 object-contain rounded-xl drop-shadow-sm"
               />
               <div>

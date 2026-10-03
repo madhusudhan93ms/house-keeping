@@ -98,8 +98,12 @@ export default function ProductShowcase({ onSelectItemForQuote }) {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    width="400"
+                    height="225"
                     loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-2.5 right-2.5">
                     <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-teal-800 border border-teal-200 shadow-sm">

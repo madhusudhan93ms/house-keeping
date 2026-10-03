@@ -1,4 +1,4 @@
-import heroBgImage from '../assets/hero_supplies_light_bg.jpg';
+import heroBgImage from '../assets/hero_supplies_light_bg.webp';
 import { 
   ArrowRight, 
   MessageSquare, 
@@ -58,6 +58,10 @@ export default function Hero({ onExploreForm }) {
         <img
           src={heroBgImage}
           alt="Wholesale Housekeeping and Office Stationery Materials in Hosur"
+          width="1376"
+          height="768"
+          fetchPriority="high"
+          decoding="async"
           style={{
             transform: `translateY(${bgParallax}px) scale(1.05)`,
             transition: 'transform 0.1s ease-out',
