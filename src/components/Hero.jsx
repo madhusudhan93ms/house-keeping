@@ -99,6 +99,9 @@ export default function Hero({ onExploreForm }) {
         {/* Hero Main Headline (Primary SEO H1) */}
         <div className="mb-4">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight max-w-4xl leading-[1.15]">
+            <span className="block text-lg sm:text-xl md:text-2xl font-extrabold text-teal-700 tracking-wide uppercase mb-1.5">
+              Jasvi Enterprises
+            </span>
             Wholesale Housekeeping Materials &amp; <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
               Stationery Supplier in Hosur

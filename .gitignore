@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Testing & Coverage
+coverage
+*.lcov
+.nyc_output
+test-comp*
+*.test.*
+*.spec.*
+__tests__/

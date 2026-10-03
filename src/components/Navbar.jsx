@@ -13,6 +13,35 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock background screen scroll when mobile menu is open
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
     { label: 'Sectors We Supply', href: '#sectors' },
     { label: 'Key Materials', href: '#materials' },
@@ -21,12 +50,30 @@ export default function Navbar() {
     { label: 'Hosur Hub & FAQ', href: '#faq' }
   ];
 
+  const handleNavLinkClick = (e, href) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      setIsMobileMenuOpen(false);
+      const targetId = href.substring(1);
+      const el = document.getElementById(targetId);
+      if (el) {
+        requestAnimationFrame(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+    } else {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   const handleScrollToQuote = (e) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
     const el = document.getElementById('lead-form');
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: 'smooth' });
+      });
     }
   };
 
@@ -131,15 +178,24 @@ export default function Navbar() {
           </button>
         </div>
 
+        {/* Backdrop overlay to close menu and block background touches */}
+        {isMobileMenuOpen && (
+          <div
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs lg:hidden -z-10"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
         {/* Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white/98 border-b border-slate-200 px-4 py-5 backdrop-blur-2xl animate-fade-in shadow-xl">
+          <div className="lg:hidden bg-white/98 border-b border-slate-200 px-4 py-5 backdrop-blur-2xl animate-fade-in shadow-xl max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => handleNavLinkClick(e, link.href)}
                   className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100 hover:text-teal-700 transition-colors"
                 >
                   {link.label}
@@ -149,7 +205,7 @@ export default function Navbar() {
                 <a
                   href="#lead-form"
                   onClick={handleScrollToQuote}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-teal-600 hover:bg-teal-500 shadow-md transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-teal-600 hover:bg-teal-500 shadow-md transition-all cursor-pointer"
                 >
                   <span>Request Wholesale Quote</span>
                   <ArrowRight size={14} />
@@ -159,7 +215,7 @@ export default function Navbar() {
                     setIsMobileMenuOpen(false);
                     handleWhatsAppContact();
                   }}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 hover:bg-emerald-100 transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 hover:bg-emerald-100 transition-all cursor-pointer"
                 >
                   <MessageSquare size={14} />
                   <span>Instant WhatsApp RFQ</span>
