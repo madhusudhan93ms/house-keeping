@@ -61,15 +61,18 @@ async function submitToGoogleForms(lead) {
 }
 
 /**
- * Submit lead to Excel / Google Sheets webhook (if configured)
+ * Submit lead to Excel / Google Sheets webhook (Google Apps Script Web App)
  */
 async function submitToSheetWebhook(lead) {
-  if (!LEAD_CONFIG.sheetWebhookUrl) return false;
+  const webhookUrl = localStorage.getItem('jasvi_google_sheet_webhook_url') || LEAD_CONFIG.sheetWebhookUrl;
+  if (!webhookUrl) return false;
 
   try {
-    await fetch(LEAD_CONFIG.sheetWebhookUrl, {
+    // Send as text/plain with no-cors to prevent browser CORS block with Google Apps Script
+    await fetch(webhookUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(lead)
     });
     return true;
@@ -87,6 +90,30 @@ export function formatItemsSummary(items = []) {
   return items.map((item, idx) => {
     return `${idx + 1}. ${item.name} (${item.qty} ${item.unit || 'units'}, ${item.packageSize || 'standard'})`;
   }).join('; ');
+}
+
+/**
+ * Update the status of an existing lead (e.g., 'NEW' -> 'ACCEPTED')
+ */
+export function updateLeadStatus(leadId, newStatus) {
+  try {
+    const leads = getStoredLeads();
+    const updated = leads.map(l => {
+      if (l.id === leadId) {
+        return { 
+          ...l, 
+          status: newStatus,
+          acceptedAt: newStatus === 'ACCEPTED' ? new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : l.acceptedAt
+        };
+      }
+      return l;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    return updated;
+  } catch (err) {
+    console.error('Failed to update lead status:', err);
+    return getStoredLeads();
+  }
 }
 
 /**
@@ -119,7 +146,8 @@ export async function submitLead(formData, cartItems = []) {
       dept: item.dept || ''
     })),
     itemsSummary,
-    status: 'New Inquiry'
+    status: 'NEW', // Default status: NEW
+    acceptedAt: null
   };
 
   // 1. Save locally so data is never lost
@@ -128,14 +156,16 @@ export async function submitLead(formData, cartItems = []) {
   // 2. Submit to Google Form if action URL configured
   await submitToGoogleForms(leadRecord);
 
-  // 3. Submit to Sheet Webhook if configured
+  // 3. Submit to Sheet Webhook (Google Apps Script) if configured
   await submitToSheetWebhook(leadRecord);
 
   return leadRecord;
 }
 
 /**
- * Export leads to Excel-ready CSV (with UTF-8 BOM for direct Excel compatibility)
+ * Export leads to Excel-ready CSV with 2 distinct sections:
+ * 1. 📥 NEW REQUISITIONS (PENDING / TO REVIEW)
+ * 2. ✅ ACCEPTED REQUISITIONS (PROCESSED / DISPATCHED)
  */
 export function exportLeadsToExcel(leads = null) {
   const data = leads || getStoredLeads();
@@ -144,28 +174,33 @@ export function exportLeadsToExcel(leads = null) {
     return;
   }
 
-  const headers = [
-    'Lead ID',
-    'Date & Time',
-    'Organization / Facility',
-    'Contact Person',
-    'Phone / WhatsApp',
-    'Email',
-    'Sector',
-    'Delivery Address',
-    'Total Items Count',
-    'Requested Products & Quantities',
-    'Special Instructions / Notes',
-    'Status'
-  ];
-
   const escapeCSV = (val) => {
     if (val === null || val === undefined) return '""';
     const str = String(val).replace(/"/g, '""');
     return `"${str}"`;
   };
 
-  const rows = data.map(lead => [
+  const newLeads = data.filter(l => l.status === 'NEW' || !l.status || l.status === 'New Inquiry');
+  const acceptedLeads = data.filter(l => l.status === 'ACCEPTED' || l.status === 'Dispatched' || l.status === 'Packing');
+
+  const headers = [
+    'Status',
+    'Lead ID',
+    'Date & Time',
+    'Organization / Facility',
+    'Contact Person',
+    'Phone / WhatsApp',
+    'Email / GSTIN',
+    'Buyer Type',
+    'Delivery Address',
+    'Total Items Count',
+    'Requested Materials & Supplies',
+    'Special Instructions / Notes',
+    'Accepted Date'
+  ];
+
+  const mapLeadToRow = (lead) => [
+    escapeCSV(lead.status || 'NEW'),
     escapeCSV(lead.id),
     escapeCSV(lead.timestamp),
     escapeCSV(lead.facilityName),
@@ -174,16 +209,32 @@ export function exportLeadsToExcel(leads = null) {
     escapeCSV(lead.email),
     escapeCSV(lead.sector),
     escapeCSV(lead.address),
-    escapeCSV(lead.itemsCount),
+    escapeCSV(lead.itemsCount || 1),
     escapeCSV(lead.itemsSummary),
     escapeCSV(lead.notes),
-    escapeCSV(lead.status)
-  ]);
+    escapeCSV(lead.acceptedAt || '')
+  ];
 
-  const csvContent = '\uFEFF' + [
+  const csvLines = [
+    'sep=,',
+    escapeCSV('========================================================================================='),
+    escapeCSV('JASVI ENTERPRISES - INSTITUTIONAL WHOLESALE REQUISITIONS & ORDER TRACKER'),
+    escapeCSV('Account: jasvienterprises28@gmail.com | Hosur Distribution Hub (+91 76390 93837)'),
+    escapeCSV('========================================================================================='),
+    '',
+    escapeCSV(`--- [SECTION 1: 📥 NEW REQUISITIONS (${newLeads.length} PENDING REVIEW)] ---`),
     headers.map(escapeCSV).join(','),
-    ...rows.map(r => r.join(','))
-  ].join('\r\n');
+    ...newLeads.map(l => mapLeadToRow(l).join(',')),
+    '',
+    '',
+    escapeCSV(`--- [SECTION 2: ✅ ACCEPTED REQUISITIONS (${acceptedLeads.length} CONFIRMED / DISPATCHED)] ---`),
+    headers.map(escapeCSV).join(','),
+    ...acceptedLeads.map(l => mapLeadToRow(l).join(',')),
+    '',
+    escapeCSV('=========================================================================================')
+  ];
+
+  const csvContent = '\uFEFF' + csvLines.join('\r\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);

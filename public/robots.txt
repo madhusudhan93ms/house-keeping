@@ -1,0 +1,6 @@
+# Robots.txt for Jasvi Enterprises (Wholesale Housekeeping & Stationery Supplier)
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://jasvienterprises.com/sitemap.xml

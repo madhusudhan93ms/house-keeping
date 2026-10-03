@@ -17,9 +17,11 @@ export default function Footer({ onOpenAdminPreview }) {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-white border border-teal-300 flex items-center justify-center text-teal-700 font-extrabold text-lg shadow-sm">
-                JE
-              </div>
+              <img
+                src="/je-logo.png"
+                alt="Jasvi Enterprises Logo"
+                className="w-11 h-11 object-contain rounded-xl drop-shadow-sm"
+              />
               <div>
                 <div className="font-extrabold text-lg text-slate-900 tracking-tight">
                   JASVI <span className="text-teal-600">ENTERPRISES</span>
@@ -101,6 +103,7 @@ export default function Footer({ onOpenAdminPreview }) {
                 { label: 'Sectors We Supply', href: '#sectors' },
                 { label: 'Key Materials Showcase', href: '#materials' },
                 { label: 'Why Choose Jasvi', href: '#why-us' },
+                { label: 'Supply Network (TN & KA)', href: '#coverage' },
                 { label: 'Request Wholesale Quote', href: '#lead-form' },
                 { label: 'Hosur Hub & FAQ', href: '#faq' }
               ].map(({ label, href }) => (
@@ -124,6 +127,36 @@ export default function Footer({ onOpenAdminPreview }) {
             </button>
           </div>
 
+        </div>
+
+        {/* B2B Regional Directory & Product Hubs (SEO Internal Link Network) */}
+        <div className="pt-8 pb-6 border-t border-slate-200">
+          <div className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">
+            Wholesale B2B Distribution Network &amp; Regional Hubs:
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-600">
+            <a href="/housekeeping-materials" className="hover:text-teal-700 transition-colors">Housekeeping Materials Hosur</a>
+            <span className="text-slate-300">•</span>
+            <a href="/stationery" className="hover:text-teal-700 transition-colors">Stationery Supplier Hosur</a>
+            <span className="text-slate-300">•</span>
+            <a href="/office-stationery-supplier" className="hover:text-teal-700 transition-colors">Office Stationery Hosur</a>
+            <span className="text-slate-300">•</span>
+            <a href="/housekeeping-materials-supplier" className="hover:text-teal-700 transition-colors">Commercial Cleaning Chemicals</a>
+            <span className="text-slate-300">•</span>
+            <a href="/hospital-supplies" className="hover:text-teal-700 transition-colors">Hospital Disinfectants Hosur</a>
+            <span className="text-slate-300">•</span>
+            <a href="/school-college-supplies" className="hover:text-teal-700 transition-colors">School &amp; College Supplies</a>
+            <span className="text-slate-300">•</span>
+            <a href="/corporate-supplies" className="hover:text-teal-700 transition-colors">Corporate Office Restock</a>
+            <span className="text-slate-300">•</span>
+            <a href="/locations/hosur" className="hover:text-teal-700 transition-colors">SIPCOT Hosur Hub</a>
+            <span className="text-slate-300">•</span>
+            <a href="/locations/tamil-nadu" className="hover:text-teal-700 transition-colors">Tamil Nadu Supply</a>
+            <span className="text-slate-300">•</span>
+            <a href="/locations/karnataka" className="hover:text-teal-700 transition-colors">Bengaluru &amp; Karnataka</a>
+            <span className="text-slate-300">•</span>
+            <a href="/wholesale-supply-india" className="hover:text-teal-700 transition-colors">Pan-India Wholesale Supply</a>
+          </div>
         </div>
 
         {/* Bottom Bar */}

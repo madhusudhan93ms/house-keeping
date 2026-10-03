@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import TargetSectors from './components/TargetSectors';
 import ProductShowcase from './components/ProductShowcase';
 import WhyChooseUs from './components/WhyChooseUs';
+import SeoCoverageSection from './components/SeoCoverageSection';
 import LeadCaptureSection from './components/LeadCaptureSection';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
@@ -115,6 +116,9 @@ function App() {
 
         {/* Why Choose Jasvi (Trust & Hosur Advantages) */}
         <WhyChooseUs />
+
+        {/* Wholesale Housekeeping & Stationery Supply Coverage (Hosur, TN, KA & India) */}
+        <SeoCoverageSection />
 
         {/* Primary High-Converting Wholesale Lead Generation Section */}
         <LeadCaptureSection

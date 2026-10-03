@@ -5,18 +5,15 @@ import {
   ShieldCheck, 
   Truck, 
   Layers, 
-  CheckCircle2, 
-  FileText, 
-  FolderArchive, 
-  Droplets, 
-  Sparkles 
+  CheckCircle2 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { getWhatsAppUrl } from '../config/leadConfig';
 
 export default function Hero({ onExploreForm }) {
-  const [heroRef, isHeroVisible] = useScrollReveal({ threshold: 0.1 });
+  const [heroRef] = useScrollReveal({ threshold: 0.05 });
+  const isHeroVisible = true;
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
@@ -35,8 +32,6 @@ export default function Hero({ onExploreForm }) {
   }, []);
 
   const bgParallax = Math.min(100, scrollY * 0.2);
-  const leftBadgeParallax = Math.min(60, scrollY * -0.08);
-  const rightBadgeParallax = Math.min(60, scrollY * -0.06);
 
   const handleWhatsAppClick = () => {
     window.open(getWhatsAppUrl("Hello Jasvi Enterprises, I would like to get a wholesale quotation for Stationery & Housekeeping supplies in Hosur."), '_blank');
@@ -67,97 +62,15 @@ export default function Hero({ onExploreForm }) {
             transform: `translateY(${bgParallax}px) scale(1.05)`,
             transition: 'transform 0.1s ease-out',
           }}
-          className="w-full h-full object-cover object-center opacity-95 contrast-[1.02] brightness-100 will-change-transform"
+          className="w-full h-full object-cover object-center opacity-100 contrast-[1.05] saturate-[1.06] brightness-[1.01] will-change-transform"
           loading="eager"
         />
 
-        {/* Soft light radial gradient leaving the left stationery & right housekeeping flanks vivid and crisp */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_65%_at_50%_42%,rgba(255,255,255,0.90)_0%,rgba(255,255,255,0.45)_55%,rgba(241,245,249,0.85)_100%)]" />
+        {/* Focused radial mask: pure legible center with high-opacity vivid supplies on left & right */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_60%_at_50%_40%,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.65)_45%,rgba(255,255,255,0.15)_75%,transparent_100%)]" />
 
-        {/* Ambient light glow accents: Sky Blue for Stationery (Left) & Emerald for Housekeeping (Right) */}
-        <div className="absolute top-1/4 -left-10 w-96 h-96 rounded-full bg-sky-300/20 blur-[100px]" />
-        <div className="absolute top-1/3 -right-10 w-96 h-96 rounded-full bg-emerald-300/20 blur-[100px]" />
-
-        {/* Bottom smooth fade to blend naturally with the common light background */}
-        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-slate-50 via-slate-50/50 to-transparent" />
-      </div>
-
-      {/* ── Left Floating Material Badges (Stationery Highlight - Light Theme) ── */}
-      <div 
-        style={{
-          transform: `translateY(calc(-50% + ${leftBadgeParallax}px))`,
-          transition: 'transform 0.1s ease-out',
-        }}
-        className="hidden lg:flex flex-col gap-3.5 absolute left-4 xl:left-8 top-1/2 z-20 pointer-events-auto max-w-[220px] will-change-transform"
-      >
-        <div className="p-3.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-sky-200/90 shadow-xl shadow-slate-300/50 hover:border-sky-400 hover:shadow-2xl transition-all duration-300 animate-float">
-          <div className="flex items-center gap-2.5 mb-1.5">
-            <span className="p-2 rounded-xl bg-sky-100 text-sky-700 border border-sky-200">
-              <FileText size={18} />
-            </span>
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-700 block">Stationery Material</span>
-              <span className="text-xs font-extrabold text-slate-900 block">Copier Paper Reams</span>
-            </div>
-          </div>
-          <p className="text-[11px] text-slate-600 font-medium leading-snug">
-            A4 80GSM & Legal cartons ready for institutional bulk dispatch.
-          </p>
-        </div>
-
-        <div className="p-3.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-indigo-200/90 shadow-xl shadow-slate-300/50 hover:border-indigo-400 hover:shadow-2xl transition-all duration-300 animate-float [animation-delay:2s]">
-          <div className="flex items-center gap-2.5 mb-1.5">
-            <span className="p-2 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-200">
-              <FolderArchive size={18} />
-            </span>
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">Office Records</span>
-              <span className="text-xs font-extrabold text-slate-900 block">Files & Ledgers</span>
-            </div>
-          </div>
-          <p className="text-[11px] text-slate-600 font-medium leading-snug">
-            Hardbound ruled registers, box files & executive document binders.
-          </p>
-        </div>
-      </div>
-
-      {/* ── Right Floating Material Badges (Housekeeping Highlight - Light Theme) ── */}
-      <div 
-        style={{
-          transform: `translateY(calc(-50% + ${rightBadgeParallax}px))`,
-          transition: 'transform 0.1s ease-out',
-        }}
-        className="hidden lg:flex flex-col gap-3.5 absolute right-4 xl:right-8 top-1/2 z-20 pointer-events-auto max-w-[220px] will-change-transform"
-      >
-        <div className="p-3.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-teal-200/90 shadow-xl shadow-slate-300/50 hover:border-teal-400 hover:shadow-2xl transition-all duration-300 animate-float [animation-delay:1s]">
-          <div className="flex items-center gap-2.5 mb-1.5">
-            <span className="p-2 rounded-xl bg-teal-100 text-teal-700 border border-teal-200">
-              <Droplets size={18} />
-            </span>
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-teal-700 block">Housekeeping Material</span>
-              <span className="text-xs font-extrabold text-slate-900 block">5L Chemical Cans</span>
-            </div>
-          </div>
-          <p className="text-[11px] text-slate-600 font-medium leading-snug">
-            Hospital-grade floor cleaners, toilet liquids & surface disinfectants.
-          </p>
-        </div>
-
-        <div className="p-3.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-emerald-200/90 shadow-xl shadow-slate-300/50 hover:border-emerald-400 hover:shadow-2xl transition-all duration-300 animate-float [animation-delay:3s]">
-          <div className="flex items-center gap-2.5 mb-1.5">
-            <span className="p-2 rounded-xl bg-emerald-100 text-emerald-700 border border-emerald-200">
-              <Sparkles size={18} />
-            </span>
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Janitorial Gear</span>
-              <span className="text-xs font-extrabold text-slate-900 block">Mops & Bin Liners</span>
-            </div>
-          </div>
-          <p className="text-[11px] text-slate-600 font-medium leading-snug">
-            Microfiber dusters, heavy wringer mop trolleys & industrial garbage bags.
-          </p>
-        </div>
+        {/* Subtle bottom fade to blend smoothly into the following section */}
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-50/90 via-slate-50/40 to-transparent" />
       </div>
 
       {/* ── Hero Main Content (No Popup Card, Clean & Reduced Content) ── */}
@@ -178,24 +91,25 @@ export default function Hero({ onExploreForm }) {
           </div>
         </div>
 
-        {/* Hero Main Headline (Punchy & Clean) */}
-        <div className={`transition-all duration-700 delay-200 transform mb-4 ${
-          isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight max-w-3xl leading-[1.15]">
-            Wholesale Supplies for <br className="hidden sm:inline" />
+        {/* Serving Target Entities Tagline */}
+        <div className="mb-3 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-teal-800 bg-teal-50/95 border border-teal-200/90 px-3.5 py-1 rounded-full shadow-xs">
+          Serving Companies • Offices • Hospitals • Schools • Colleges • Factories
+        </div>
+
+        {/* Hero Main Headline (Primary SEO H1) */}
+        <div className="mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight max-w-4xl leading-[1.15]">
+            Wholesale Housekeeping Materials &amp; <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
-              Companies, Offices & Schools
+              Stationery Supplier in Hosur
             </span>
           </h1>
         </div>
 
-        {/* Reduced Subtitle (Crisp & Direct) */}
-        <div className={`transition-all duration-700 delay-300 transform mb-7 ${
-          isHeroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
-          <p className="text-sm sm:text-base text-slate-700 max-w-xl leading-relaxed font-medium">
-            Direct institutional distributor of <strong className="text-slate-900 font-bold">Office Stationery</strong> & <strong className="text-slate-900 font-bold">Housekeeping Chemicals</strong> in Hosur.
+        {/* SEO Supporting Subtitle */}
+        <div className="mb-7">
+          <p className="text-sm sm:text-base text-slate-700 max-w-2xl leading-relaxed font-medium">
+            Jasvi Enterprises supplies <strong className="text-slate-900 font-bold">housekeeping materials, cleaning products, stationery</strong> and <strong className="text-slate-900 font-bold">office essentials</strong> to companies, offices, hospitals, schools, colleges and industries across Hosur, Tamil Nadu, Karnataka and selected locations across India.
           </p>
         </div>
 

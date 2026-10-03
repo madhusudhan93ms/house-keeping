@@ -17,6 +17,7 @@ export default function Navbar() {
     { label: 'Sectors We Supply', href: '#sectors' },
     { label: 'Key Materials', href: '#materials' },
     { label: 'Why Jasvi', href: '#why-us' },
+    { label: 'Supply Network', href: '#coverage' },
     { label: 'Hosur Hub & FAQ', href: '#faq' }
   ];
 
@@ -72,13 +73,11 @@ export default function Navbar() {
           
           {/* Brand Logo */}
           <a href="#" className="flex items-center gap-3 group no-underline">
-            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 p-[1px] shadow-md shadow-teal-700/20 group-hover:shadow-teal-500/40 transition-all duration-300">
-              <div className="w-full h-full rounded-[11px] bg-white flex items-center justify-center border border-teal-200">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tighter text-teal-700">
-                  JE
-                </span>
-              </div>
-            </div>
+            <img
+              src="/je-logo.png"
+              alt="Jasvi Enterprises Logo"
+              className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-xl drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+            />
             <div className="flex flex-col">
               <span className="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight leading-none group-hover:text-teal-700 transition-colors">
                 JASVI <span className="text-teal-600">ENTERPRISES</span>
