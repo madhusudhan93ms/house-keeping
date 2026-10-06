@@ -26,7 +26,7 @@ export const LEAD_CONFIG = {
   googleSheetIframeUrl: "",
 
   // 4. Excel / Google Sheets Webhook (Rule 2: Supports VITE_GOOGLE_SHEET_WEBHOOK_URL env var)
-  sheetWebhookUrl: import.meta.env.VITE_GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbza_A-13RnFMuvUjNxh_vUxglN8zgW8GsRECK6j62D6bJDK6Nqv-wI7L082Dx7RHmaU/exec",
+  sheetWebhookUrl: import.meta.env.VITE_GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbzNp_of54ZF0k0gaYnPuBZLMx_T7HEjH7saqnhxjp2k9YnTd4vRFgAApqAKHP6OVPPF/exec",
 
   // 5. Official Contact & Fulfillment details (from Jasvi Enterprises business card)
   phoneNumber: import.meta.env.VITE_CONTACT_PHONE || "7639093837",

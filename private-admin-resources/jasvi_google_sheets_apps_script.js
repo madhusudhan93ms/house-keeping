@@ -215,6 +215,19 @@ function doPost(e) {
       lead.notes || ""
     ];
 
+    // ── DEDUPLICATION CHECK: PREVENT DUPLICATE ROWS BY LEAD REF ID ──
+    const targetLeadId = lead.id ? String(lead.id).trim() : null;
+    if (targetLeadId) {
+      const existingData = sheetNew.getDataRange().getValues();
+      for (let i = 1; i < existingData.length; i++) {
+        if (String(existingData[i][1]).trim() === targetLeadId) {
+          // Lead already logged! Do not insert duplicate row.
+          return ContentService.createTextOutput(JSON.stringify({ status: "already_exists", id: targetLeadId }))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
+      }
+    }
+
     // Append to "New Requisitions" tab
     sheetNew.appendRow(rowData);
     const lastRow = sheetNew.getLastRow();

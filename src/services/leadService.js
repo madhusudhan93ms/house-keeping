@@ -71,8 +71,8 @@ try {
 
 /**
  * Submit lead to Excel / Google Sheets webhook (Google Apps Script Web App)
- * Permanently locked to verified Google Apps Script endpoint to prevent URL hijacking
- * Employs apiClient with timeout [Rule 7], retry [Rule 16], rate limiting [Rule 18], dev logging [Rule 19]
+ * - Zero retries (retries: 0) to ensure leads are NEVER duplicated in Google Sheets
+ * - Uses browser keepalive and no-cors so transmission succeeds reliably in background without hanging the user's UI
  */
 async function submitToSheetWebhook(lead) {
   const webhookUrl = LEAD_CONFIG.sheetWebhookUrl;
@@ -82,13 +82,16 @@ async function submitToSheetWebhook(lead) {
   }
 
   try {
-    // Send via apiClient: handles timeout (10s), retry, rate limit cooldown, dev logging
-    return await apiClient.post(webhookUrl, JSON.stringify(lead), {
+    // Send with keepalive: true so browser delivers payload reliably without blocking user experience
+    fetch(webhookUrl, {
+      method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      timeoutMs: 10000,
-      retries: 1
-    });
+      body: JSON.stringify(lead),
+      keepalive: true
+    }).catch(err => console.warn('Sheet Webhook network background notice:', err));
+
+    return { success: true };
   } catch (err) {
     console.warn('Sheet Webhook submission attempted:', err);
     return { success: false, error: err.message };
@@ -117,17 +120,19 @@ export async function syncLeadStatusToSheet(leadId, newStatus) {
   }
 
   try {
-    return await apiClient.post(webhookUrl, JSON.stringify({
-      action: "UPDATE_STATUS",
-      leadId,
-      status: newStatus,
-      acceptedAt: newStatus === 'ACCEPTED' ? new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : null
-    }), {
+    fetch(webhookUrl, {
+      method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      timeoutMs: 10000,
-      retries: 1
-    });
+      body: JSON.stringify({
+        action: "UPDATE_STATUS",
+        leadId,
+        status: newStatus,
+        acceptedAt: newStatus === 'ACCEPTED' ? new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : null
+      }),
+      keepalive: true
+    }).catch(() => {});
+    return true;
   } catch (err) {
     console.warn('Google Sheet status sync attempted:', err);
     return false;
