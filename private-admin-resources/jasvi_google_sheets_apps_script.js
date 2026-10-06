@@ -101,18 +101,97 @@ function setupSpreadsheet() {
 }
 
 /**
- * Handle HTTP POST from Website Requisition Form
+ * Handle HTTP POST from Website Requisition Form & Admin Portal
  */
 function doPost(e) {
   try {
-    let lead = {};
+    let payload = {};
     if (e.postData && e.postData.contents) {
-      lead = JSON.parse(e.postData.contents);
+      payload = JSON.parse(e.postData.contents);
     } else if (e.parameter) {
-      lead = e.parameter;
+      payload = e.parameter;
     }
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    // ── 1. AUTOMATED STATUS UPDATE (from Website Admin Portal) ──
+    if (payload.action === "UPDATE_STATUS" && payload.leadId) {
+      let sheetNew = ss.getSheetByName(SHEET_NEW) || (setupSpreadsheet(), ss.getSheetByName(SHEET_NEW));
+      let sheetAccepted = ss.getSheetByName(SHEET_ACCEPTED) || (setupSpreadsheet(), ss.getSheetByName(SHEET_ACCEPTED));
+
+      if (payload.status === "ACCEPTED") {
+        // Find in New Requisitions and move to Accepted Orders
+        const data = sheetNew.getDataRange().getValues();
+        for (let i = 1; i < data.length; i++) {
+          if (String(data[i][1]).trim() === String(payload.leadId).trim()) {
+            const rowValues = data[i];
+            const now = new Date();
+            const acceptedDate = payload.acceptedAt || Utilities.formatDate(now, "Asia/Kolkata", "dd-MMM-yyyy HH:mm:ss");
+
+            const acceptedRow = [
+              acceptedDate,
+              rowValues[1], // Lead Ref ID
+              "ACCEPTED",
+              rowValues[3], // Company
+              rowValues[4], // Contact
+              rowValues[5], // Phone
+              rowValues[6], // Email/GSTIN
+              rowValues[7], // Sector
+              rowValues[8], // Address
+              rowValues[9], // Materials
+              rowValues[10], // Notes
+              "", // Challan #
+              ""  // Remarks
+            ];
+
+            sheetAccepted.appendRow(acceptedRow);
+            const accLastRow = sheetAccepted.getLastRow();
+            sheetAccepted.getRange(accLastRow, 3).setBackground("#d1fae5").setFontColor("#065f46").setFontWeight("bold");
+
+            sheetNew.deleteRow(i + 1);
+            return ContentService.createTextOutput(JSON.stringify({ status: "success", action: "ACCEPTED" }))
+              .setMimeType(ContentService.MimeType.JSON);
+          }
+        }
+      } else if (payload.status === "NEW") {
+        // Find in Accepted Orders and move back to New Requisitions
+        const data = sheetAccepted.getDataRange().getValues();
+        for (let i = 1; i < data.length; i++) {
+          if (String(data[i][1]).trim() === String(payload.leadId).trim()) {
+            const rowValues = data[i];
+            const now = new Date();
+            const dateStr = Utilities.formatDate(now, "Asia/Kolkata", "dd-MMM-yyyy HH:mm:ss");
+
+            const newRow = [
+              dateStr,
+              rowValues[1], // Lead Ref ID
+              "NEW",
+              rowValues[3], // Company
+              rowValues[4], // Contact
+              rowValues[5], // Phone
+              rowValues[6], // Email/GSTIN
+              rowValues[7], // Sector
+              rowValues[8], // Address
+              rowValues[9], // Materials
+              rowValues[10] // Notes
+            ];
+
+            sheetNew.appendRow(newRow);
+            const newLastRow = sheetNew.getLastRow();
+            sheetNew.getRange(newLastRow, 3).setBackground("#fef3c7").setFontColor("#b45309").setFontWeight("bold");
+
+            sheetAccepted.deleteRow(i + 1);
+            return ContentService.createTextOutput(JSON.stringify({ status: "success", action: "NEW" }))
+              .setMimeType(ContentService.MimeType.JSON);
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({ status: "leadNotFound" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // ── 2. NEW REQUISITION LEAD RECORDING ──
+    const lead = payload;
     let sheetNew = ss.getSheetByName(SHEET_NEW);
     if (!sheetNew) {
       setupSpreadsheet();

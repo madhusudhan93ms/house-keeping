@@ -1,5 +1,6 @@
 import React from 'react';
-import { Mail, MapPin, MessageSquare, ShieldCheck, Phone, FileSpreadsheet } from 'lucide-react';
+import { Mail, MapPin, ShieldCheck, Phone, FileSpreadsheet } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
 import { LEAD_CONFIG, getWhatsAppUrl } from '../config/leadConfig';
 
 export default function Footer({ onOpenAdminPreview }) {
@@ -45,7 +46,7 @@ export default function Footer({ onOpenAdminPreview }) {
               onClick={handleWhatsAppContact}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/30 shadow-md shadow-emerald-700/20 transition-all cursor-pointer"
             >
-              <MessageSquare size={14} />
+              <WhatsAppIcon size={15} className="text-white shrink-0" />
               <span>WhatsApp Inquiries</span>
             </button>
           </div>
@@ -107,6 +108,7 @@ export default function Footer({ onOpenAdminPreview }) {
                 { label: 'Sectors We Supply', href: '#sectors' },
                 { label: 'Key Materials Showcase', href: '#materials' },
                 { label: 'Why Choose Jasvi', href: '#why-us' },
+                { label: 'Client Reviews', href: '#reviews' },
                 { label: 'Supply Network (TN & KA)', href: '#coverage' },
                 { label: 'Request Wholesale Quote', href: '#lead-form' },
                 { label: 'Hosur Hub & FAQ', href: '#faq' }
@@ -118,17 +120,6 @@ export default function Footer({ onOpenAdminPreview }) {
                 </li>
               ))}
             </ul>
-
-            {/* Admin Leads Modal Trigger */}
-            <button
-              type="button"
-              onClick={onOpenAdminPreview}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-teal-800 bg-white hover:bg-slate-50 border border-teal-300 shadow-sm transition-all cursor-pointer"
-              title="Admin Portal - Export Captured Leads to Excel"
-            >
-              <FileSpreadsheet size={14} className="text-teal-600" />
-              <span>Lead Data Hub (Excel Export)</span>
-            </button>
           </div>
 
         </div>
@@ -165,7 +156,11 @@ export default function Footer({ onOpenAdminPreview }) {
 
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 text-center sm:text-left">
-          <div>
+          <div 
+            onDoubleClick={onOpenAdminPreview}
+            className="cursor-default select-none"
+            title="Jasvi Enterprises"
+          >
             © {new Date().getFullYear()} <strong className="text-slate-700">Jasvi Enterprises</strong>. Hosur, Tamil Nadu. Official Wholesale Supplier.
           </div>
           <div>

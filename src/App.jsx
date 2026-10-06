@@ -4,12 +4,14 @@ import Hero from './components/Hero';
 import TargetSectors from './components/TargetSectors';
 import ProductShowcase from './components/ProductShowcase';
 import WhyChooseUs from './components/WhyChooseUs';
+import ClientReviewsSection from './components/ClientReviewsSection';
 import SeoCoverageSection from './components/SeoCoverageSection';
 import LeadCaptureSection from './components/LeadCaptureSection';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import AdminPreviewModal from './components/AdminPreviewModal';
-import { MessageSquare, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
+import WhatsAppIcon from './components/WhatsAppIcon';
 import { useScrollProgress } from './hooks/useScrollReveal';
 import { getWhatsAppUrl } from './config/leadConfig';
 
@@ -29,6 +31,40 @@ function App() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Secret admin route listener (#admin, #jasvi-admin) and Ctrl+Shift+A shortcut
+  useEffect(() => {
+    const checkAdminHash = () => {
+      const hash = (window.location.hash || '').toLowerCase();
+      if (hash === '#admin' || hash === '#jasvi-admin') {
+        setIsAdminPreviewOpen(true);
+      }
+    };
+
+    window.addEventListener('hashchange', checkAdminHash);
+    checkAdminHash();
+
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        setIsAdminPreviewOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('hashchange', checkAdminHash);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const handleCloseAdminModal = () => {
+    setIsAdminPreviewOpen(false);
+    const hash = (window.location.hash || '').toLowerCase();
+    if (hash === '#admin' || hash === '#jasvi-admin') {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  };
 
   const handleFloatingWhatsApp = () => {
     window.open(getWhatsAppUrl("Hello Jasvi Enterprises! I would like to inquire about wholesale Stationery & Housekeeping supplies for my organization in Hosur."), '_blank');
@@ -74,7 +110,7 @@ function App() {
         title="Direct WhatsApp Inquiry"
         aria-label="Direct WhatsApp Inquiry"
       >
-        <MessageSquare size={24} className="text-white" />
+        <WhatsAppIcon size={26} className="text-white" />
         <span className="hidden group-hover:block absolute right-16 bg-white text-slate-900 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200 shadow-xl whitespace-nowrap">
           Chat with Jasvi Enterprises
         </span>
@@ -117,6 +153,9 @@ function App() {
         {/* Why Choose Jasvi (Trust & Hosur Advantages) */}
         <WhyChooseUs />
 
+        {/* Client Reviews & Verified B2B Testimonials */}
+        <ClientReviewsSection />
+
         {/* Wholesale Housekeeping & Stationery Supply Coverage (Hosur, TN, KA & India) */}
         <SeoCoverageSection />
 
@@ -138,7 +177,7 @@ function App() {
       {/* Admin Leads Preview & Excel Export Modal */}
       <AdminPreviewModal
         isOpen={isAdminPreviewOpen}
-        onClose={() => setIsAdminPreviewOpen(false)}
+        onClose={handleCloseAdminModal}
       />
 
     </div>

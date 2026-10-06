@@ -16,27 +16,38 @@ import {
   ShieldCheck, 
   Truck, 
   FileText,
-  PackageCheck
+  PackageCheck,
+  FolderArchive,
+  FlaskConical,
+  Droplets,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
-import { submitLead, exportLeadsToExcel, generateWhatsAppQuoteText } from '../services/leadService';
+import { submitLead, generateWhatsAppQuoteText } from '../services/leadService';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import WhatsAppIcon from './WhatsAppIcon';
 import { LEAD_CONFIG, getWhatsAppUrl } from '../config/leadConfig';
 
 const POPULAR_SUPPLIES_TAGS = [
-  { id: 'a4-paper', label: 'A4 Copier Paper (JK / Reams)', icon: '📄' },
-  { id: 'files', label: 'Office Files & Registers', icon: '📁' },
-  { id: 'floor-cleaner', label: 'Floor Cleaner 5L Cans', icon: '🧪' },
-  { id: 'disinfectant', label: 'Disinfectant Concentrate 5L', icon: '🛡️' },
-  { id: 'hand-soap', label: 'Liquid Hand Soap & Sanitizers', icon: '🧼' },
-  { id: 'garbage-bags', label: 'Heavy Duty Garbage Bags', icon: '🗑️' },
-  { id: 'mops-brooms', label: 'Industrial Mops & Brooms', icon: '🧹' },
-  { id: 'restock', label: 'Complete Monthly Restock', icon: '⚡' }
+  { id: 'a4-paper', label: 'A4 Copier Paper (JK / Reams)', icon: FileText },
+  { id: 'files', label: 'Office Files & Registers', icon: FolderArchive },
+  { id: 'floor-cleaner', label: 'Floor Cleaner 5L Cans', icon: FlaskConical },
+  { id: 'disinfectant', label: 'Disinfectant Concentrate 5L', icon: ShieldCheck },
+  { id: 'hand-soap', label: 'Liquid Hand Soap & Sanitizers', icon: Droplets },
+  { id: 'garbage-bags', label: 'Heavy Duty Garbage Bags', icon: Trash2 },
+  { id: 'mops-brooms', label: 'Industrial Mops & Brooms', icon: Sparkles },
+  { id: 'restock', label: 'Complete Monthly Restock', icon: RefreshCw }
 ];
 
 export default function LeadCaptureSection({ selectedSector, selectedProduct }) {
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.1 });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedLead, setSubmittedLead] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showAllTags, setShowAllTags] = useState(false);
 
   const [formData, setFormData] = useState({
     facilityName: '',
@@ -81,9 +92,16 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
     });
   };
 
+  const DEFAULT_VISIBLE_TAGS = 4;
+  const visibleTags = showAllTags
+    ? POPULAR_SUPPLIES_TAGS
+    : POPULAR_SUPPLIES_TAGS.filter((tag, idx) => idx < DEFAULT_VISIBLE_TAGS || formData.selectedTags.includes(tag.label));
+  const hiddenCount = POPULAR_SUPPLIES_TAGS.length - visibleTags.length;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
     try {
       const itemsList = formData.selectedTags.map(tag => ({
         id: `tag-${tag}`,
@@ -107,6 +125,8 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
       setSubmittedLead(leadRecord);
     } catch (err) {
       console.error('Failed to submit quote lead:', err);
+      // Rule 6: Meaningful Error Messages
+      setErrorMessage(err.message || 'Unable to submit quotation request. Please verify your details or contact us directly on WhatsApp.');
     } finally {
       setIsSubmitting(false);
     }
@@ -118,14 +138,9 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
     window.open(getWhatsAppUrl(text), '_blank');
   };
 
-  const handleDownloadExcel = () => {
-    if (submittedLead) {
-      exportLeadsToExcel([submittedLead]);
-    }
-  };
-
   const handleReset = () => {
     setSubmittedLead(null);
+    setErrorMessage('');
     setFormData({
       facilityName: '',
       contactName: '',
@@ -178,72 +193,45 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
           <div className="h-1.5 w-full bg-gradient-to-r from-teal-500 via-emerald-400 to-sky-500" />
 
           {submittedLead ? (
-            /* ── SUCCESS STATE ── */
-            <div className="text-center p-8 sm:p-12 flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center text-emerald-600 mb-4 shadow-lg shadow-emerald-950/20 animate-bounce">
+            /* ── CLIENT CONFIRMATION (CLEAN & ESSENTIAL ONLY) ── */
+            <div className="text-center p-8 sm:p-12 flex flex-col items-center animate-fade-in">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center text-emerald-600 mb-4 shadow-lg shadow-emerald-950/20">
                 <CheckCircle size={36} />
               </div>
               
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-                Quotation Request Transmitted!
+                Quotation Request Received!
               </h3>
-              <p className="text-sm text-slate-600 max-w-md mx-auto mb-5">
-                Thank you, <strong className="text-slate-900">{submittedLead.facilityName || 'Valued Partner'}</strong>. Your requisition is registered under Reference ID:
+              
+              {/* Reference ID Pill */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-300 text-teal-800 text-sm font-mono font-bold mb-4 shadow-2xs">
+                <span>Ref: {submittedLead.id}</span>
+              </div>
+
+              {/* Essential Client Message */}
+              <p className="text-sm sm:text-base text-slate-600 max-w-md mx-auto mb-6 leading-relaxed">
+                Thank you, <strong className="text-slate-900">{submittedLead.contactName || submittedLead.facilityName || 'Valued Buyer'}</strong>. We have successfully registered your wholesale requisition. Our Hosur team will review your items and reach out to you shortly with wholesale rates.
               </p>
 
-              {/* Reference ID Pill */}
-              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-teal-50 border border-teal-300 text-teal-800 text-base font-mono font-bold mb-6 shadow-2xs">
-                <span>{submittedLead.id}</span>
-              </div>
-
-              {/* Summary Card */}
-              <div className="w-full max-w-md bg-slate-50 border border-slate-200 rounded-2xl p-4.5 mb-6 text-left text-xs sm:text-sm text-slate-700 space-y-2 shadow-2xs">
-                <div className="flex justify-between pb-1.5 border-b border-slate-200">
-                  <span className="text-slate-500">Contact Person:</span>
-                  <strong className="text-slate-900">{submittedLead.contactName} ({submittedLead.phone})</strong>
-                </div>
-                <div className="flex justify-between pb-1.5 border-b border-slate-200">
-                  <span className="text-slate-500">Institution Sector:</span>
-                  <strong className="text-teal-700">{submittedLead.sector}</strong>
-                </div>
-                <div className="flex justify-between pb-1.5 border-b border-slate-200">
-                  <span className="text-slate-500">Delivery Hub:</span>
-                  <strong className="text-slate-900">{LEAD_CONFIG.fullAddress}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-500 block mb-1">Materials Requested:</span>
-                  <span className="text-slate-700 leading-relaxed font-medium">{submittedLead.itemsSummary}</span>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md justify-center">
+              {/* Instant WhatsApp Action */}
+              <div className="w-full max-w-sm flex justify-center">
                 <button
                   type="button"
                   onClick={handleWhatsAppConfirm}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-700/20 transition-all hover:scale-[1.02] cursor-pointer border-none"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-700/20 transition-all hover:scale-[1.02] cursor-pointer border-none"
                 >
-                  <MessageSquare size={16} />
+                  <WhatsAppIcon size={18} className="text-white shrink-0" />
                   <span>Confirm on WhatsApp (Instant)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleDownloadExcel}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold text-white bg-teal-600 hover:bg-teal-500 shadow-md shadow-teal-700/20 transition-all hover:scale-[1.02] cursor-pointer border-none"
-                >
-                  <FileSpreadsheet size={16} />
-                  <span>Download Requisition (.csv)</span>
                 </button>
               </div>
 
               <button
                 type="button"
                 onClick={handleReset}
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-teal-700 transition-colors cursor-pointer bg-transparent border-none"
+                className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-teal-700 transition-colors cursor-pointer bg-transparent border-none"
               >
                 <RefreshCw size={13} />
-                <span>Submit Another Requisition</span>
+                <span>Submit Another Request</span>
               </button>
             </div>
           ) : (
@@ -373,24 +361,32 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
                     <ClipboardList size={16} className="text-teal-600" />
                     <span>Select Key Materials Required (Click to toggle):</span>
                   </label>
-                  <span className="text-[11px] text-slate-500 hidden sm:inline">Multiple tags supported</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-500 hidden sm:inline">Multiple tags supported</span>
+                    {formData.selectedTags.length > 0 && (
+                      <span className="text-[11px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200">
+                        {formData.selectedTags.length} selected
+                      </span>
+                    )}
+                  </div>
                 </div>
                 
-                <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                  {POPULAR_SUPPLIES_TAGS.map(tag => {
+                <div className="flex flex-wrap gap-2 sm:gap-2.5 items-center">
+                  {visibleTags.map(tag => {
                     const isSelected = formData.selectedTags.includes(tag.label);
+                    const TagIcon = tag.icon;
                     return (
                       <button
                         type="button"
                         key={tag.id}
                         onClick={() => toggleTag(tag.label)}
-                        className={`group text-xs font-semibold px-3 py-2 sm:py-2.5 rounded-xl transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 border ${
+                        className={`group text-xs font-semibold px-3 py-2 sm:py-2.5 rounded-xl transition-all duration-200 cursor-pointer inline-flex items-center gap-2 border ${
                           isSelected
                             ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white border-teal-600 shadow-sm shadow-teal-700/25 scale-[1.02]'
                             : 'bg-slate-50/90 text-slate-700 border-slate-200 hover:border-teal-400 hover:bg-teal-50/50 hover:text-teal-900 hover:shadow-2xs active:scale-[0.98]'
                         }`}
                       >
-                        <span className="text-sm shrink-0">{tag.icon}</span>
+                        <TagIcon size={14} className={`shrink-0 ${isSelected ? 'text-white' : 'text-teal-600'}`} />
                         <span>{tag.label}</span>
                         <span className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ml-1 transition-all ${
                           isSelected ? 'bg-white text-teal-700' : 'bg-slate-200 text-slate-600 group-hover:bg-teal-200 group-hover:text-teal-800'
@@ -400,6 +396,26 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
                       </button>
                     );
                   })}
+
+                  {/* Show More / Show Less Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowAllTags(prev => !prev)}
+                    className="text-xs font-bold px-3.5 py-2 sm:py-2.5 rounded-xl border border-dashed border-teal-500/70 bg-teal-50/70 hover:bg-teal-100/90 text-teal-800 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 shadow-2xs hover:shadow-xs active:scale-95"
+                    aria-label={showAllTags ? "Show less material tags" : "Show more material tags"}
+                  >
+                    {showAllTags ? (
+                      <>
+                        <ChevronUp size={14} className="text-teal-700 shrink-0" />
+                        <span>Show Less</span>
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown size={14} className="text-teal-700 shrink-0" />
+                        <span>Show More {hiddenCount > 0 ? `(+${hiddenCount})` : ''}</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -445,6 +461,17 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
                 </div>
               </div>
 
+              {/* Error Alert Banner (Rule 6: Meaningful Error Messages) */}
+              {errorMessage && (
+                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start gap-2.5 shadow-2xs">
+                  <AlertCircle size={18} className="text-amber-600 shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <span className="font-bold block mb-0.5">Submission Notice:</span>
+                    <span>{errorMessage}</span>
+                  </div>
+                </div>
+              )}
+
               {/* Submit CTA with Radiant Gradient & Hover Light Sweep Animation */}
               <div className="pt-2">
                 <button
@@ -455,7 +482,11 @@ export default function LeadCaptureSection({ selectedSector, selectedProduct }) 
                   {/* Shimmer Light Sweep on Hover */}
                   <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                   
-                  <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+                  {isSubmitting ? (
+                    <Loader2 size={18} className="animate-spin text-white" />
+                  ) : (
+                    <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+                  )}
                   <span>{isSubmitting ? 'Registering Your Wholesale Requisition...' : 'Submit Wholesale Quote Request'}</span>
                 </button>
 

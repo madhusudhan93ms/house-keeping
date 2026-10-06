@@ -1,12 +1,12 @@
 import heroBgImage from '../assets/hero_supplies_light_bg.webp';
 import { 
   ArrowRight, 
-  MessageSquare, 
   ShieldCheck, 
   Truck, 
   Layers, 
   CheckCircle2 
 } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
 import { useEffect, useState } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { getWhatsAppUrl } from '../config/leadConfig';
@@ -101,7 +101,7 @@ export default function Hero({ onExploreForm }) {
         </div>
 
         {/* Hero Main Headline (Primary SEO H1) */}
-        <div className="mb-4">
+        <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight max-w-4xl leading-[1.15]">
             <span className="block text-lg sm:text-xl md:text-2xl font-extrabold text-teal-700 tracking-wide uppercase mb-1.5">
               Jasvi Enterprises
@@ -111,13 +111,6 @@ export default function Hero({ onExploreForm }) {
               Stationery Supplier in Hosur
             </span>
           </h1>
-        </div>
-
-        {/* SEO Supporting Subtitle */}
-        <div className="mb-7">
-          <p className="text-sm sm:text-base text-slate-700 max-w-2xl leading-relaxed font-medium">
-            Jasvi Enterprises supplies <strong className="text-slate-900 font-bold">housekeeping materials, cleaning products, stationery</strong> and <strong className="text-slate-900 font-bold">office essentials</strong> to companies, offices, hospitals, schools, colleges and industries across Hosur, Tamil Nadu, Karnataka and selected locations across India.
-          </p>
         </div>
 
         {/* Primary Call-to-Actions */}
@@ -137,7 +130,7 @@ export default function Hero({ onExploreForm }) {
             onClick={handleWhatsAppClick}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl text-sm sm:text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/30 shadow-lg shadow-emerald-700/25 transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
           >
-            <MessageSquare size={18} className="text-emerald-100" />
+            <WhatsAppIcon size={18} className="text-white shrink-0" />
             <span>WhatsApp RFQ</span>
           </button>
         </div>

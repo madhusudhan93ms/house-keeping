@@ -16,8 +16,8 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 const SECTORS = [
   {
     id: 'Company',
-    shortName: '⚡ Companies & Factories',
-    title: '⚡ Companies & Factories: 5L/20L Floor Cleaners & Industrial Mops',
+    shortName: 'Companies & Factories',
+    title: 'Companies & Factories: 5L/20L Floor Cleaners & Industrial Mops',
     headline: '5L/20L Floor Cleaners & Industrial Mops',
     tagline: 'Heavy-Duty Industrial Sanitation & Floor Maintenance',
     subtitle: 'SIPCOT Phase I & II, Automobile Units, Ancillaries & Tech Hubs',
@@ -40,8 +40,8 @@ const SECTORS = [
   },
   {
     id: 'Office',
-    shortName: '📄 Corporate Offices',
-    title: '📄 Corporate Offices: JK Copier Paper 75/80 GSM Reams',
+    shortName: 'Corporate Offices',
+    title: 'Corporate Offices: JK Copier Paper 75/80 GSM Reams',
     headline: 'JK Copier Paper 75/80 GSM Reams',
     tagline: 'Premium Executive Copier Paper & Clean Workspaces',
     subtitle: 'Tech Parks, Commercial Facilities, BPOs & Corporate HQs',
@@ -64,8 +64,8 @@ const SECTORS = [
   },
   {
     id: 'Hospital',
-    shortName: '🏥 Hospitals & Healthcare',
-    title: '🏥 Hospitals & Healthcare: Medical Disinfectants & Biohazard Bags',
+    shortName: 'Hospitals & Healthcare',
+    title: 'Hospitals & Healthcare: Medical Disinfectants & Biohazard Bags',
     headline: 'Medical Disinfectants & Biohazard Bags',
     tagline: 'Certified Hygiene, Germicidal Protection & Patient Documentation',
     subtitle: 'Multispecialty Hospitals, Nursing Homes, Pathology Labs & Clinics',
@@ -88,8 +88,8 @@ const SECTORS = [
   },
   {
     id: 'College',
-    shortName: '🎓 Colleges & Universities',
-    title: '🎓 Colleges & Universities: Hardbound Registers & Whiteboard Markers',
+    shortName: 'Colleges & Universities',
+    title: 'Colleges & Universities: Hardbound Registers & Whiteboard Markers',
     headline: 'Hardbound Registers & Whiteboard Markers',
     tagline: 'High-Volume Academic Examination & Campus Maintenance',
     subtitle: 'Engineering, Medical, Arts & Science Campuses across Krishnagiri',
@@ -112,8 +112,8 @@ const SECTORS = [
   },
   {
     id: 'School',
-    shortName: '🏫 Schools & Institutes',
-    title: '🏫 Schools & Institutes: Student Record Folders & Hand Wash',
+    shortName: 'Schools & Institutes',
+    title: 'Schools & Institutes: Student Record Folders & Hand Wash',
     headline: 'Student Record Folders & Hand Wash',
     tagline: 'Child-Safe Materials & Term-Wise Academic Supplies',
     subtitle: 'Matriculation, CBSE, International Schools & Pre-Schools',
@@ -136,8 +136,8 @@ const SECTORS = [
   },
   {
     id: 'Custom',
-    shortName: '📦 Custom Institutional POs',
-    title: '📦 Custom Institutional POs: Tailored Wholesale Consignments',
+    shortName: 'Custom Orders & Tenders',
+    title: 'Custom Orders & Tenders: Tailored Wholesale Consignments',
     headline: 'Tailored Wholesale Consignments',
     tagline: 'Bespoke Brand Specifications, Custom Lot Sizes & Challans',
     subtitle: 'Government Agencies, Industrial Estates, Large Campuses & Tenders',
@@ -210,8 +210,11 @@ export default function TargetSectors({ onSelectSector }) {
 
         {/* ── 3D INTERACTIVE FLIP DISPLAY ── */}
         <div className="space-y-6">
-          <div className="text-center text-xs font-semibold text-slate-500 mb-2">
-            💡 <em>Hover over any sector card (or tap on mobile) to flip 360° and view the complete materials checklist & dispatch details!</em>
+          <div className="text-center mb-3">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-semibold">
+              <RefreshCw size={12} className="text-teal-600" />
+              <span>Tap or hover cards to inspect item checklists & specifications</span>
+            </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

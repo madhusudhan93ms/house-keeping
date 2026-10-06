@@ -1,4 +1,5 @@
 import { LEAD_CONFIG } from '../config/leadConfig';
+import { apiClient } from './apiClient';
 
 const STORAGE_KEY = 'jasvi_institutional_leads';
 
@@ -30,9 +31,10 @@ export function saveLeadToStorage(lead) {
 
 /**
  * Submit lead to Google Forms (if configured)
+ * Employs apiClient with timeout [Rule 7], retry [Rule 16], and error handling [Rule 3]
  */
 async function submitToGoogleForms(lead) {
-  if (!LEAD_CONFIG.googleFormActionUrl) return false;
+  if (!LEAD_CONFIG.googleFormActionUrl) return { success: false, reason: 'unconfigured' };
 
   try {
     const formData = new FormData();
@@ -47,38 +49,49 @@ async function submitToGoogleForms(lead) {
     if (entries.orderItems)   formData.append(entries.orderItems,   lead.itemsSummary || '');
     if (entries.notes)        formData.append(entries.notes,        lead.notes || '');
 
-    // Submit with no-cors so browser doesn't block Google Forms response
-    await fetch(LEAD_CONFIG.googleFormActionUrl, {
-      method: 'POST',
+    // Submit via apiClient with timeout and error handling
+    return await apiClient.post(LEAD_CONFIG.googleFormActionUrl, formData, {
       mode: 'no-cors',
-      body: formData
+      timeoutMs: 10000,
+      retries: 1
     });
-    return true;
   } catch (err) {
     console.warn('Google Form submission attempted:', err);
-    return false;
+    return { success: false, error: err.message };
   }
+}
+
+// Purge any legacy webhook overrides from localStorage to prevent URL hijacking or data exfiltration
+try {
+  localStorage.removeItem('jasvi_google_sheet_webhook_url');
+  localStorage.removeItem('jasvi_google_sheet_iframe_url');
+} catch (e) {
+  // ignore in non-browser context
 }
 
 /**
  * Submit lead to Excel / Google Sheets webhook (Google Apps Script Web App)
+ * Permanently locked to verified Google Apps Script endpoint to prevent URL hijacking
+ * Employs apiClient with timeout [Rule 7], retry [Rule 16], rate limiting [Rule 18], dev logging [Rule 19]
  */
 async function submitToSheetWebhook(lead) {
-  const webhookUrl = localStorage.getItem('jasvi_google_sheet_webhook_url') || LEAD_CONFIG.sheetWebhookUrl;
-  if (!webhookUrl) return false;
+  const webhookUrl = LEAD_CONFIG.sheetWebhookUrl;
+
+  if (!webhookUrl || !webhookUrl.startsWith('https://script.google.com/macros/s/')) {
+    return { success: false, error: 'Invalid Google Apps Script Webhook URL' };
+  }
 
   try {
-    // Send as text/plain with no-cors to prevent browser CORS block with Google Apps Script
-    await fetch(webhookUrl, {
-      method: 'POST',
+    // Send via apiClient: handles timeout (10s), retry, rate limit cooldown, dev logging
+    return await apiClient.post(webhookUrl, JSON.stringify(lead), {
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(lead)
+      timeoutMs: 10000,
+      retries: 1
     });
-    return true;
   } catch (err) {
     console.warn('Sheet Webhook submission attempted:', err);
-    return false;
+    return { success: false, error: err.message };
   }
 }
 
@@ -93,7 +106,37 @@ export function formatItemsSummary(items = []) {
 }
 
 /**
+ * Synchronize status update to Google Sheets Webhook
+ * Permanently locked to official Google Apps Script endpoint
+ */
+export async function syncLeadStatusToSheet(leadId, newStatus) {
+  const webhookUrl = LEAD_CONFIG.sheetWebhookUrl;
+
+  if (!webhookUrl || !webhookUrl.startsWith('https://script.google.com/macros/s/')) {
+    return false;
+  }
+
+  try {
+    return await apiClient.post(webhookUrl, JSON.stringify({
+      action: "UPDATE_STATUS",
+      leadId,
+      status: newStatus,
+      acceptedAt: newStatus === 'ACCEPTED' ? new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : null
+    }), {
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      timeoutMs: 10000,
+      retries: 1
+    });
+  } catch (err) {
+    console.warn('Google Sheet status sync attempted:', err);
+    return false;
+  }
+}
+
+/**
  * Update the status of an existing lead (e.g., 'NEW' -> 'ACCEPTED')
+ * Persists locally and synchronizes with Google Sheets Webhook
  */
 export function updateLeadStatus(leadId, newStatus) {
   try {
@@ -103,12 +146,18 @@ export function updateLeadStatus(leadId, newStatus) {
         return { 
           ...l, 
           status: newStatus,
-          acceptedAt: newStatus === 'ACCEPTED' ? new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : l.acceptedAt
+          acceptedAt: newStatus === 'ACCEPTED' 
+            ? new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) 
+            : (newStatus === 'NEW' ? null : l.acceptedAt)
         };
       }
       return l;
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+    // Asynchronously notify Google Sheet webhook
+    syncLeadStatusToSheet(leadId, newStatus).catch(() => {});
+
     return updated;
   } catch (err) {
     console.error('Failed to update lead status:', err);
@@ -118,8 +167,20 @@ export function updateLeadStatus(leadId, newStatus) {
 
 /**
  * Main function to record an institutional lead
+ * Implements [Rule 5] Validation, [Rule 15] Local Caching/Persistence, [Rule 1/3] Safe API dispatch
  */
 export async function submitLead(formData, cartItems = []) {
+  // [Rule 5] Input Validation
+  if (!formData?.facilityName?.trim()) {
+    throw new Error('Please enter your Company / Institution / Factory Name.');
+  }
+  if (!formData?.contactName?.trim()) {
+    throw new Error('Please enter the Contact Person Name.');
+  }
+  if (!formData?.phone?.trim()) {
+    throw new Error('Please enter your Phone / WhatsApp Number.');
+  }
+
   const leadId = `JE-LEAD-${Math.floor(100000 + Math.random() * 900000)}`;
   const now = new Date();
   const timestamp = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
@@ -129,13 +190,13 @@ export async function submitLead(formData, cartItems = []) {
   const leadRecord = {
     id: leadId,
     timestamp,
-    facilityName: formData.facilityName || '',
-    contactName: formData.contactName || '',
-    phone: formData.phone || '',
-    email: formData.email || '',
+    facilityName: formData.facilityName.trim(),
+    contactName: formData.contactName.trim(),
+    phone: formData.phone.trim(),
+    email: (formData.email || '').trim(),
     sector: formData.sector || 'Company',
-    address: formData.address || '',
-    notes: formData.notes || '',
+    address: (formData.address || '').trim(),
+    notes: (formData.notes || '').trim(),
     itemsCount: cartItems.reduce((acc, curr) => acc + curr.qty, 0),
     items: cartItems.map(item => ({
       id: item.id,
@@ -150,16 +211,19 @@ export async function submitLead(formData, cartItems = []) {
     acceptedAt: null
   };
 
-  // 1. Save locally so data is never lost
+  // 1. [Rule 15] Save locally so requisition is never lost even if offline
   saveLeadToStorage(leadRecord);
 
-  // 2. Submit to Google Form if action URL configured
-  await submitToGoogleForms(leadRecord);
+  // 2. [Rule 1/3/7/16] Submit to Google Form if action URL configured
+  const formResult = await submitToGoogleForms(leadRecord);
 
-  // 3. Submit to Sheet Webhook (Google Apps Script) if configured
-  await submitToSheetWebhook(leadRecord);
+  // 3. [Rule 1/3/7/16] Submit to Sheet Webhook (Google Apps Script)
+  const sheetResult = await submitToSheetWebhook(leadRecord);
 
-  return leadRecord;
+  return {
+    ...leadRecord,
+    cloudTransmitted: Boolean(sheetResult?.success || formResult?.success)
+  };
 }
 
 /**
@@ -205,7 +269,7 @@ export function exportLeadsToExcel(leads = null) {
     escapeCSV(lead.timestamp),
     escapeCSV(lead.facilityName),
     escapeCSV(lead.contactName),
-    escapeCSV(lead.phone),
+    escapeCSV(lead.phone ? `'${lead.phone}` : ''),
     escapeCSV(lead.email),
     escapeCSV(lead.sector),
     escapeCSV(lead.address),
@@ -222,12 +286,12 @@ export function exportLeadsToExcel(leads = null) {
     escapeCSV('Account: jasvienterprises28@gmail.com | Hosur Distribution Hub (+91 76390 93837)'),
     escapeCSV('========================================================================================='),
     '',
-    escapeCSV(`--- [SECTION 1: 📥 NEW REQUISITIONS (${newLeads.length} PENDING REVIEW)] ---`),
+    escapeCSV(`--- [SECTION 1: NEW REQUISITIONS (${newLeads.length} PENDING REVIEW)] ---`),
     headers.map(escapeCSV).join(','),
     ...newLeads.map(l => mapLeadToRow(l).join(',')),
     '',
     '',
-    escapeCSV(`--- [SECTION 2: ✅ ACCEPTED REQUISITIONS (${acceptedLeads.length} CONFIRMED / DISPATCHED)] ---`),
+    escapeCSV(`--- [SECTION 2: ACCEPTED REQUISITIONS (${acceptedLeads.length} CONFIRMED / DISPATCHED)] ---`),
     headers.map(escapeCSV).join(','),
     ...acceptedLeads.map(l => mapLeadToRow(l).join(',')),
     '',

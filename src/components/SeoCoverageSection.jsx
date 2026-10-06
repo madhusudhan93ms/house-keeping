@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { 
   MapPin, 
-  Truck, 
   Building2, 
   CheckCircle2, 
-  Globe2, 
   Sparkles, 
   ArrowRight,
   ShieldCheck,
@@ -111,28 +109,44 @@ export default function SeoCoverageSection() {
               Stationery Supplier in Hosur
             </span>
           </h2>
-          
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-            <strong>Jasvi Enterprises</strong> is a trusted wholesale supplier of housekeeping materials, cleaning products, office stationery and workplace essentials based in Hosur, Tamil Nadu.
-          </p>
         </div>
 
-        {/* Narrative SEO Context Card */}
-        <div className="mb-12 p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-sm text-slate-700 leading-relaxed text-sm sm:text-base space-y-4">
-          <p>
-            We supply <strong>businesses, companies, corporate offices, hospitals, schools, colleges, manufacturing factories and institutions</strong> with a comprehensive range of everyday housekeeping chemicals, cleaning gear, and office stationery products at direct wholesale rates.
-          </p>
-          <p>
-            Our core supply network is anchored in <strong>Hosur, Krishnagiri, and surrounding industrial belts</strong> (including SIPCOT Phase I &amp; II), with rapid delivery corridors spanning <strong>Tamil Nadu and Karnataka</strong>. For bulk institutional orders and tender contracts, we also fulfill consignments for enterprise clients across <strong>India</strong>.
-          </p>
-          <div className="pt-2 flex flex-wrap items-center gap-2 text-xs font-bold text-slate-700">
-            <span className="text-slate-500">Popular Wholesale Keywords:</span>
-            <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-teal-800">Cleaning Chemicals Hosur</span>
-            <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-teal-800">JK Copier Paper Reams</span>
-            <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-teal-800">5L Floor Cleaners</span>
-            <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-teal-800">Office Registers &amp; Files</span>
-            <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-teal-800">Industrial Mops &amp; Bags</span>
-            <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-teal-800">Hospital Disinfectants</span>
+        {/* Quick Highlights Strip */}
+        <div className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+              <Building2 size={20} />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 mb-1">Local Hosur Warehouse</h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                Immediate dispatch to SIPCOT Phase I &amp; II, Zuzuvadi, and Krishnagiri industrial belts.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <PackageCheck size={20} />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 mb-1">Consolidated B2B Orders</h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                Combine 5L cleaning chemicals, hygiene tools, copier paper &amp; stationery in one delivery.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 mb-1">GST &amp; Challan Verified</h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                Direct wholesale pricing with official stamped delivery challans and GST invoices.
+              </p>
+            </div>
           </div>
         </div>
 

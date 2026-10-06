@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, MessageSquare, MapPin } from 'lucide-react';
+import { ChevronDown, HelpCircle, MapPin } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
 import { FAQS } from '../data/products';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { LEAD_CONFIG, getWhatsAppUrl } from '../config/leadConfig';
@@ -97,7 +98,7 @@ export default function FAQ() {
             onClick={handleWhatsAppContact}
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/30 shadow-md shadow-emerald-700/20 transition-all cursor-pointer whitespace-nowrap"
           >
-            <MessageSquare size={15} />
+            <WhatsAppIcon size={16} className="text-white shrink-0" />
             <span>Chat on WhatsApp</span>
           </button>
         </div>
